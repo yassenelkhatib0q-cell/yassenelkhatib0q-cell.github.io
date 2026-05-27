@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /saves/
+Disallow: /backend/
+Disallow: /_archive/
+
+Sitemap: /sitemap.xml

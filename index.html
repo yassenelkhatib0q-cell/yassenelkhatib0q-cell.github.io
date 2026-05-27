@@ -1,0 +1,3466 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yassen Elkhatib — Performance-driven Video Editor</title>
+<meta name="description" content="Vintage retro-cinematic portfolio of Yassen Elkhatib — performance-driven video editor for short-form & long-form content, social media ads, Reels and TikTok. Step into the room.">
+<meta name="author" content="Yassen Elkhatib">
+<meta name="theme-color" content="#0a0710">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32">
+<link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
+<link rel="canonical" href="/index-v5.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yassen Elkhatib — Video Editor Portfolio">
+<meta property="og:description" content="Vintage retro-cinematic portfolio. Step into the room.">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_EG">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yassen Elkhatib — Video Editor Portfolio">
+<meta name="twitter:description" content="Vintage retro-cinematic portfolio. Step into the room.">
+<!-- Structured data (Schema.org Person) -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Yassen Elkhatib","jobTitle":"Video Editor","description":"Performance-driven video editor for short-form & long-form content.","knowsLanguage":["en","ar"]}</script>
+
+<link href="/vendor/fonts/fonts-v5.css" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Berkshire Pro Loops';
+    src: url('assets/fonts/berkshire-pro-loops.otf') format('opentype'),
+         url('assets/fonts/berkshire-pro-loops.ttf') format('truetype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cazon Uno';
+    src: url('assets/fonts/Cazon-Uno.ttf') format('truetype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Panorama Naskh';
+    src: url('assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    font-display: swap;
+  }
+</style>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width:100%; min-height:100%; overflow-x:hidden; background:#0a0710; color:#f3eee8; font-family:'Inter',system-ui,sans-serif; }
+  html { height:100%; }
+  body { height:auto; }
+  /* Hide the scrollbar but keep scrolling functional */
+  html { scrollbar-width: none; -ms-overflow-style: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  /* Disable scroll-anchoring so the cinematic doesn't get hijacked */
+  body { overflow-anchor: none; }
+
+  /* ============================================================ */
+  /* CINEMA LOOK — letterbox bars + film grain + vignette          */
+  /* ============================================================ */
+  .cinema-bar {
+    position: fixed; left: 0; right: 0;
+    height: 12vh;
+    background: #000;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 0 24px rgba(0,0,0,0.7);
+  }
+  .cinema-bar.top    { top: 0; }
+  .cinema-bar.bottom { bottom: 0; }
+
+  /* Vignette — soft dark radial edges drawing eye to center */
+  #vignette {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgba(0, 0, 0, 0.35) 75%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+  }
+
+  /* CRT scanlines — horizontal lines + subtle flicker over the whole page */
+  #crt-overlay {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.18) 0px,
+      rgba(0, 0, 0, 0.18) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.7;
+    animation: crtFlicker 4s infinite;
+  }
+  @keyframes crtFlicker {
+    0%, 100% { opacity: 0.7; }
+    47%      { opacity: 0.7; }
+    48%      { opacity: 0.6; }
+    49%      { opacity: 0.74; }
+    50%      { opacity: 0.65; }
+    51%      { opacity: 0.7; }
+  }
+
+  /* Film scratches — sudden vertical streaks (white + black) that flash and disappear */
+  #film-scratches {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    mix-blend-mode: overlay;
+    opacity: 1;
+  }
+  #film-scratches::before, #film-scratches::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(0deg, transparent 14%, rgba(255,255,255,0.95) 14.04%, transparent 14.08%),
+      linear-gradient(0deg, transparent 31%, rgba(0,0,0,0.85) 31.05%, transparent 31.1%),
+      linear-gradient(0deg, transparent 48%, rgba(255,255,255,0.7) 48.03%, transparent 48.06%),
+      linear-gradient(0deg, transparent 64%, rgba(0,0,0,0.7) 64.04%, transparent 64.08%),
+      linear-gradient(0deg, transparent 79%, rgba(255,255,255,0.85) 79.03%, transparent 79.06%),
+      linear-gradient(0deg, transparent 92%, rgba(0,0,0,0.75) 92.05%, transparent 92.1%);
+    opacity: 0;
+    animation: scratchFlash 1.4s linear infinite;
+  }
+  #film-scratches::after {
+    animation: scratchFlash 1.1s linear infinite;
+    animation-delay: 0.35s;
+    background:
+      linear-gradient(0deg, transparent 8%, rgba(255,255,255,0.8) 8.04%, transparent 8.08%),
+      linear-gradient(0deg, transparent 23%, rgba(255,255,255,0.6) 23.03%, transparent 23.06%),
+      linear-gradient(0deg, transparent 41%, rgba(0,0,0,0.7) 41.05%, transparent 41.1%),
+      linear-gradient(0deg, transparent 56%, rgba(255,255,255,0.7) 56.03%, transparent 56.06%),
+      linear-gradient(0deg, transparent 73%, rgba(0,0,0,0.6) 73.05%, transparent 73.1%),
+      linear-gradient(0deg, transparent 86%, rgba(255,255,255,0.65) 86.04%, transparent 86.08%);
+  }
+  @keyframes scratchFlash {
+    0%       { opacity: 0; }
+    5%, 7%   { opacity: 1; }
+    9%       { opacity: 0; }
+    18%      { opacity: 0; }
+    20%, 22% { opacity: 0.85; }
+    24%      { opacity: 0; }
+    35%      { opacity: 0; }
+    37%, 39% { opacity: 0.95; }
+    41%      { opacity: 0; }
+    55%      { opacity: 0; }
+    57%, 60% { opacity: 0.8; }
+    62%      { opacity: 0; }
+    78%      { opacity: 0; }
+    80%, 82% { opacity: 0.9; }
+    84%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+
+  /* Film dirt & dust — tiny white/black specks that flicker fast */
+  #film-dust {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust'><feTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1' seed='5'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust)' fill='white'/></svg>"),
+                       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust2'><feTurbulence type='fractalNoise' baseFrequency='5' numOctaves='1' seed='12'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust2)' fill='black'/></svg>");
+    background-size: 400px 400px, 400px 400px;
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+    animation: dustShift 0.13s steps(5) infinite;
+  }
+  @keyframes dustShift {
+    0%   { background-position: 0px 0px, 0px 0px; }
+    20%  { background-position: -120px 80px, 200px -160px; }
+    40%  { background-position: 200px -100px, -180px 110px; }
+    60%  { background-position: -80px 220px, 80px -50px; }
+    80%  { background-position: 160px 40px, -240px 200px; }
+    100% { background-position: 0px 0px, 0px 0px; }
+  }
+
+  /* Jitter removed (was causing canvas shake) */
+
+  /* Film grain — animated noise overlay */
+  #film-grain {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    opacity: 0.10;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+    animation: grainShift 0.7s steps(8) infinite;
+  }
+  @keyframes grainShift {
+    0%   { transform: translate(0, 0); }
+    12%  { transform: translate(-7%, -3%); }
+    25%  { transform: translate( 5%,  4%); }
+    37%  { transform: translate(-3%,  7%); }
+    50%  { transform: translate( 6%, -5%); }
+    62%  { transform: translate(-7%, -2%); }
+    75%  { transform: translate( 4%,  5%); }
+    87%  { transform: translate(-5%,  3%); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* CRT power-off transition layers */
+  #tv-transition {
+    position: fixed; inset: 0; z-index: 4;
+    pointer-events: none;
+  }
+  #tv-blackout {
+    position: absolute; inset: 0;
+    background: #000;
+    opacity: 0;
+  }
+  #tv-beam {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 2px; height: 2px;
+    opacity: 0;
+    border-radius: 40px;
+    background: linear-gradient(180deg, rgba(255,250,242,0.98), rgba(255,235,198,0.86));
+    transform: translate(-50%, -50%);
+    filter: blur(10px);
+  }
+  #tv-beam::before {
+    content: '';
+    position: absolute;
+    inset: -180px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center,
+      rgba(255,240,200,0.46) 0%,
+      rgba(255,235,180,0.30) 28%,
+      rgba(255,220,150,0.18) 55%,
+      rgba(255,220,150,0) 80%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  /* Default cursor — ink pen disabled. Pin body to `default` AND force every descendant to inherit,
+     because Chrome on Windows displays the text I-beam over <h1>/<p> children of an overlay even
+     when the overlay has pointer-events:none. Without `* { cursor: inherit }`, those text elements
+     fall back to UA `auto` and the cursor flips to I-beam when hovering the headline area / TV. */
+  body { cursor: default; }
+  * { cursor: inherit; }
+  /* Re-restore the few elements that need an explicit pointer cursor (the `inherit` rule above
+     wiped the cursor:pointer set on these by their own rules). JS still sets body cursor=pointer
+     on TV/Radio button hover, which propagates via `inherit` to all children. */
+  .hint.clickable, #pf-back { cursor: pointer; }
+  #cursor, canvas#cursor-trail { display: none !important; }
+
+  #loader { position:fixed; inset:0; z-index:1000; background:#0a0710; display:flex; align-items:center; justify-content:center; flex-direction:column; transition:opacity .8s ease; }
+  #loader.hidden { opacity:0; pointer-events:none; }
+  #loader .brand { font-family:'Fraunces',serif; font-style:italic; font-size:64px; color:#e8dcc4; }
+  #loader .label { font-size:11px; letter-spacing:6px; color:rgba(232,220,196,.55); margin-top:14px; }
+  #loader .bar { width:240px; height:1px; background:rgba(232,220,196,.15); margin-top:18px; overflow:hidden; }
+  #loader .bar-fill { height:100%; width:0%; background:#e8dcc4; transition:width .12s linear; }
+  #loader .pct { margin-top:20px; font-family:'Fraunces',serif; font-size:34px; color:#e8dcc4; letter-spacing:1px; font-variant-numeric:tabular-nums; }
+
+  /* ===== Floating hints on the TV / radio — plain text in the portfolio's Panorama font, gentle glow pulse ===== */
+  @font-face { font-family:'Panorama Naskh'; src:url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display:swap; }
+  .hint { position:fixed; left:0; top:0;
+    padding:12px 26px; border-radius:999px;
+    background:rgba(232,220,196,.96); color:#1a1510;
+    border:2px solid rgba(26,21,16,.5); box-shadow:0 6px 24px rgba(0,0,0,.5);
+    font-family:'Panorama Naskh','Tajawal','Cairo',serif; font-size:20px; font-weight:500;
+    letter-spacing:0.04em;
+    white-space:nowrap; opacity:0; pointer-events:none;
+    /* z-index BELOW cinema-bar (50) so the pill slides behind the bottom bar instead of
+       poking through it — keeps the cinematic frame on top, pill becomes a cinema-framed element. */
+    transition:opacity .45s ease; z-index:40;
+    transform:translate(-50%,0) scale(1);
+    animation:hint-pulse 2.4s ease-in-out infinite; }
+  /* Downward arrow under each pill, pointing to the 3D button below. Inherits opacity from the
+     parent (.hint) so it fades in/out together with the pill — no extra JS needed. */
+  .hint::after {
+    content:''; position:absolute; left:50%; top:100%;
+    width:0; height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-top:14px solid rgba(232,220,196,.96);
+    transform:translateX(-50%);
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.35));
+  }
+  /* English hints use the hero's Fraunces italic + extra letter-spacing for the display look */
+  .hint[dir="ltr"] { font-family:'Fraunces',serif; font-style:italic; font-weight:700; font-size:18px; letter-spacing:0.12em; }
+  @keyframes hint-pulse {
+    0%, 100% { transform:translate(-50%,0) scale(1);    box-shadow:0 6px 24px rgba(0,0,0,.5); }
+    50%      { transform:translate(-50%,0) scale(1.06); box-shadow:0 10px 30px rgba(0,0,0,.6); }
+  }
+  .hint.clickable { pointer-events:auto; cursor:pointer; }
+
+  #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
+  #cursor svg { width:100%; height:100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+  canvas#cursor-trail { position:fixed; inset:0; pointer-events:none; z-index:998; }
+
+  canvas#gl { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:1; }
+
+  #phase1-overlay { position:fixed; inset:0; z-index:5; pointer-events:none; display:flex; align-items:center; padding:0 6vw; }
+  #phase1-overlay h1 {
+    font-family:'Berkshire Pro Loops', serif;
+    font-style:normal;
+    font-size:clamp(56px,7vw,104px);
+    line-height:1.0;
+    font-weight:400;
+    letter-spacing:-.005em;
+    color:#F5E8C8;
+    text-shadow:
+      -2px -2px 0 #2a0f08,
+       2px -2px 0 #2a0f08,
+      -2px  2px 0 #2a0f08,
+       2px  2px 0 #2a0f08,
+       0    4px 0 #2a0f08,
+       0    8px 16px rgba(0,0,0,.55);
+    max-width:560px;
+  }
+  #phase1-overlay h1 span.accent { color:#F5E8C8; }
+  #phase1-overlay .sub { font-family:'Cazon Uno', serif; font-size:clamp(13px,1.2vw,18px); line-height:1.5; color:rgba(243,238,232,.85); margin-top:clamp(18px,1.8vw,28px); max-width:clamp(280px,26vw,380px); }
+  #phase1-overlay .tagline { font-family:'Cazon Uno', serif; font-size:clamp(10px,0.95vw,14px); letter-spacing:clamp(2px,0.2vw,3px); color:rgba(243,238,232,.65); margin-top:clamp(20px,2.1vw,32px); text-transform:uppercase; }
+  #phase1-overlay .scroll-hint { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:4px; color:rgba(243,238,232,.4); text-transform:uppercase; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:.4; transform:translate(-50%,0); } 50% { opacity:1; transform:translate(-50%,6px); } }
+  html[dir="rtl"] body { font-family:'Cairo','Tajawal',sans-serif; }
+  html[dir="rtl"] #phase1-overlay h1 { font-family:'Panorama Naskh', 'Cairo', sans-serif; font-style:normal; font-weight:400; font-feature-settings:"swsh" 1, "calt" 1, "liga" 1, "dlig" 1; }
+  html[dir="rtl"] #phase1-overlay { direction:ltr; }
+  html[dir="rtl"] #phase1-overlay > * { direction:rtl; text-align:right; }
+
+  /* Portfolio reveals after the CRT transition. Pinned to the viewport
+     bottom of the cinematic, fading in via the JS handoff. */
+  #portfolio-shell {
+    position: fixed; inset: 0;
+    z-index: 3;
+    background: #0a0710;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  #pf-frame{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#0a0710; display:block; }
+  #pf-back{ position:fixed; top:18px; left:18px; z-index:60; width:48px; height:48px; border-radius:999px; border:2px solid rgba(232,220,196,.5); background:rgba(10,7,16,.85); color:#e8dcc4; font-size:22px; line-height:1; cursor:pointer; }
+  #pf-back:hover{ background:#e8dcc4; color:#0a0710; }
+  #portfolio-nav { position:sticky; top:0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:24px 5vw; background:rgba(10,7,16,.95); border-bottom:1px solid rgba(232,220,196,.08); }
+  .brand-mark { font-family:'Fraunces',serif; font-style:italic; font-size:18px; color:#e8dcc4; }
+  .nav-links { display:flex; gap:28px; }
+  .nav-links a { color:rgba(243,238,232,.7); text-decoration:none; font-size:12px; letter-spacing:2px; text-transform:uppercase; }
+  .nav-links a:hover { color:#e8dcc4; }
+  .portfolio-inner { max-width:1200px; margin:0 auto; padding:0 5vw; }
+  .hero { padding:80px 0 100px; }
+  .eyebrow { font-size:11px; letter-spacing:4px; color:rgba(232,220,196,.6); text-transform:uppercase; margin-bottom:24px; }
+  .hero h1 { font-family:'Fraunces',serif; font-size:clamp(40px,5vw,72px); line-height:1.05; font-weight:700; max-width:14ch; margin-bottom:28px; }
+  .hero-copy { font-size:16px; line-height:1.7; color:rgba(243,238,232,.75); max-width:50ch; }
+  .hero-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:80px; align-items:start; }
+  .hero-actions { display:flex; gap:18px; margin-top:36px; }
+  .action-link, .ghost-link { padding:14px 24px; font-size:13px; letter-spacing:1px; text-transform:uppercase; border-radius:6px; text-decoration:none; }
+  .action-link { background:#e8dcc4; color:#111217; }
+  .ghost-link { color:#e8dcc4; border:1px solid rgba(232,220,196,.4); }
+  .hero-panel { background:rgba(232,220,196,.04); border:1px solid rgba(232,220,196,.12); border-radius:18px; padding:30px 28px; }
+  .panel-label { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:rgba(232,220,196,.5); margin-bottom:14px; }
+  .hero-panel p { font-size:14px; line-height:1.6; color:rgba(243,238,232,.8); margin-bottom:22px; }
+  .hero-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .hero-stat strong { display:block; font-size:13px; color:#e8dcc4; margin-bottom:4px; }
+  .hero-stat span { font-size:12px; color:rgba(243,238,232,.6); line-height:1.5; }
+  .section-head { margin:100px 0 48px; }
+  .section-label { font-size:11px; letter-spacing:6px; color:rgba(232,220,196,.55); text-transform:uppercase; margin-bottom:18px; }
+  .section-head h2 { font-family:'Fraunces',serif; font-size:clamp(32px,4vw,56px); font-weight:700; max-width:18ch; margin-bottom:12px; }
+  .section-head p { font-size:15px; color:rgba(243,238,232,.7); max-width:56ch; line-height:1.6; }
+  .project-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+  .project-card { background:rgba(232,220,196,.03); border:1px solid rgba(232,220,196,.1); border-radius:14px; padding:32px; display:flex; flex-direction:column; gap:18px; }
+  .project-image { width:100%; aspect-ratio:16/10; border-radius:8px; background: linear-gradient(135deg, #2c1d3f 0%, #1a0e26 100%); }
+  .project-meta { font-size:11px; letter-spacing:3px; color:rgba(232,220,196,.55); text-transform:uppercase; }
+  .project-card h3 { font-family:'Fraunces',serif; font-size:24px; }
+  .project-card p { font-size:14px; color:rgba(243,238,232,.7); line-height:1.6; }
+  .project-link { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#c8b6e6; text-decoration:none; padding-top:14px; border-top:1px solid rgba(232,220,196,.1); margin-top:auto; }
+  .about-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:56px; align-items:start; }
+  .info-panel { background:rgba(232,220,196,.03); border:1px solid rgba(232,220,196,.1); border-radius:14px; padding:36px 32px; }
+  .about-copy p { font-size:16px; line-height:1.7; color:rgba(243,238,232,.8); }
+  .about-copy p + p { margin-top:20px; }
+  .about-visual { aspect-ratio:4/5; border-radius:14px; background: linear-gradient(135deg, #3a2a52 0%, #1d1426 100%); }
+  .contact-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:start; }
+  .contact-panel { background:rgba(232,220,196,.04); border:1px solid rgba(232,220,196,.12); border-radius:18px; padding:36px 32px; }
+  #contact-form { display:flex; flex-direction:column; gap:18px; margin-top:16px; }
+  #contact-form label { display:flex; flex-direction:column; gap:8px; font-size:11px; letter-spacing:2px; color:rgba(232,220,196,.7); text-transform:uppercase; }
+  #contact-form input, #contact-form textarea { background:rgba(0,0,0,.25); border:1px solid rgba(232,220,196,.18); border-radius:8px; padding:12px 14px; color:#f3eee8; font-family:inherit; font-size:14px; }
+  #contact-form textarea { min-height:120px; resize:vertical; }
+  #contact-form button { padding:14px 24px; background:#e8dcc4; color:#111217; border:none; border-radius:8px; font-size:13px; letter-spacing:2px; text-transform:uppercase; font-weight:600; cursor:none; }
+  .form-note { font-size:11px; color:rgba(243,238,232,.45); margin-top:4px; }
+  .contact-copy strong { display:block; font-family:'Fraunces',serif; font-size:24px; margin-bottom:16px; }
+  .contact-copy p { font-size:15px; line-height:1.7; color:rgba(243,238,232,.75); margin-bottom:24px; }
+  .contact-list div { padding:14px 0; border-top:1px solid rgba(232,220,196,.08); display:flex; gap:18px; font-size:13px; color:rgba(243,238,232,.8); }
+  .contact-list span { font-size:11px; letter-spacing:2px; color:rgba(232,220,196,.55); text-transform:uppercase; min-width:60px; }
+  footer { padding:48px 5vw 24px; border-top:1px solid rgba(232,220,196,.08); margin-top:80px; font-size:11px; letter-spacing:3px; color:rgba(232,220,196,.4); text-align:center; text-transform:uppercase; }
+  #toast { position:fixed; bottom:32px; right:32px; z-index:100; padding:14px 20px; background:rgba(232,220,196,.95); color:#111217; border-radius:8px; font-size:13px; opacity:0; transform:translateY(12px); transition:opacity .3s, transform .3s; pointer-events:none; }
+  #toast.show { opacity:1; transform:translateY(0); }
+
+  #debug-hud { position:fixed; top:8px; right:8px; z-index:200; background:rgba(0,0,0,.7); color:#a8ff9a; font-family:ui-monospace,monospace; font-size:11px; padding:8px 10px; border-radius:6px; max-width:380px; pointer-events:none; line-height:1.5; }
+
+  /* ============================================================ */
+  /* PREMIUM EDITOR THEME — applied to lil-gui + outliner          */
+  /* ============================================================ */
+  .lil-gui {
+    --background-color: rgba(20, 14, 30, 0.88) !important;
+    --text-color: #f3eee8 !important;
+    --title-background-color: rgba(40, 26, 60, 0.95) !important;
+    --title-text-color: #e8dcc4 !important;
+    --widget-color: rgba(232, 220, 196, 0.08) !important;
+    --hover-color: rgba(200, 182, 230, 0.18) !important;
+    --focus-color: rgba(200, 182, 230, 0.30) !important;
+    --number-color: #c8b6e6 !important;
+    --string-color: #e8dcc4 !important;
+    --font-size: 12px !important;
+    --input-font-size: 12px !important;
+    --padding: 8px !important;
+    --spacing: 4px !important;
+    --widget-height: 22px !important;
+    --slider-knob-width: 3px !important;
+    --slider-input-width: 26% !important;
+    --color-input-width: 26% !important;
+    --width: 320px !important;
+    backdrop-filter: blur(14px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+    border: 1px solid rgba(232, 220, 196, 0.18) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    overflow: hidden !important;
+    font-family: 'Inter', ui-monospace, monospace !important;
+  }
+  .lil-gui .title {
+    font-family: 'Fraunces', serif !important;
+    font-style: italic !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    letter-spacing: 0.02em !important;
+    padding: 12px 14px !important;
+    border-bottom: 1px solid rgba(232, 220, 196, 0.12) !important;
+  }
+  .lil-gui .lil-gui > .title {
+    font-size: 11px !important;
+    font-style: normal !important;
+    font-family: 'Inter', sans-serif !important;
+    letter-spacing: 3px !important;
+    text-transform: uppercase !important;
+    color: rgba(232, 220, 196, 0.7) !important;
+  }
+  .lil-gui .controller .name {
+    color: rgba(243, 238, 232, 0.78) !important;
+    font-size: 11.5px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .lil-gui input, .lil-gui select {
+    font-family: ui-monospace, 'SF Mono', monospace !important;
+    font-size: 11px !important;
+    color: #c8b6e6 !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    border-radius: 4px !important;
+  }
+  .lil-gui .slider {
+    border-radius: 4px !important;
+    overflow: hidden !important;
+  }
+  .lil-gui .slider .fill {
+    background: linear-gradient(90deg, #8b6dc4 0%, #c8b6e6 100%) !important;
+  }
+  .lil-gui button, .lil-gui .controller.function .widget {
+    background: rgba(232, 220, 196, 0.06) !important;
+    border: 1px solid rgba(232, 220, 196, 0.12) !important;
+    border-radius: 4px !important;
+    color: #e8dcc4 !important;
+    transition: background 0.15s, border-color 0.15s !important;
+  }
+  .lil-gui button:hover, .lil-gui .controller.function:hover .widget {
+    background: rgba(200, 182, 230, 0.18) !important;
+    border-color: rgba(200, 182, 230, 0.35) !important;
+  }
+  .lil-gui .controller.color .widget {
+    border-radius: 4px !important;
+    overflow: hidden !important;
+  }
+  /* lil-gui scrollbar */
+  .lil-gui::-webkit-scrollbar { width: 6px; }
+  .lil-gui::-webkit-scrollbar-track { background: transparent; }
+  .lil-gui::-webkit-scrollbar-thumb { background: rgba(200, 182, 230, 0.25); border-radius: 3px; }
+  .lil-gui::-webkit-scrollbar-thumb:hover { background: rgba(200, 182, 230, 0.45); }
+
+  /* OUTLINER PANEL */
+  #outliner {
+    backdrop-filter: blur(14px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+    background: rgba(20, 14, 30, 0.78) !important;
+    border: 1px solid rgba(232, 220, 196, 0.18) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.3) !important;
+    font-family: 'Inter', ui-monospace, monospace !important;
+    font-size: 12px !important;
+  }
+  #outliner::-webkit-scrollbar { width: 6px; }
+  #outliner::-webkit-scrollbar-track { background: transparent; }
+  #outliner::-webkit-scrollbar-thumb { background: rgba(200, 182, 230, 0.25); border-radius: 3px; }
+  #outliner::-webkit-scrollbar-thumb:hover { background: rgba(200, 182, 230, 0.45); }
+  #outliner > div:first-child {
+    font-family: 'Fraunces', serif !important;
+    font-style: italic !important;
+    font-size: 16px !important;
+    letter-spacing: 0.02em !important;
+    color: #c8b6e6 !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(232, 220, 196, 0.12) !important;
+  }
+  #outliner [data-obj-id] {
+    transition: background 0.12s, padding 0.12s !important;
+  }
+  #outliner [data-obj-id]:hover {
+    background: rgba(232, 220, 196, 0.08) !important;
+  }
+  #outliner [data-obj-id].selected {
+    background: linear-gradient(90deg, rgba(200, 182, 230, 0.32), rgba(200, 182, 230, 0.12)) !important;
+    border-left: 2px solid #c8b6e6 !important;
+    padding-left: 8px !important;
+  }
+
+  @media (max-width: 768px) {
+    .hero-grid, .about-grid, .contact-grid, .project-grid { grid-template-columns:1fr; gap:32px; }
+    body { cursor:auto; }
+    #cursor, canvas#cursor-trail { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE GATE — must run before the loader paints. Detects touch-primary devices, replaces the
+     loader with a "desktop only" message in EN + AR, sets a flag so the Three.js module aborts. -->
+<style>
+  html.mobile-blocked #gl, html.mobile-blocked canvas#cursor-trail, html.mobile-blocked .cinema-bar,
+  html.mobile-blocked .hint, html.mobile-blocked #portfolio-shell, html.mobile-blocked #phase1-overlay,
+  html.mobile-blocked #scroll-spacer, html.mobile-blocked #cursor, html.mobile-blocked #toast,
+  html.mobile-blocked #btn-tooltip, html.mobile-blocked #debug-hud { display: none !important; }
+  html.mobile-blocked, html.mobile-blocked body { overflow: hidden !important; }
+  #loader.mobile-block .bar, #loader.mobile-block .pct, #loader.mobile-block .label { display: none; }
+  #loader.mobile-block .gate-msg { color:#e8dcc4; font-family:'Inter',sans-serif; font-size:15px;
+    line-height:1.7; padding:0 32px; max-width:520px; text-align:center; margin-top:18px;
+    letter-spacing:0.5px; }
+  #loader.mobile-block .gate-msg.ar { font-family:'Cairo','Tajawal',sans-serif; font-size:17px;
+    direction:rtl; margin-top:14px; }
+  #loader.mobile-block .gate-divider { width:60px; height:1px; background:rgba(232,220,196,.25);
+    margin:18px auto 4px; }
+</style>
+<script>
+(function () {
+  var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+  var touchUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(navigator.userAgent);
+  // iPadOS 13+ identifies as Mac — catch it via touch capability + non-pointer hover.
+  var iPadLikely = navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent);
+  var narrow = window.innerWidth < 900;   // safety net for small windows / portrait tablets
+  if (!(coarse || touchUA || iPadLikely || narrow)) return;
+  document.documentElement.classList.add('mobile-blocked');
+  window.__mobileBlocked = true;
+  // Wait until the loader element exists in the DOM (it's the very next element below this script).
+  function paintGate() {
+    var loader = document.getElementById('loader');
+    if (!loader) { return setTimeout(paintGate, 16); }
+    loader.classList.add('mobile-block');
+    loader.innerHTML =
+      '<div class="brand">YASSEN</div>' +
+      '<div class="gate-msg">Please open this site on a desktop or laptop (Windows / macOS / Linux). ' +
+        'The 3D experience isn\'t available on mobile.</div>' +
+      '<div class="gate-divider"></div>' +
+      '<div class="gate-msg ar">يُرجى فتح هذا الموقع من حاسوبٍ مكتبيّ أو محمول (Windows / macOS / Linux). ' +
+        'التجربة ثلاثية الأبعاد غير متاحة على الجوّال.</div>';
+  }
+  paintGate();
+})();
+</script>
+
+<div id="loader">
+  <div class="brand">YASSEN</div>
+  <div class="label" data-i18n="loading">LOADING…</div>
+  <div class="bar"><div class="bar-fill" id="loader-bar"></div></div>
+  <div class="pct" id="loader-pct">0%</div>
+</div>
+
+<div class="hint" id="hint-lang">Switch to Arabic</div>
+<div class="hint" id="hint-radio">اضغط لتشغيل الموسيقى</div>
+
+<canvas id="gl"></canvas>
+
+<!-- Cinema look: letterbox bars + CRT scanlines + scratches + dust + grain + vignette -->
+<div class="cinema-bar top"></div>
+<div class="cinema-bar bottom"></div>
+<div id="vignette"></div>
+<div id="crt-overlay"></div>
+<div id="film-dust"></div>
+<div id="film-grain"></div>
+
+<!-- CRT power-off transition (between Phase 1 and the portfolio) -->
+<div id="tv-transition" aria-hidden="true">
+  <div id="tv-blackout"></div>
+  <div id="tv-beam"></div>
+</div>
+
+<!-- Scroll spacer — provides the height the cinematic uses to drive progress.
+     Page max-scroll = spacer-height − viewport. To reach scrollY = 4×viewport
+     (the camRange), we need spacer ≥ 5×viewport. -->
+<div id="scroll-spacer" style="height:500vh; pointer-events:none;"></div>
+<canvas id="cursor-trail"></canvas>
+<div id="cursor">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="penGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4d27a"/><stop offset="50%" stop-color="#c89a3a"/><stop offset="100%" stop-color="#8a6520"/>
+    </linearGradient></defs>
+    <path d="M3,29 L7,25 L24,8 L28,12 L11,29 Z" fill="url(#penGold)" stroke="#5a3f10" stroke-width="0.5" stroke-linejoin="round"/>
+    <line x1="6" y1="26" x2="20" y2="12" stroke="#1a1208" stroke-width="0.7"/>
+    <circle cx="3.5" cy="28.5" r="1.4" fill="#1a1208"/>
+  </svg>
+</div>
+
+<div id="phase1-overlay">
+  <div>
+    <h1 data-i18n="headline-html">Let's build<br>something<br><span class="accent">together</span></h1>
+    <p class="sub" data-i18n="sub">Retro-cinematic creative development. Atmospheric work that ships and converts.</p>
+    <div class="tagline" data-i18n="tagline">UI DESIGN · MOTION · AI VIDEO · CREATIVE DIRECTION</div>
+  </div>
+</div>
+
+<div id="portfolio-shell">
+  <!-- PERF: BOTH portfolio iframes preloaded so language flip is instant (no reload, no first-paint jank).
+       The inactive one is opacity:0 + pointer-events:none, on top is whichever matches currentLang. -->
+  <iframe id="pf-frame" title="Portfolio" referrerpolicy="no-referrer" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms"></iframe>
+  <iframe id="pf-frame-alt" title="Portfolio (alt language)" referrerpolicy="no-referrer" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#0a0710;display:block;opacity:0;pointer-events:none"></iframe>
+  <button id="pf-back" type="button" aria-label="back" title="back">↩</button>
+  <div class="portfolio-old" style="display:none">
+  <nav id="portfolio-nav">
+    <div class="brand-mark" data-i18n="brand">YASSEN / SIGNAL STUDIO</div>
+    <div class="nav-links">
+      <a href="#home" data-i18n="nav-home">Home</a><a href="#work" data-i18n="nav-work">Work</a><a href="#about" data-i18n="nav-about">About</a><a href="#contact" data-i18n="nav-contact">Contact</a>
+    </div>
+  </nav>
+  <div class="portfolio-inner">
+    <section id="home" class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow" data-i18n="hero-eyebrow">Retro-Cinematic Presence</div>
+          <h1 data-i18n="hero-title">Retro cool systems that make serious work feel magnetic.</h1>
+          <p class="hero-copy" data-i18n="hero-copy">Every screen is designed to feel premium on first impression and dependable in the details.</p>
+          <div class="hero-actions">
+            <a class="action-link" href="#work" data-i18n="hero-cta-1">View Work</a>
+            <a class="ghost-link" href="#contact" data-i18n="hero-cta-2">Book a Call</a>
+          </div>
+        </div>
+        <aside class="hero-panel">
+          <div class="panel-label" data-i18n="hero-panel-label">Why Clients Say Yes</div>
+          <p data-i18n="hero-panel-copy">Clear hierarchy, persuasive pacing, and tactile atmosphere built together so the work feels custom and ready to ship.</p>
+          <div class="hero-stat-grid">
+            <div class="hero-stat"><strong data-i18n="stat1-h">3D launches</strong><span data-i18n="stat1-c">Cinematic product scenes that feel handcrafted.</span></div>
+            <div class="hero-stat"><strong data-i18n="stat2-h">Editorial trust</strong><span data-i18n="stat2-c">Readable structure that holds attention.</span></div>
+            <div class="hero-stat"><strong data-i18n="stat3-h">Signal systems</strong><span data-i18n="stat3-c">Navigation tuned to feel intentional.</span></div>
+            <div class="hero-stat"><strong data-i18n="stat4-h">Launch-ready</strong><span data-i18n="stat4-c">Built to survive the real brief.</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <section id="work">
+      <div class="section-head">
+        <div><div class="section-label" data-i18n="work-label">Selected Work</div><h2 data-i18n="work-title">Curated signals, framed like proof.</h2></div>
+        <p data-i18n="work-copy">A retro portfolio should still move like a tool. These cards keep the mood heavy and the reading path clean.</p>
+      </div>
+      <div class="project-grid">
+        <article class="project-card"><div class="project-image"></div><div class="project-meta" data-i18n="proj1-meta">3D Launch</div><div><h3 data-i18n="proj1-h">Signal Room</h3><p data-i18n="proj1-c">Warm CRT framing, dramatic copy, and a room that feels like a physical invitation.</p></div><a class="project-link" href="#contact" data-i18n="proj1-link">Build a room like this</a></article>
+        <article class="project-card"><div class="project-image"></div><div class="project-meta" data-i18n="proj2-meta">Editorial UI</div><div><h3 data-i18n="proj2-h">Poster Logic</h3><p data-i18n="proj2-c">Typography arranged like a vintage spread while still guiding real interaction.</p></div><a class="project-link" href="#contact" data-i18n="proj2-link">See the approach</a></article>
+        <article class="project-card"><div class="project-image"></div><div class="project-meta" data-i18n="proj3-meta">Motion System</div><div><h3 data-i18n="proj3-h">Follow the Signal</h3><p data-i18n="proj3-c">Transitions that feel cinematic, not decorative.</p></div><a class="project-link" href="#contact" data-i18n="proj3-link">Shape the handoff</a></article>
+        <article class="project-card"><div class="project-image"></div><div class="project-meta" data-i18n="proj4-meta">Client Trust</div><div><h3 data-i18n="proj4-h">Serious Work</h3><p data-i18n="proj4-c">Premium mood on arrival, stable structure underneath.</p></div><a class="project-link" href="#contact" data-i18n="proj4-link">Talk through scope</a></article>
+      </div>
+    </section>
+    <section id="about">
+      <div class="section-head"><div><div class="section-label" data-i18n="about-label">About</div><h2 data-i18n="about-title">Retro atmosphere, modern discipline.</h2></div></div>
+      <div class="about-grid">
+        <div class="info-panel about-copy">
+          <p data-i18n="about-p1">YASSEN builds launch pages, cinematic interfaces, and tactile portfolio systems.</p>
+          <p data-i18n="about-p2">The mood pulls people in. The structure makes them stay.</p>
+        </div>
+        <div class="about-visual"></div>
+      </div>
+    </section>
+    <section id="contact">
+      <div class="section-head"><div><div class="section-label" data-i18n="contact-label">Contact</div><h2 data-i18n="contact-title">Bring the brief.</h2></div></div>
+      <div class="contact-grid">
+        <div class="contact-panel">
+          <div class="panel-label" data-i18n="contact-panel-label">Project Intake</div>
+          <form id="contact-form">
+            <label data-i18n="form-name-l">Name<input type="text" name="name" data-i18n-attr="placeholder:form-name-p" placeholder="Your name"></label>
+            <label data-i18n="form-email-l">Email<input type="email" name="email" data-i18n-attr="placeholder:form-email-p" placeholder="your@email.com"></label>
+            <label data-i18n="form-msg-l">Message<textarea name="message" data-i18n-attr="placeholder:form-msg-p" placeholder="What do you want to build?"></textarea></label>
+            <button type="submit" data-i18n="form-submit">Send</button>
+            <p class="form-note" data-i18n="form-note">Demo form. Fields don't go anywhere yet.</p>
+          </form>
+        </div>
+        <div class="contact-copy">
+          <strong data-i18n="contact-strong">Fast alignment beats long drift.</strong>
+          <p data-i18n="contact-p">Detail the deadline, the atmosphere, and the behavior that cannot break.</p>
+          <div class="contact-list">
+            <div><span data-i18n="contact-l1">Studio</span><div data-i18n="contact-v1">Remote / Retro-cinematic / Production-minded</div></div>
+            <div><span data-i18n="contact-l2">Focus</span><div data-i18n="contact-v2">Cinematic interfaces, realtime scenes</div></div>
+            <div><span data-i18n="contact-l3">Email</span><div>hello@yassen.studio</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer data-i18n="footer">YASSEN / Creative Development Studio / 2026</footer>
+  </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Floating hover tooltip — DISABLED. The persistent #hint-lang / #hint-radio pills above each
+     button already convey the action label; the duplicate hover label was confusing UX. Element
+     kept in DOM (display:none) so the JS that updates its text/position is a no-op rather than crashing. -->
+<div id="btn-tooltip" style="
+  display: none;
+  position: fixed; pointer-events: none; z-index: 700;
+  padding: 8px 14px; border-radius: 999px;
+  background: rgba(20, 14, 30, 0.92);
+  color: #f3eee8;
+  font: 11px/1 'Inter', sans-serif; letter-spacing: 2px; text-transform: uppercase;
+  border: 1px solid rgba(232, 220, 196, 0.25);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  opacity: 0; transition: opacity 0.15s ease;
+  white-space: nowrap;
+  transform: translate(-50%, -160%);
+"></div>
+<div id="debug-hud" style="display:none">init…</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "/vendor/three/three.module.js",
+    "three/addons/": "/vendor/three/jsm/",
+    "lil-gui": "/vendor/lil-gui.esm.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+import GUI from 'lil-gui';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// MOBILE GATE — if the early inline script set this flag, abort the entire 3D-scene module.
+// Throwing here halts the rest of this <script type="module"> from executing, so no GLB load,
+// no AudioContext, no video decode, no animate loop — important on mobile data plans.
+if (window.__mobileBlocked) { throw new Error('[mobile-gate] desktop-only — module halted.'); }
+
+/* ====================================================================== */
+/* I18N                                                                   */
+/* ====================================================================== */
+const STRINGS = {
+  en: {
+    'loading':'LOADING…','headline-html':"Let's build<br>something<br><span class='accent'>together</span>",
+    'sub':'Retro-cinematic creative development. Atmospheric work that ships.',
+    'tagline':'UI DESIGN · MOTION · AI VIDEO · CREATIVE DIRECTION','scroll-hint':'SCROLL TO ENTER',
+    'brand':'YASSEN / SIGNAL STUDIO','nav-home':'Home','nav-work':'Work','nav-about':'About','nav-contact':'Contact',
+    'hero-eyebrow':'Retro-Cinematic Presence','hero-title':'Retro cool systems that make serious work feel magnetic.',
+    'hero-copy':'Every screen is designed to feel premium on first impression and dependable in the details.',
+    'hero-cta-1':'View Work','hero-cta-2':'Book a Call','hero-panel-label':'Why Clients Say Yes',
+    'hero-panel-copy':'Clear hierarchy, persuasive pacing, and tactile atmosphere built together so the work feels custom and ready to ship.',
+    'stat1-h':'3D launches','stat1-c':'Cinematic product scenes that feel handcrafted.',
+    'stat2-h':'Editorial trust','stat2-c':'Readable structure that holds attention.',
+    'stat3-h':'Signal systems','stat3-c':'Navigation tuned to feel intentional.',
+    'stat4-h':'Launch-ready','stat4-c':'Built to survive the real brief.',
+    'work-label':'Selected Work','work-title':'Curated signals, framed like proof.',
+    'work-copy':'A retro portfolio should still move like a tool.',
+    'proj1-meta':'3D Launch','proj1-h':'Signal Room','proj1-c':'Warm CRT framing.','proj1-link':'Build a room like this',
+    'proj2-meta':'Editorial UI','proj2-h':'Poster Logic','proj2-c':'Typography arranged like a vintage spread.','proj2-link':'See the approach',
+    'proj3-meta':'Motion System','proj3-h':'Follow the Signal','proj3-c':'Cinematic transitions.','proj3-link':'Shape the handoff',
+    'proj4-meta':'Client Trust','proj4-h':'Serious Work','proj4-c':'Premium on arrival, stable underneath.','proj4-link':'Talk through scope',
+    'about-label':'About','about-title':'Retro atmosphere, modern discipline.',
+    'about-p1':'YASSEN builds launch pages, cinematic interfaces, and tactile portfolio systems.',
+    'about-p2':'The mood pulls people in. The structure makes them stay.',
+    'contact-label':'Contact','contact-title':'Bring the brief.','contact-panel-label':'Project Intake',
+    'form-name-l':'Name','form-name-p':'Your name','form-email-l':'Email','form-email-p':'your@email.com',
+    'form-msg-l':'Message','form-msg-p':'What do you want to build?','form-submit':'Send',
+    'form-note':"Demo form. Fields don't go anywhere yet.",
+    'contact-strong':'Fast alignment beats long drift.',
+    'contact-p':'Detail the deadline, the atmosphere, and the behavior that cannot break.',
+    'contact-l1':'Studio','contact-v1':'Remote / Retro-cinematic / Production-minded',
+    'contact-l2':'Focus','contact-v2':'Cinematic interfaces, realtime scenes','contact-l3':'Email',
+    'footer':'YASSEN / Creative Development Studio / 2026',
+    'toast-form':'Thanks — demo form, no email sent.',
+  },
+  ar: {
+    'loading':'جاري التحميل…','headline-html':"هيا نبني<br>شيئاً<br><span class='accent'>معاً</span>",
+    'sub':'تطوير إبداعي ريترو سينمائي.','tagline':'تصميم · موشن · ذكاء اصطناعي · إخراج','scroll-hint':'مرّر للأسفل',
+    'brand':'ياسين / استوديو سيغنال','nav-home':'الرئيسية','nav-work':'أعمال','nav-about':'عنّا','nav-contact':'تواصل',
+    'hero-eyebrow':'حضور ريترو سينمائي','hero-title':'أنظمة ريترو تجعل العمل الجاد مغناطيسيًا.',
+    'hero-copy':'كل شاشة مصممة لتشعر بالفخامة من النظرة الأولى.',
+    'hero-cta-1':'شاهد الأعمال','hero-cta-2':'احجز مكالمة','hero-panel-label':'لماذا يوافق العملاء',
+    'hero-panel-copy':'تسلسل واضح وأجواء ملموسة بُنيت معًا.',
+    'stat1-h':'إطلاقات 3D','stat1-c':'مشاهد سينمائية مصنوعة يدويًا.',
+    'stat2-h':'ثقة تحريرية','stat2-c':'بنية تبقي الانتباه.',
+    'stat3-h':'أنظمة الإشارة','stat3-c':'ملاحة متعمَّدة.',
+    'stat4-h':'جاهز للإطلاق','stat4-c':'مبني للنجاة في البريف الحقيقي.',
+    'work-label':'أعمال مختارة','work-title':'إشارات منسقة كدليل.','work-copy':'محفظة الريترو تتحرك كأداة.',
+    'proj1-meta':'إطلاق 3D','proj1-h':'غرفة الإشارة','proj1-c':'تأطير CRT دافئ.','proj1-link':'ابنِ كهذه',
+    'proj2-meta':'واجهة','proj2-h':'منطق الملصق','proj2-c':'طباعة كصفحة قديمة.','proj2-link':'انظر النهج',
+    'proj3-meta':'حركة','proj3-h':'اتبع الإشارة','proj3-c':'انتقالات سينمائية.','proj3-link':'شكّل التسليم',
+    'proj4-meta':'ثقة','proj4-h':'عمل جاد','proj4-c':'فاخر عند الوصول.','proj4-link':'تحدث عن النطاق',
+    'about-label':'عنّا','about-title':'أجواء ريترو، انضباط حديث.',
+    'about-p1':'ياسين يبني صفحات إطلاق وواجهات سينمائية.','about-p2':'المزاج يجذب. البنية تُبقي.',
+    'contact-label':'تواصل','contact-title':'أحضر البريف.','contact-panel-label':'استلام المشروع',
+    'form-name-l':'الاسم','form-name-p':'اسمك','form-email-l':'البريد','form-email-p':'your@email.com',
+    'form-msg-l':'الرسالة','form-msg-p':'ماذا تريد أن تبني؟','form-submit':'أرسل',
+    'form-note':'نموذج تجريبي.','contact-strong':'المحاذاة السريعة تتفوق على الانجراف.',
+    'contact-p':'فصِّل الموعد والأجواء والسلوك.',
+    'contact-l1':'الاستوديو','contact-v1':'عن بُعد / ريترو','contact-l2':'التركيز','contact-v2':'واجهات سينمائية','contact-l3':'البريد',
+    'footer':'ياسين / استوديو إبداعي / 2026','toast-form':'شكرًا — نموذج تجريبي.',
+  }
+};
+
+// ============================================================
+// PREVIEW MODE detection — ?preview=home or ?preview=end
+// ============================================================
+const _params = new URLSearchParams(location.search);
+const PREVIEW_MODE = _params.get('preview'); // 'home' | 'end' | null
+const IS_PREVIEW = PREVIEW_MODE === 'home' || PREVIEW_MODE === 'end';
+
+// BroadcastChannel — editor sends state, preview tabs receive
+const _liveChannel = new BroadcastChannel('yassen-live-edit');
+
+// ============================================================
+// EDITOR INSTALL FLAG — read from /saves/editor.enabled
+// Toggled by INSTALL_EDITOR.bat / REMOVE_EDITOR.bat
+// (Force-on for editor mode while developing: append ?force_editor=1)
+// ============================================================
+window._editorEnabledPromise = (async () => {
+  if (_params.get('force_editor') === '1') return true;
+  if (IS_PREVIEW) return false; // preview tabs never show editor
+  try {
+    const r = await fetch('/saves/editor.enabled');
+    return r.ok;
+  } catch { return false; }
+})();
+
+// TEXT EDITOR INSTALL FLAG — read from /saves/text-editor.enabled
+// Toggled by INSTALL_TEXT_EDITOR.bat / REMOVE_TEXT_EDITOR.bat (independent of the light editor).
+// force_editor=1 (full editor) or force_text=1 also turn it on.
+window._textEditorEnabledPromise = (async () => {
+  if (_params.get('force_editor') === '1' || _params.get('force_text') === '1') return true;
+  if (IS_PREVIEW) return false;
+  try {
+    const r = await fetch('/saves/text-editor.enabled');
+    return r.ok;
+  } catch { return false; }
+})();
+
+let currentLang = localStorage.getItem('yassenLang') || 'ar';   // Arabic is the default (CRT video, text, audio) for first-time visitors
+
+function setLanguage(lang) {
+  currentLang = lang;
+  try { localStorage.setItem('yassenLang', lang); } catch (e) {}   // Safari ITP / blocked storage
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  const dict = STRINGS[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] != null) {
+      if (key.endsWith('-html')) el.innerHTML = dict[key];
+      else el.textContent = dict[key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    const [attr, key] = el.getAttribute('data-i18n-attr').split(':');
+    if (dict[key] != null) el.setAttribute(attr, dict[key]);
+  });
+  // CRT VIDEO LANGUAGE SWAP — pointer swap, not a .src reload. The old `.src = ...` re-decoded
+  // the video from byte 0 and re-uploaded the texture, stalling the GPU for ~hundreds of ms.
+  // LAZY-LOAD: the other-language slot may not exist yet; ensureCrtSlot() creates it on first use.
+  if (typeof ensureCrtSlot === 'function') {
+    const targetSlot = ensureCrtSlot(lang);
+    if (videoCRT !== targetSlot.video) {
+      const prev = videoCRT;
+      videoCRTSlot = targetSlot;
+      videoCRT = videoCRTSlot.video;
+      videoCRTTex = videoCRTSlot.texture;
+      if (window._crtMesh && window._crtMesh.material) {
+        // Reassign .map — shader program unchanged (material was created WITH a map at boot),
+        // so we MUST NOT set material.needsUpdate = true (forces shader recompile, 10-50ms freeze).
+        window._crtMesh.material.map = videoCRTTex;
+      }
+      try { videoCRT.play().catch(()=>{}); } catch (e) {}
+      try { prev && prev.pause(); } catch (e) {}
+    }
+  }
+  // RADIO LANGUAGE SWAP: each UI language has its own playlist now.
+  // If music is currently playing, crossfade into the matching track in the new language.
+  // If it's stopped, just reset the track index so the next play picks the new language.
+  try {
+    musicState.trackIndex = 0;   // restart at track 0 in the new playlist
+    if (musicState.playing && typeof playTrack === 'function') {
+      playTrack(0, FADE_MS);   // crossfade into the first English/Arabic track
+    }
+  } catch (e) {}
+  // Re-apply text overrides AFTER i18n rewrites text, so edits survive language switch.
+  if (window.__applyTextOverrides) window.__applyTextOverrides();
+  // Keep the floating pills (language toggle + radio hint) in the right language too.
+  if (typeof refreshLangPillText === 'function') refreshLangPillText();
+  if (typeof refreshRadioHintText === 'function') refreshRadioHintText();
+  // Swap the in-TV portfolio to the matching language file.
+  if (typeof syncIframeToLang === 'function') syncIframeToLang();
+}
+
+/* ====================================================================== */
+/* THREE.JS                                                               */
+/* ====================================================================== */
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.85;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x05030a);
+
+// Subtle deep-space ambient so areas without direct light aren't pitch black
+scene.add(new THREE.AmbientLight(0x2a1838, 0.18));
+
+let camera = new THREE.PerspectiveCamera(33, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.position.set(15, 3, 6);
+camera.lookAt(6, 4, 0);
+
+// Post-processing: subtle bloom for moon + lamp halos + outline for clickable hover
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+composer.addPass(renderPass);
+
+const outlinePass = new OutlinePass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  scene, camera
+);
+outlinePass.edgeStrength = 4.0;
+outlinePass.edgeGlow = 0.6;
+outlinePass.edgeThickness = 1.5;
+outlinePass.pulsePeriod = 1.6; // gentle breathing
+outlinePass.visibleEdgeColor.set('#ffd070');
+outlinePass.hiddenEdgeColor.set('#664020');
+composer.addPass(outlinePass);
+window._outlinePass = outlinePass;
+
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.2,    // strength — subtle, like Eevee's default bloom
+  0.6,    // radius
+  0.95    // threshold — only nearly-saturated pixels bloom
+);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+/* ====================================================================== */
+/* ENVIRONMENT (cubemap)                                                  */
+/* ====================================================================== */
+const pmremGen = new THREE.PMREMGenerator(renderer);
+pmremGen.compileEquirectangularShader();
+
+new THREE.TextureLoader().load('assets/room-env.jpg', (tex) => {
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const envMap = pmremGen.fromEquirectangular(tex).texture;
+  scene.environment = envMap;
+  // Higher intensity gives PBR materials general "indirect-bounce" feel like Eevee.
+  scene.environmentIntensity = 0.45;
+  tex.dispose();
+  pmremGen.dispose();
+}, undefined, () => console.warn('env failed to load'));
+
+/* ====================================================================== */
+/* VIDEO TEXTURES                                                         */
+/* ====================================================================== */
+const videoTextures = []; // for play() on first user interaction
+
+function makeVideoTexture(src, opts = {}) {
+  const v = document.createElement('video');
+  v.src = src;
+  v.loop = true;
+  v.muted = true;
+  v.playsInline = true;
+  v.crossOrigin = 'anonymous';
+  v.autoplay = true;
+  v.preload = 'auto';
+  v.play().catch(()=>{});
+  const tex = new THREE.VideoTexture(v);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.flipY = opts.flipY ?? false;
+  videoTextures.push(v);
+  return { texture: tex, video: v };
+}
+
+// LAZY-LOAD CRT VIDEOS: only the current-language video loads at boot. The other slot stays empty
+// until the TV button is pressed — saves ~50-100 MB RAM (decoded video buffers) at startup.
+// Tradeoff: first language switch pauses ~1-2s while the second video loads + decodes its first frame.
+// The other-language slot is created lazily by ensureOtherCrtSlot() below in setLanguage().
+const _crtSlots = { ar: null, en: null };
+_crtSlots[currentLang] = makeVideoTexture('assets/video/crt-' + currentLang + '.mp4');
+let videoCRTSlot = _crtSlots[currentLang];
+let videoCRT = videoCRTSlot.video;
+let videoCRTTex = videoCRTSlot.texture;
+function ensureCrtSlot(lang) {
+  if (_crtSlots[lang]) return _crtSlots[lang];
+  _crtSlots[lang] = makeVideoTexture('assets/video/crt-' + lang + '.mp4');
+  return _crtSlots[lang];
+}
+const videoWindowSlot = makeVideoTexture('assets/video/window-bg.mp4');
+const videoWindowTex = videoWindowSlot.texture;
+
+/* ====================================================================== */
+/* MUSIC                                                                  */
+/* ====================================================================== */
+const RADIO_AR = [
+  'assets/music/radio-farid.mp3',
+  'assets/music/radio-abdelhalim.mp3',
+  'assets/music/radio-omkalthoum.mp3',
+];
+const RADIO_EN = [
+  'assets/music/radio-sunset-en.mp3',
+  'assets/music/radio-inkspots-en.mp3',
+  'assets/music/radio-shadow-en.mp3',
+];
+const PLAYLISTS = { en: RADIO_EN, ar: RADIO_AR };   // radio swaps with the UI language
+
+const MUSIC_VOL    = 0.5;     // radio volume while you're standing in the room
+const AMBIENT_VOL  = 0.18;
+const MUFFLE_SCALE = 0.4;     // volume multiplier when you step "inside the TV" (music from the next room)
+const FADE_MS      = 1600;    // crossfade / fade-in / fade-out length
+
+// Two decks so one song can fade OUT while the next fades IN (no abrupt jump between tracks).
+// LAZY-LOAD: decks have NO src set + preload="none" — no audio downloads until the user actually
+// clicks the radio. Saves ~20-40 MB RAM at boot. First radio click pauses ~1-2s while track loads.
+const deckA = new Audio(); const deckB = new Audio();
+deckA.preload = deckB.preload = 'none';
+let active = deckA, idle = deckB;
+
+// Ambient also lazy — only loads on first radio click via ensureAmbient() below.
+const audioAmbient = new Audio();
+audioAmbient.preload = 'none';
+audioAmbient.loop = true; audioAmbient.volume = 0;
+let _ambientLoaded = false;
+function ensureAmbient() {
+  if (_ambientLoaded) return;
+  _ambientLoaded = true;
+  audioAmbient.src = 'assets/music/ambient-night.mp3';
+}
+
+const musicState = { playing: false, trackIndex: 0, muffled: false, started: false };
+let _crossing = false;
+
+function musicTargetVol(){ return MUSIC_VOL * (musicState.muffled ? MUFFLE_SCALE : 1); }
+function ambientTargetVol(){ return AMBIENT_VOL * (musicState.muffled ? MUFFLE_SCALE : 1); }
+
+// Timer-based fade (independent of requestAnimationFrame, so it still runs in a throttled/iframe tab).
+function fadeAudio(el, to, ms, done){
+  if (el._fadeTimer) clearInterval(el._fadeTimer);
+  to = Math.max(0, Math.min(1, to));
+  const from = el.volume || 0, t0 = Date.now();
+  if (ms <= 0){ el.volume = to; if (done) done(); return; }
+  el._fadeTimer = setInterval(() => {
+    const k = Math.min(1, (Date.now() - t0) / ms);
+    el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
+    if (k >= 1){ clearInterval(el._fadeTimer); el._fadeTimer = null; if (done) done(); }
+  }, 40);
+}
+
+// Optional Web-Audio low-pass so the muffle actually sounds like "another room", not just quieter.
+// Degrades gracefully: if it can't init, the volume drop above still applies.
+let _audioCtx, _lowpass;
+function ensureAudioGraph(){
+  if (_audioCtx || !(window.AudioContext || window.webkitAudioContext)) return;
+  try {
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    _lowpass = _audioCtx.createBiquadFilter();
+    _lowpass.type = 'lowpass'; _lowpass.frequency.value = 20000;
+    _lowpass.connect(_audioCtx.destination);
+    [deckA, deckB].forEach(d => _audioCtx.createMediaElementSource(d).connect(_lowpass));
+  } catch(e){ _audioCtx = null; }
+}
+function applyMuffleTone(){
+  if (!_lowpass) return;
+  if (_audioCtx.state === 'suspended') _audioCtx.resume().catch(()=>{});
+  _lowpass.frequency.setTargetAtTime(musicState.muffled ? 520 : 20000, _audioCtx.currentTime, 0.25);
+}
+
+// PERF: pre-build the AudioContext + MediaElementSource graph DURING the loader, not on a user
+// gesture. Creating an AudioContext on Windows costs 200-500ms of main-thread freeze; deferring it
+// to first-gesture-plus-2500ms still hits the user mid-scroll. Build it now while the user is
+// staring at the loader bar — the freeze is invisible there. AudioContext starts in "suspended"
+// state per browser autoplay policy; the first user gesture later just calls .resume() (cheap).
+setTimeout(() => { try { ensureAudioGraph(); } catch (e) {} }, 50);
+
+function playTrack(idx, fade){
+  musicState.trackIndex = idx;
+  idle.src = PLAYLISTS[currentLang][idx];
+  idle.volume = 0;
+  const p = idle.play(); if (p && p.catch) p.catch(()=>{});
+  fadeAudio(idle, musicTargetVol(), fade);
+  const out = active;
+  fadeAudio(out, 0, fade, () => { try { out.pause(); } catch(e){} });
+  active = idle; idle = out;   // swap: the new song is now the active deck
+}
+
+function advanceTrack(){
+  if (_crossing || !musicState.playing) return;
+  _crossing = true;
+  playTrack((musicState.trackIndex + 1) % PLAYLISTS[currentLang].length, FADE_MS);
+  setTimeout(() => { _crossing = false; }, FADE_MS + 120);
+}
+// Start the next song a touch BEFORE the current one ends -> real overlap crossfade.
+[deckA, deckB].forEach(d => {
+  d.addEventListener('timeupdate', function(){
+    if (this !== active || _crossing || !musicState.playing) return;
+    const dur = active.duration;
+    if (!dur || isNaN(dur)) return;
+    if (dur - active.currentTime <= (FADE_MS / 1000) + 0.05) advanceTrack();
+  });
+  d.addEventListener('ended', function(){ if (this === active) advanceTrack(); });   // safety net
+});
+
+function toggleMusic(){
+  ensureAudioGraph();
+  ensureAmbient();   // LAZY-LOAD: trigger ambient track download on first radio click only
+  if (_audioCtx && _audioCtx.state === 'suspended') _audioCtx.resume().catch(()=>{});
+  if (!musicState.playing){
+    musicState.playing = true;
+    // Pressing PLAY again after a stop advances to the NEXT song (acts like switching the station).
+    const idx = musicState.started
+      ? (musicState.trackIndex + 1) % PLAYLISTS[currentLang].length
+      : musicState.trackIndex;
+    musicState.started = true;
+    playTrack(idx, FADE_MS);
+    audioAmbient.play().catch(()=>{});
+    fadeAudio(audioAmbient, ambientTargetVol(), FADE_MS);
+  } else {
+    musicState.playing = false;
+    fadeAudio(active, 0, FADE_MS, () => { try { active.pause(); } catch(e){} });
+    fadeAudio(audioAmbient, 0, FADE_MS, () => { try { audioAmbient.pause(); } catch(e){} });
+  }
+}
+
+// Called when you step into / out of the TV -> music sounds like it's coming from the next room.
+function setMusicMuffled(on){
+  if (musicState.muffled === on) return;
+  musicState.muffled = on;
+  applyMuffleTone();
+  if (musicState.playing) fadeAudio(active, musicTargetVol(), 700);
+  if (musicState.playing) fadeAudio(audioAmbient, ambientTargetVol(), 700);
+}
+
+/* ====================================================================== */
+/* GLTF LOAD                                                              */
+/* ====================================================================== */
+const loaderEl = document.getElementById('loader');
+const loaderBar = document.getElementById('loader-bar');
+const debugHud = document.getElementById('debug-hud');
+const manager = new THREE.LoadingManager();
+// Loading bar: move left->right at ONE steady speed (no jumps/stalls). It creeps up to 90%
+// while assets load, then once everything is ready it fills to 100% and the page reveals.
+const loaderPct = document.getElementById('loader-pct');
+let _loadDone = false, _shownProg = 0;
+const _loaderTimer = setInterval(() => {
+  if (_loadDone) {
+    _shownProg = Math.min(1, _shownProg + 0.06);                 // finish to 100% once everything is ready
+  } else if (_shownProg < 0.95) {
+    _shownProg += 0.0035;                                        // slow, steady count up (~8s to 95%)
+  } else {
+    _shownProg = Math.min(0.99, _shownProg + 0.0004);           // crawl 95% -> 99%, never freezes
+  }
+  const pct = Math.round(_shownProg * 100);
+  loaderBar.style.width = (_shownProg * 100).toFixed(1) + '%';
+  if (loaderPct) loaderPct.textContent = pct + '%';
+  if (_loadDone && _shownProg >= 1) { if (loaderPct) loaderPct.textContent = '100%'; clearInterval(_loaderTimer); }
+}, 30);
+manager.onProgress = () => {};   // progress is shown by the steady creep above, not by jumpy per-file events
+
+const gltfLoader = new GLTFLoader(manager);
+let camHome = null, camEnd = null;
+let tvButton = null, radioButton = null;
+let tvButtonRestZ = null, tvButtonAltZ = null;
+let scrollProgress = 0;
+const clickables = [];
+
+// Materials that should be highly reflective (will pick up the cubemap).
+// Tightened: only true metal/glass — phone body, cable, dial plate are plastic.
+function isShinyMatName(name) {
+  return /(MetalTable|MetalWindow|^_*Metal$|__Metal$|Glass)/i.test(name);
+}
+
+gltfLoader.load('assets/room.glb', (gltf) => {
+  const root = gltf.scene;
+  scene.add(root);
+
+  // Walk and configure
+  let crtTargetMesh = null;
+  let windowTargetMesh = null;
+  let allMeshNames = [];
+
+  root.traverse((obj) => {
+    if (obj.isMesh) {
+      allMeshNames.push(obj.name);
+      obj.castShadow = false;
+      obj.receiveShadow = false;
+      // The GLTFLoader already gave us MeshStandardMaterial with all textures.
+      // Just tweak: shiny materials get higher metalness/lower roughness so the env shows.
+      const mat = obj.material;
+      if (mat && mat.name) {
+        if (isShinyMatName(mat.name)) {
+          if (mat.metalness !== undefined) mat.metalness = Math.max(mat.metalness, 0.85);
+          if (mat.roughness !== undefined) mat.roughness = Math.min(mat.roughness, 0.25);
+          mat.envMapIntensity = 1.5;
+        } else {
+          if (mat.envMapIntensity !== undefined) mat.envMapIntensity = 0.55;
+        }
+      }
+
+      // Find video targets — try direct name AND check parents/children
+      const n = obj.name.toLowerCase();
+      if (n === 'slot_crtscreen' || n.includes('crtscreen')) crtTargetMesh = obj;
+      if (n === 'window_outer' || n.includes('window_outer')) windowTargetMesh = obj;
+    }
+    if (obj.isCamera) {
+      if (obj.name === 'Cam_Home') camHome = obj;
+      if (obj.name === 'Cam_End') camEnd = obj;
+    }
+    if (obj.isLight) {
+      // Drop ALL imported Blender lights — they're calibrated for Cycles units
+      // and don't translate. We rebuild lighting below by hand.
+      obj.intensity = 0;
+      obj.visible = false;
+    }
+    if (obj.name === 'TV-Button') tvButton = obj;
+    if (obj.name === 'Radio_Button') radioButton = obj;
+    if (obj.name === 'Cube.010') obj.visible = false;
+  });
+
+  // CRT video
+  if (crtTargetMesh) {
+    crtTargetMesh.material = new THREE.MeshBasicMaterial({ map: videoCRTTex });
+    fixPlaneUVs(crtTargetMesh, { flipU: false, flipV: true });
+    window._crtMesh = crtTargetMesh;   // setLanguage() needs this to swap material.map on language flip
+    console.log('CRT video assigned to', crtTargetMesh.name, '(UVs fixed, flipV)');
+  } else {
+    console.warn('No CRT mesh found');
+  }
+  // Window backdrop video
+  if (windowTargetMesh) {
+    windowTargetMesh.material = new THREE.MeshBasicMaterial({ map: videoWindowTex });
+    // Regenerate UVs so the video maps cleanly across the full plane
+    // (the imported Plane has degenerate UVs that sample only one corner)
+    fixPlaneUVs(windowTargetMesh);
+    console.log('Window video assigned to', windowTargetMesh.name, '(UVs fixed)');
+  } else {
+    console.warn('No Window_Outer mesh found');
+  }
+
+  // Compute fresh UVs for a flat plane based on its vertex positions in local space.
+  // Picks the two largest dimensions of the bounding box as U and V axes.
+  // opts.flipU / opts.flipV mirror the resulting UVs.
+  function fixPlaneUVs(mesh, opts = {}) {
+    const geo = mesh.geometry;
+    const pos = geo.attributes.position;
+    if (!pos) return;
+    let minX=Infinity, minY=Infinity, minZ=Infinity;
+    let maxX=-Infinity, maxY=-Infinity, maxZ=-Infinity;
+    for (let i = 0; i < pos.count; i++) {
+      const x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i);
+      if (x<minX) minX=x; if (x>maxX) maxX=x;
+      if (y<minY) minY=y; if (y>maxY) maxY=y;
+      if (z<minZ) minZ=z; if (z>maxZ) maxZ=z;
+    }
+    const ranges = { x:[minX,maxX-minX], y:[minY,maxY-minY], z:[minZ,maxZ-minZ] };
+    const sorted = Object.entries(ranges).sort((a,b) => b[1][1]-a[1][1]);
+    const u = sorted[0][0], v = sorted[1][0];
+    const uMin = ranges[u][0], vMin = ranges[v][0];
+    const uSize = ranges[u][1] || 1, vSize = ranges[v][1] || 1;
+    const uvArr = new Float32Array(pos.count * 2);
+    const getU = (i) => (u==='x'?pos.getX(i):u==='y'?pos.getY(i):pos.getZ(i));
+    const getV = (i) => (v==='x'?pos.getX(i):v==='y'?pos.getY(i):pos.getZ(i));
+    for (let i = 0; i < pos.count; i++) {
+      let uu = (getU(i) - uMin) / uSize;
+      let vv = (getV(i) - vMin) / vSize;
+      if (opts.flipU) uu = 1 - uu;
+      if (opts.flipV) vv = 1 - vv;
+      uvArr[i*2]   = uu;
+      uvArr[i*2+1] = vv;
+    }
+    geo.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
+    geo.attributes.uv.needsUpdate = true;
+  }
+
+  // Hide ONLY the glass panes (kills the dark blue tint) — keep the metal/wood frame visible
+  let glassHidden = 0;
+  root.traverse(o => {
+    if (o.isMesh && o.material && o.material.name && /glass/i.test(o.material.name) && o !== crtTargetMesh) {
+      o.visible = false;
+      glassHidden++;
+    }
+  });
+  console.log(`Glass panes hidden: ${glassHidden} (window frame restored)`);
+
+  // Camera setup — copy from Cam_Home into our free camera (don't reassign reference)
+  if (camHome) {
+    camera.position.copy(camHome.position);
+    camera.quaternion.copy(camHome.quaternion);
+    if (camHome.isPerspectiveCamera) {
+      camera.fov = camHome.fov;
+      camera.near = camHome.near;
+      camera.far = camHome.far;
+    }
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  if (tvButton) {
+    tvButtonRestZ = tvButton.rotation.z;
+    tvButtonAltZ = tvButtonRestZ + (124 * Math.PI / 180);
+    clickables.push({ object: tvButton, name: 'TV-Button' });
+  }
+  if (radioButton) {
+    clickables.push({ object: radioButton, name: 'Radio_Button' });
+  }
+
+  // Default outline — always visible on both buttons so user knows they're clickable
+  if (window._outlinePass) {
+    const allBtnMeshes = [];
+    clickables.forEach(c => c.object.traverse(o => { if (o.isMesh) allBtnMeshes.push(o); }));
+    window._outlinePass.selectedObjects = allBtnMeshes;
+    // Save list so hover effect can restore it after a momentary intensity boost
+    window._defaultOutlineObjects = allBtnMeshes.slice();
+  }
+
+  // ============================================================
+  // V3: HAND-BUILT LIGHTING FROM SCRATCH
+  // No Blender import. Five lights tuned for the look directly in Three.js.
+  // World coords (Three.js Y-up):
+  //   TV body:         (3.84, 4.76, 1.44)
+  //   Lamp area:       (12.7, 4.5, 4.6)   right-side desk lamp
+  //   Window backdrop: (-30, 19, -1)      far left, high
+  //   Floor center:    (6.78, -1.96, -4.35)
+  //   Cam_Home:        (15.0, 3.13, 6.31) viewer's eye
+  // ============================================================
+
+  // ---- LIGHTS — accessible via window._lights so the GUI can edit them ----
+  const _lights = window._lights = {};
+
+  _lights.lampSpot = new THREE.SpotLight(0xffb060, 80, 12, Math.PI/4, 0.6, 2);
+  _lights.lampSpot.position.set(12.7, 5.2, 4.6);
+  _lights.lampSpot.target.position.set(11.0, 0.0, 4.6);
+  scene.add(_lights.lampSpot, _lights.lampSpot.target);
+
+  _lights.lampBulb = new THREE.PointLight(0xffd0a0, 14, 6, 2);
+  _lights.lampBulb.position.set(12.7, 4.6, 4.6);
+  scene.add(_lights.lampBulb);
+
+  _lights.moonDir = new THREE.DirectionalLight(0xa8c0ff, 2.4);
+  _lights.moonDir.position.set(-25, 18, 0);
+  _lights.moonDir.target.position.set(6, 2, 0);
+  scene.add(_lights.moonDir, _lights.moonDir.target);
+
+  _lights.moonPoint = new THREE.PointLight(0xc8d8ff, 35, 50, 2);
+  _lights.moonPoint.position.set(-29, 19, -1);
+  scene.add(_lights.moonPoint);
+
+  _lights.hemi = new THREE.HemisphereLight(0xb89cd0, 0x2a1a3a, 0.85);
+  scene.add(_lights.hemi);
+
+  _lights.interiorFill = new THREE.PointLight(0xd9b88f, 30, 24, 1.5);
+  _lights.interiorFill.position.set(8, 5, 4);
+  scene.add(_lights.interiorFill);
+
+  console.log('v5: 6 lights ready for live editing');
+
+  // ====== HELPER SPHERES (visual markers at each light) ======
+  // Created BEFORE the GUI so the GUI can find them as children of each light.
+  const lightHelpers = [];
+  let _helpersVisible = true; // master state — saved & restored
+  function addHelperToLight(name, L) {
+    if (!L.position || L.isHemisphereLight) return null;
+    const helper = new THREE.Mesh(
+      new THREE.SphereGeometry(0.2, 16, 8),
+      new THREE.MeshBasicMaterial({ color: L.color || 0xffffff, transparent: true, opacity: 0.85, depthTest: false })
+    );
+    helper.userData.lightName = name;
+    helper.userData.isLightHelper = true;
+    helper.userData.light = L;
+    helper.renderOrder = 999;
+    helper.visible = _helpersVisible; // honor master state on creation
+    L.add(helper);
+    lightHelpers.push(helper);
+    return helper;
+  }
+  for (const [name, L] of Object.entries(_lights)) {
+    addHelperToLight(name, L);
+  }
+  function setAllHelpersVisible(v) {
+    _helpersVisible = v;
+    for (const h of lightHelpers) h.visible = v;
+  }
+
+  // ====== LIVE EDITOR (lil-gui) ======
+  const gui = new GUI({ title: 'Light Editor', width: 320 });
+  gui.domElement.style.zIndex = '500';
+
+  // ---- helper: wrap any lil-gui controller with undo ----
+  // Captures value at pointer-down, pushes undo on finish-change.
+  function withUndo(controller, label) {
+    let snapshot;
+    const startCapture = () => { snapshot = controller.getValue(); };
+    controller.domElement.addEventListener('pointerdown', startCapture, true);
+    controller.domElement.addEventListener('touchstart', startCapture, true);
+    controller.onFinishChange((newVal) => {
+      if (snapshot === undefined) return;
+      if (JSON.stringify(snapshot) === JSON.stringify(newVal)) { snapshot = undefined; return; }
+      const before = snapshot;
+      pushUndo(label, () => controller.setValue(before));
+      snapshot = undefined;
+    });
+    return controller;
+  }
+
+  // Globals
+  const fGlobal = gui.addFolder('Globals');
+  const globalState = {
+    exposure: renderer.toneMappingExposure,
+    bloomStrength: bloomPass.strength,
+    bloomThreshold: bloomPass.threshold,
+    bloomRadius: bloomPass.radius,
+    envIntensity: scene.environmentIntensity ?? 0.45,
+  };
+  withUndo(fGlobal.add(globalState, 'exposure', 0, 2, 0.01).onChange(v => renderer.toneMappingExposure = v), 'exposure');
+  withUndo(fGlobal.add(globalState, 'envIntensity', 0, 2, 0.01).onChange(v => scene.environmentIntensity = v), 'envIntensity');
+  withUndo(fGlobal.add(globalState, 'bloomStrength', 0, 2, 0.01).onChange(v => bloomPass.strength = v), 'bloomStrength');
+  withUndo(fGlobal.add(globalState, 'bloomThreshold', 0, 1, 0.01).onChange(v => bloomPass.threshold = v), 'bloomThreshold');
+  withUndo(fGlobal.add(globalState, 'bloomRadius', 0, 2, 0.01).onChange(v => bloomPass.radius = v), 'bloomRadius');
+
+  // Master toggle: show / hide ALL light helper spheres at once
+  globalState.helpersVisible = true;
+  withUndo(
+    fGlobal.add(globalState, 'helpersVisible')
+      .name('🟢 Show all light helpers')
+      .onChange(v => setAllHelpersVisible(v)),
+    'helpersVisible'
+  );
+
+  // Per-light controls (each slider wrapped in undo)
+  function addLightFolder(name, light) {
+    const f = gui.addFolder(name);
+    withUndo(f.add(light, 'visible').name('Light ON/OFF (effect)'), `${name}.visible`);
+    const helper = light.children.find(c => c.userData?.isLightHelper);
+    if (helper) {
+      withUndo(f.add(helper, 'visible').name('Show helper sphere'), `${name}.helper.visible`);
+    }
+    withUndo(f.add(light, 'intensity', 0, 500, 0.5), `${name}.intensity`);
+    if (light.color) {
+      withUndo(
+        f.addColor({ color: '#' + light.color.getHexString() }, 'color').onChange(v => light.color.set(v)),
+        `${name}.color`
+      );
+    }
+    if (light.isHemisphereLight) {
+      withUndo(
+        f.addColor({ groundColor: '#' + light.groundColor.getHexString() }, 'groundColor').onChange(v => light.groundColor.set(v)),
+        `${name}.groundColor`
+      );
+    }
+    if (light.position) {
+      withUndo(f.add(light.position, 'x', -40, 40, 0.1).name('pos.x'), `${name}.pos.x`);
+      withUndo(f.add(light.position, 'y', -10, 30, 0.1).name('pos.y'), `${name}.pos.y`);
+      withUndo(f.add(light.position, 'z', -40, 40, 0.1).name('pos.z'), `${name}.pos.z`);
+    }
+    if (light.isSpotLight) {
+      withUndo(f.add(light, 'angle', 0, Math.PI/2, 0.01), `${name}.angle`);
+      withUndo(f.add(light, 'penumbra', 0, 1, 0.01), `${name}.penumbra`);
+      withUndo(f.add(light, 'distance', 0, 60, 0.5), `${name}.distance`);
+      withUndo(f.add(light.target.position, 'x', -40, 40, 0.1).name('target.x'), `${name}.target.x`);
+      withUndo(f.add(light.target.position, 'y', -10, 30, 0.1).name('target.y'), `${name}.target.y`);
+      withUndo(f.add(light.target.position, 'z', -40, 40, 0.1).name('target.z'), `${name}.target.z`);
+    }
+    if (light.isPointLight) {
+      withUndo(f.add(light, 'distance', 0, 80, 0.5), `${name}.distance`);
+      withUndo(f.add(light, 'decay', 0, 4, 0.01), `${name}.decay`);
+    }
+    f.close();
+    return f;
+  }
+
+  for (const [name, light] of Object.entries(_lights)) {
+    addLightFolder(name, light);
+  }
+
+  // ====== ✍ STANDALONE TEXT EDITOR (its own panel — NOT part of the Light Editor) ======
+  // Independent panel, gated by /saves/text-editor.enabled (INSTALL_TEXT_EDITOR.bat).
+  // Text styling is stored in the same published JSON (textOverrides) so visitors see it too.
+  const TEXT_TARGETS = [
+    { name: 'Hero phrase (intro)', sel: '#phase1-overlay h1' },
+    { name: 'Hero title',          sel: '.hero h1' },
+    { name: 'Section headings',    sel: '.section-head h2' },
+    { name: 'Project titles',      sel: '.project-card h3' },
+    { name: 'Brand mark',          sel: '.brand-mark' },
+    { name: 'Eyebrow / labels',    sel: '.eyebrow' },
+    { name: 'Body copy (hero)',    sel: '.hero-copy' },
+  ];
+  let FONT_CHOICES = ['(default)', 'Panorama Naskh', 'Cairo', 'Tajawal', 'Fraunces', 'Inter'];
+  const WEIGHTS = { '(auto)': 0, 'Light 300': 300, 'Regular 400': 400, 'Medium 500': 500, 'SemiBold 600': 600, 'Bold 700': 700, 'ExtraBold 800': 800, 'Black 900': 900 };
+  const ALIGNS = ['default', 'right', 'center', 'left', 'justify'];
+  const SWASH_FEATURES = '"swsh" 1, "calt" 1, "liga" 1, "dlig" 1';
+
+  // Override model per selector:
+  //   { content:{en,ar}, font, weight, color, opacity, spacing, line, align, rotate, swsh,
+  //     bp:{ desktop:{size,x,y,scale}, tablet:{...}, mobile:{...} } }
+  let _textOverrides = {};
+  let _textEditorOn = false;
+
+  function currentBP() { const w = window.innerWidth; return w <= 640 ? 'mobile' : (w <= 1024 ? 'tablet' : 'desktop'); }
+  function bpVal(ov, key) {
+    const cur = currentBP();
+    const order = cur === 'mobile' ? ['mobile', 'tablet', 'desktop'] : cur === 'tablet' ? ['tablet', 'desktop'] : ['desktop'];
+    for (const b of order) { const m = ov.bp && ov.bp[b]; if (m && m[key] !== undefined && m[key] !== null) return m[key]; }
+    return undefined;
+  }
+
+  function applyTextOverride(sel) {
+    const ov = _textOverrides[sel];
+    document.querySelectorAll(sel).forEach(el => {
+      if (!ov) {
+        ['fontFamily','fontWeight','color','opacity','letterSpacing','lineHeight','textAlign','fontFeatureSettings','translate','transform','fontSize'].forEach(p => el.style[p] = '');
+        return;
+      }
+      el.style.fontFamily        = (ov.font && ov.font !== '(default)') ? ov.font : '';
+      el.style.fontWeight        = (ov.weight && ov.weight > 0) ? String(ov.weight) : '';
+      el.style.color             = ov.color || '';
+      el.style.opacity           = (ov.opacity != null && ov.opacity < 1) ? String(ov.opacity) : '';
+      el.style.letterSpacing     = (ov.spacing) ? (ov.spacing + 'em') : '';
+      el.style.lineHeight        = (ov.line && ov.line > 0) ? String(ov.line) : '';
+      el.style.textAlign         = (ov.align && ov.align !== 'default') ? ov.align : '';
+      el.style.fontFeatureSettings = ov.swsh ? SWASH_FEATURES : '';
+      const size = bpVal(ov, 'size'); el.style.fontSize = (size && size > 0) ? (size + 'px') : '';
+      const tx = bpVal(ov, 'x') || 0, ty = bpVal(ov, 'y') || 0;
+      el.style.translate = (tx || ty) ? (tx + 'px ' + ty + 'px') : '';        // independent of transform
+      const rot = ov.rotate || 0; const sc = bpVal(ov, 'scale'); const scale = (sc == null) ? 1 : sc;
+      const tp = []; if (rot) tp.push('rotate(' + rot + 'deg)'); if (scale !== 1) tp.push('scale(' + scale + ')');
+      el.style.transform = tp.length ? tp.join(' ') : '';
+      if (ov.content) {
+        const lang = (document.documentElement.dir === 'rtl') ? 'ar' : 'en';
+        const txt = ov.content[lang];
+        if (txt != null) {
+          const key = el.getAttribute && el.getAttribute('data-i18n');
+          if (key && key.endsWith('-html')) el.innerHTML = txt; else el.textContent = txt;
+        }
+      }
+    });
+  }
+  function applyAllTextOverrides() {
+    for (const sel of Object.keys(_textOverrides)) applyTextOverride(sel);
+  }
+  window.__applyTextOverrides = applyAllTextOverrides;   // called by setLanguage() so edits survive language switch
+
+  // Persistent dashed outline on the currently-selected element(s) (editor only).
+  let _selEls = [];
+  function clearSelOutline() { _selEls.forEach(el => { el.style.outline = el.dataset.__pe || ''; delete el.dataset.__pe; }); _selEls = []; }
+  function markSelected(sel) {
+    if (!_textEditorOn) return;
+    clearSelOutline();
+    try { document.querySelectorAll(sel).forEach(el => { el.dataset.__pe = el.style.outline; el.style.outline = '1px dashed rgba(200,182,230,0.8)'; el.style.outlineOffset = '2px'; _selEls.push(el); }); } catch (e) {}
+  }
+
+  // Re-apply when the viewport crosses a breakpoint.
+  let _rzTO; window.addEventListener('resize', () => { clearTimeout(_rzTO); _rzTO = setTimeout(() => { if (typeof _onBPMaybeChanged === 'function') _onBPMaybeChanged(); applyAllTextOverrides(); }, 150); });
+
+  // Separate lil-gui instance, placed on the LEFT so it never overlaps the Light Editor (right side).
+  const textGui = new GUI({ title: '✍ Text Editor', width: 320 });
+  textGui.domElement.style.position = 'fixed';
+  textGui.domElement.style.top = '16px';
+  textGui.domElement.style.left = '16px';
+  textGui.domElement.style.right = 'auto';
+  textGui.domElement.style.maxHeight = '94vh';
+  textGui.domElement.style.overflowY = 'auto';
+  textGui.domElement.style.zIndex = '500';
+
+  const textUI = {
+    target: TEXT_TARGETS[0].sel, content: '',
+    font: '(default)', weight: 0, useColor: false, color: '#e8dcc4', opacity: 1,
+    spacing: 0, line: 0, align: 'default', rotate: 0, swsh: false,
+    editBP: currentBP(), size: 0, x: 0, y: 0, scale: 1,
+  };
+  function refreshUI() { textGui.controllersRecursive().forEach(c => c.updateDisplay()); }
+  function ensureOv(sel) { const ov = _textOverrides[sel] || (_textOverrides[sel] = {}); if (!ov.bp) ov.bp = {}; if (!ov.bp[textUI.editBP]) ov.bp[textUI.editBP] = {}; return ov; }
+
+  function loadTargetIntoUI(sel) {
+    const ov = _textOverrides[sel] || {};
+    textUI.font    = ov.font || '(default)';
+    textUI.weight  = ov.weight || 0;
+    textUI.useColor = !!ov.color;
+    textUI.color   = ov.color || '#e8dcc4';
+    textUI.opacity = (ov.opacity == null) ? 1 : ov.opacity;
+    textUI.spacing = ov.spacing || 0;
+    textUI.line    = ov.line || 0;
+    textUI.align   = ov.align || 'default';
+    textUI.rotate  = ov.rotate || 0;
+    textUI.swsh    = !!ov.swsh;
+    const m = (ov.bp && ov.bp[textUI.editBP]) || {};
+    textUI.size  = m.size || 0; textUI.x = m.x || 0; textUI.y = m.y || 0; textUI.scale = (m.scale == null) ? 1 : m.scale;
+    const lang = (document.documentElement.dir === 'rtl') ? 'ar' : 'en';
+    let c = ov.content && ov.content[lang];
+    if (c == null) { const el = document.querySelector(sel); c = el ? (el.textContent || '').trim() : ''; }
+    textUI.content = c;
+    refreshUI();
+  }
+  function selectTarget(sel) { textUI.target = sel; loadTargetIntoUI(sel); markSelected(sel); }
+
+  function writeStyle() {
+    pushUndoCoalesced();
+    const ov = ensureOv(textUI.target);
+    ov.font = textUI.font; ov.weight = textUI.weight;
+    ov.color = textUI.useColor ? textUI.color : '';
+    ov.opacity = textUI.opacity; ov.spacing = textUI.spacing; ov.line = textUI.line;
+    ov.align = textUI.align; ov.rotate = textUI.rotate; ov.swsh = textUI.swsh;
+    ov.bp[textUI.editBP] = { size: textUI.size, x: textUI.x, y: textUI.y, scale: textUI.scale };
+    applyTextOverride(textUI.target);
+  }
+  function writeContent() {
+    pushUndoCoalesced();
+    const ov = ensureOv(textUI.target);
+    if (!ov.content) ov.content = {};
+    const lang = (document.documentElement.dir === 'rtl') ? 'ar' : 'en';
+    ov.content[lang] = textUI.content;
+    applyTextOverride(textUI.target);
+  }
+
+  // ----- undo (own stack; Ctrl+Z) -----
+  let _textUndo = [];
+  function snapText() { return JSON.stringify(_textOverrides); }
+  function pushUndoSnap(s) { if (s != null && s !== snapText()) { _textUndo.push(s); if (_textUndo.length > 80) _textUndo.shift(); } }
+  let _lastUndoT = 0;
+  function pushUndoCoalesced() {
+    if (_dragging) return;                              // drag captures its own snapshot at start
+    const now = Date.now();
+    if (now - _lastUndoT < 600 && _textUndo.length) { _lastUndoT = now; return; }  // coalesce rapid slider moves
+    const s = snapText();
+    if (_textUndo.length && _textUndo[_textUndo.length - 1] === s) return;
+    _textUndo.push(s); if (_textUndo.length > 80) _textUndo.shift(); _lastUndoT = now;
+  }
+  function textWithUndo(controller) { return controller; }  // undo captured inside writeStyle/writeContent
+  function doUndo() {
+    if (!_textUndo.length) return;
+    const prevKeys = Object.keys(_textOverrides);
+    _textOverrides = JSON.parse(_textUndo.pop());
+    new Set([...prevKeys, ...Object.keys(_textOverrides)]).forEach(applyTextOverride);  // clears removed selectors too
+    selectTarget(textUI.target);
+    showToast('↩ Undo');
+  }
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z' && _textEditorOn && _textUndo.length) {
+      e.preventDefault(); e.stopImmediatePropagation(); doUndo();
+    }
+  }, true);
+
+  // updates the breakpoint dropdown label after a resize (defined here, used by resize handler above)
+  function _onBPMaybeChanged() { if (textUI.editBP !== currentBP()) { textUI.editBP = currentBP(); loadTargetIntoUI(textUI.target); } }
+  // ----- click-to-select ("pick") mode: click any text on the page to select it -----
+  function cssPath(el) {
+    if (!el || el.nodeType !== 1) return '';
+    if (el.id) return '#' + CSS.escape(el.id);
+    const key = el.getAttribute && el.getAttribute('data-i18n');
+    if (key) return '[data-i18n="' + key + '"]';   // stable selector, survives DOM reshuffles
+    const parts = [];
+    let node = el;
+    while (node && node.nodeType === 1 && node !== document.body) {
+      if (node.id) { parts.unshift('#' + CSS.escape(node.id)); break; }
+      let part = node.tagName.toLowerCase();
+      const parent = node.parentElement;
+      if (parent) {
+        const same = [...parent.children].filter(c => c.tagName === node.tagName);
+        if (same.length > 1) part += ':nth-of-type(' + (same.indexOf(node) + 1) + ')';
+      }
+      parts.unshift(part);
+      node = node.parentElement;
+    }
+    return parts.join(' > ');
+  }
+  let _picking = false, _hoverEl = null, _hoverOutline = '';
+  function _clearHover() { if (_hoverEl) { _hoverEl.style.outline = _hoverOutline; _hoverEl = null; } }
+  function _onHover(e) {
+    _refreshPEIfActive();
+    const el = e.target;
+    if (el === _hoverEl || (el.closest && el.closest('.lil-gui'))) return;
+    _clearHover();
+    _hoverEl = el; _hoverOutline = el.style.outline;
+    el.style.outline = '2px solid #c8b6e6';
+    el.style.outlineOffset = '2px';
+  }
+  function _onPick(e) {
+    if (e.target.closest && e.target.closest('.lil-gui')) return; // ignore clicks on the panel
+    e.preventDefault(); e.stopPropagation();
+    const sel = cssPath(e.target);
+    _clearHover(); setPicking(false);
+    if (sel) { selectTarget(sel); showToast('🎯 Selected: ' + sel); }
+  }
+  // Text overlays use pointer-events:none so the 3D scene/scroll work underneath.
+  // While picking OR dragging, force pointer-events back ON so text is interactive.
+  function _refreshPE() {
+    const need = _picking || _dragMode;
+    let s = document.getElementById('__pickPE');
+    if (!need) { if (s) s.remove(); return; }
+    // Only enable clicks on the VIEW that's actually showing. The intro overlay (#phase1-overlay,
+    // z-index 5, full-screen) stays on top even when faded — if we leave it clickable it steals
+    // clicks meant for the portfolio underneath.
+    const pf = document.getElementById('portfolio-shell');
+    const ov = document.getElementById('phase1-overlay');
+    const pfVisible = pf && parseFloat(getComputedStyle(pf).opacity) > 0.5;
+    const ovVisible = ov && parseFloat(getComputedStyle(ov).opacity) > 0.5;
+    let css = '#gl, canvas { pointer-events: none !important; }';
+    // enable clicks only on the view that's actually visible; the faded one stays click-through
+    css += ' #portfolio-shell, #portfolio-shell * { pointer-events: ' + (pfVisible ? 'auto' : 'none') + ' !important; }';
+    css += ' #phase1-overlay, #phase1-overlay * { pointer-events: ' + (ovVisible ? 'auto' : 'none') + ' !important; }';
+    if (!s) { s = document.createElement('style'); s.id = '__pickPE'; document.head.appendChild(s); }
+    s.textContent = css;
+  }
+  // keep the active-view pointer-events fresh while pick/drag is on (in case you scroll between views)
+  function _refreshPEIfActive() { if (_picking || _dragMode) _refreshPE(); }
+  function setPicking(on) {
+    _picking = on;
+    document.body.style.cursor = on ? 'crosshair' : '';
+    _refreshPE();
+    const m = on ? 'addEventListener' : 'removeEventListener';
+    document[m]('click', _onPick, true);
+    document[m]('mouseover', _onHover, true);
+    if (!on) _clearHover(); else showToast('Click any text on the page…  (Esc to cancel)');
+  }
+
+  // ----- drag-to-move: drag the element on the page to set its X/Y offset -----
+  let _dragMode = false, _dragging = false, _dragSX = 0, _dragSY = 0, _dragOX = 0, _dragOY = 0;
+  function _onDragDown(e) {
+    if (e.target.closest && e.target.closest('.lil-gui')) return;
+    e.preventDefault(); e.stopPropagation();
+    pushUndoSnap(snapText());
+    textUI.editBP = currentBP();             // drag edits the breakpoint you're actually viewing
+    const sel = cssPath(e.target);
+    if (sel) selectTarget(sel);
+    _dragging = true;
+    _dragSX = e.clientX; _dragSY = e.clientY;
+    _dragOX = textUI.x || 0; _dragOY = textUI.y || 0;
+    document.addEventListener('pointermove', _onDragMove, true);
+    document.addEventListener('pointerup', _onDragUp, true);
+  }
+  function _onDragMove(e) {
+    if (!_dragging) return;
+    e.preventDefault();
+    textUI.x = Math.round(_dragOX + (e.clientX - _dragSX));
+    textUI.y = Math.round(_dragOY + (e.clientY - _dragSY));
+    writeStyle();
+    refreshUI();
+  }
+  function _onDragUp() {
+    _dragging = false;
+    document.removeEventListener('pointermove', _onDragMove, true);
+    document.removeEventListener('pointerup', _onDragUp, true);
+  }
+  function setDragMode(on) {
+    _dragMode = on;
+    document.body.style.cursor = on ? 'move' : '';
+    _refreshPE();
+    const m = on ? 'addEventListener' : 'removeEventListener';
+    document[m]('pointerdown', _onDragDown, true);   // pointer events = mouse + touch
+    if (on) showToast('Drag any text to move it…  (Esc to stop)');
+  }
+  window.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (_picking) setPicking(false);
+    if (_dragMode) setDragMode(false);
+  });
+
+  // ---- Selection ----
+  textGui.add({ pick() { setPicking(!_picking); } }, 'pick').name('🎯 Pick element (click page)');
+  textGui.add(textUI, 'target').name('Selector').onChange(() => selectTarget(textUI.target));
+  const _targetOptions = { '— quick presets —': textUI.target };
+  TEXT_TARGETS.forEach(t => _targetOptions[t.name] = t.sel);
+  textGui.add({ preset: textUI.target }, 'preset', _targetOptions).name('Presets').onChange(v => selectTarget(v));
+
+  // ---- Content (per language) ----
+  const fContent = textGui.addFolder('✏️ Text content');
+  textWithUndo(fContent.add(textUI, 'content').name('Words (this language)').onChange(writeContent));
+
+  // ---- Style (all screens, both languages) ----
+  const fStyle = textGui.addFolder('🎨 Style');
+  let fontCtrl = textWithUndo(fStyle.add(textUI, 'font', FONT_CHOICES).name('Font').onChange(writeStyle));
+  fStyle.add({ addFont() {
+    const f = prompt('Type a CSS font-family name to add:');
+    if (!f) return;
+    if (!FONT_CHOICES.includes(f)) FONT_CHOICES.push(f);
+    fontCtrl = textWithUndo(fontCtrl.options(FONT_CHOICES).name('Font').onChange(writeStyle));
+    textUI.font = f; fontCtrl.setValue(f); writeStyle();
+  } }, 'addFont').name('＋ Add font…');
+  textWithUndo(fStyle.add(textUI, 'weight', WEIGHTS).name('Weight').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'useColor').name('Use custom color').onChange(writeStyle));
+  textWithUndo(fStyle.addColor(textUI, 'color').name('Color').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'opacity', 0, 1, 0.01).name('Opacity').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'spacing', -0.1, 0.6, 0.005).name('Letter-spacing em').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'line', 0, 2.6, 0.05).name('Line-height (0=auto)').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'align', ALIGNS).name('Align').onChange(writeStyle));
+  textWithUndo(fStyle.add(textUI, 'swsh').name('Swashes (flow)').onChange(writeStyle));
+
+  // ---- Layout (per screen size) ----
+  const fLayout = textGui.addFolder('📐 Layout (per screen)');
+  fLayout.add(textUI, 'editBP', ['desktop', 'tablet', 'mobile']).name('Editing screen').onChange(() => loadTargetIntoUI(textUI.target));
+  textWithUndo(fLayout.add(textUI, 'size', 0, 320, 1).name('Size px (0=auto)').onChange(writeStyle));
+  textWithUndo(fLayout.add(textUI, 'x', -1200, 1200, 1).name('Move X px').onChange(writeStyle));
+  textWithUndo(fLayout.add(textUI, 'y', -1200, 1200, 1).name('Move Y px').onChange(writeStyle));
+  textWithUndo(fLayout.add(textUI, 'rotate', -180, 180, 1).name('Rotate °').onChange(writeStyle));
+  textWithUndo(fLayout.add(textUI, 'scale', 0.2, 4, 0.01).name('Scale').onChange(writeStyle));
+  fLayout.add({ drag() { setDragMode(!_dragMode); } }, 'drag').name('✥ Drag to move (on page)');
+
+  // ---- Actions ----
+  const fAct = textGui.addFolder('⚙ Actions');
+  fAct.add({ undo() { doUndo(); } }, 'undo').name('↩ Undo (Ctrl+Z)');
+  fAct.add({ reset() { pushUndoSnap(snapText()); delete _textOverrides[textUI.target]; applyTextOverride(textUI.target); loadTargetIntoUI(textUI.target); showToast('↺ Reset element'); } }, 'reset').name('↺ Reset this element');
+  fAct.add({ clearAll() { if (!confirm('Clear ALL text edits on the whole site?')) return; pushUndoSnap(snapText()); const keys = Object.keys(_textOverrides); _textOverrides = {}; keys.forEach(applyTextOverride); loadTargetIntoUI(textUI.target); showToast('🗑 Cleared all'); } }, 'clearAll').name('🗑 Clear ALL edits');
+  fAct.add({ list() { const ks = Object.keys(_textOverrides); alert(ks.length ? ('Edited elements:\n\n' + ks.join('\n')) : 'No text edits yet.'); } }, 'list').name('📋 List edits');
+  fAct.add({ async publish() {
+    if (!confirm('Make the current TEXT styling the LIVE default for all visitors?')) return;
+    try {
+      const data = collectCurrentState();   // includes textOverrides (and preserves current lights)
+      await Promise.all([
+        fetch('/api/save',    { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }).then(r=>r.json()),
+        fetch('/api/publish', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }).then(r=>r.json()),
+      ]);
+      try { localStorage.setItem('yassenTextOverrides', JSON.stringify(_textOverrides)); } catch (e) {}
+      showToast('🚀 Text published live');
+    } catch (e) { alert('Publish failed: ' + e.message); }
+  } }, 'publish').name('🚀 Save text as LIVE default');
+
+  // initialise panel on the default target
+  selectTarget(textUI.target);
+
+  // ====== SAVE / LOAD via backend ======
+  function collectCurrentState() {
+    const out = {
+      timestamp: new Date().toISOString(),
+      renderer: { toneMappingExposure: +renderer.toneMappingExposure.toFixed(3) },
+      scene: { environmentIntensity: +(scene.environmentIntensity || 0).toFixed(3) },
+      bloom: {
+        strength: +bloomPass.strength.toFixed(3),
+        radius: +bloomPass.radius.toFixed(3),
+        threshold: +bloomPass.threshold.toFixed(3),
+      },
+      lights: {},
+      hiddenObjects: [],   // mesh / object names that were hidden via H key
+      removedObjects: [],  // GLB object names that were Deleted (re-add will be skipped)
+      helpersVisible: _helpersVisible,
+      textOverrides: _textOverrides,   // ✍ font/size/spacing/swash overrides per selector
+    };
+    for (const [name, L] of Object.entries(_lights)) {
+      const o = { type: L.type, visible: L.visible, intensity: +L.intensity.toFixed(3) };
+      if (L.color) o.color = '#' + L.color.getHexString();
+      if (L.groundColor) o.groundColor = '#' + L.groundColor.getHexString();
+      if (L.position) o.position = [+L.position.x.toFixed(2), +L.position.y.toFixed(2), +L.position.z.toFixed(2)];
+      if (L.target) o.target = [+L.target.position.x.toFixed(2), +L.target.position.y.toFixed(2), +L.target.position.z.toFixed(2)];
+      if (L.isSpotLight) { o.angle = +L.angle.toFixed(3); o.penumbra = +L.penumbra.toFixed(3); o.distance = +L.distance.toFixed(2); }
+      if (L.isPointLight) { o.distance = +L.distance.toFixed(2); o.decay = +L.decay.toFixed(2); }
+      out.lights[name] = o;
+    }
+    // Walk GLB tree to find hidden/missing objects
+    if (gltfRoot) {
+      const expectedNames = new Set();
+      gltfRoot.traverse(o => { if (o.name) expectedNames.add(o.name); });
+      gltfRoot.traverse(o => {
+        if (o.name && !o.visible) out.hiddenObjects.push(o.name);
+      });
+      // Note: detecting deletion is harder — we'd need a registry of original names.
+      // For now, we record what's currently present; missing-from-this-list = removed on save.
+      out.presentObjects = Array.from(expectedNames);
+    }
+    return out;
+  }
+
+  const fSave = gui.addFolder('💾 Save / Load');
+  fSave.open();
+
+  fSave.add({
+    async save() {
+      const data = collectCurrentState();
+      try {
+        // Snapshot (history) AND publish live (current.json) in one click
+        const [saveRes, pubRes] = await Promise.all([
+          fetch('/api/save',    { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }).then(r=>r.json()),
+          fetch('/api/publish', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }).then(r=>r.json()),
+        ]);
+        showToast(`💾 Saved as ${saveRes.saved} · Live updated`);
+        console.log('Saved + published:', saveRes, pubRes);
+      } catch (e) {
+        alert('Save failed: ' + e.message);
+      }
+    }
+  }, 'save').name('💾 Save (instant — also publishes live)');
+
+  // Tiny inline toast so we don't spam alert()s
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return alert(msg);
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._tid);
+    showToast._tid = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Reusable: apply a saved state object to the live scene.
+  // Handles: light property updates, light deletion, light recreation, mesh hide, mesh delete.
+  function applyState(state) {
+    if (!state) return;
+    if (state.renderer) renderer.toneMappingExposure = state.renderer.toneMappingExposure;
+    if (state.scene)    scene.environmentIntensity   = state.scene.environmentIntensity;
+    if (state.bloom) {
+      bloomPass.strength  = state.bloom.strength;
+      bloomPass.radius    = state.bloom.radius;
+      bloomPass.threshold = state.bloom.threshold;
+    }
+
+    // ---- TEXT / FONT OVERRIDES ----
+    if (state.textOverrides) {
+      _textOverrides = state.textOverrides || {};
+      applyAllTextOverrides();
+      if (typeof loadTargetIntoUI === 'function') loadTargetIntoUI(textUI.target);
+    }
+
+    // ---- LIGHTS ----
+    if (state.lights) {
+      // 1) Remove default lights that are NOT in the saved state (user deleted them)
+      for (const name of Object.keys(_lights)) {
+        if (!(name in state.lights)) {
+          const L = _lights[name];
+          scene.remove(L);
+          if (L.target) scene.remove(L.target);
+          delete _lights[name];
+          const folder = gui.folders.find(f => f._title === name);
+          if (folder) folder.destroy();
+        }
+      }
+      // 2) Apply each saved light — recreate if missing, then update properties
+      for (const [name, snap] of Object.entries(state.lights)) {
+        let L = _lights[name];
+        if (!L) {
+          // Recreate from saved type
+          if      (snap.type === 'PointLight')       L = new THREE.PointLight(0xffffff, 1, 10, 2);
+          else if (snap.type === 'SpotLight')        L = new THREE.SpotLight(0xffffff, 1, 10, Math.PI/4, 0.4, 2);
+          else if (snap.type === 'DirectionalLight') L = new THREE.DirectionalLight(0xffffff, 1);
+          else if (snap.type === 'HemisphereLight')  L = new THREE.HemisphereLight(0xffffff, 0x222222, 0.5);
+          if (!L) continue;
+          _lights[name] = L;
+          scene.add(L);
+          if (L.target) scene.add(L.target);
+          addHelperToLight(name, L);
+          addLightFolder(name, L);
+        }
+        if ('visible'   in snap) L.visible   = snap.visible;
+        if ('intensity' in snap) L.intensity = snap.intensity;
+        if (snap.color  && L.color)       L.color.set(snap.color);
+        if (snap.groundColor && L.groundColor) L.groundColor.set(snap.groundColor);
+        if (snap.position && L.position)  L.position.fromArray(snap.position);
+        if (snap.target && L.target)      L.target.position.fromArray(snap.target);
+        if (snap.angle != null && L.isSpotLight)    L.angle = snap.angle;
+        if (snap.penumbra != null && L.isSpotLight) L.penumbra = snap.penumbra;
+        if (snap.distance != null) L.distance = snap.distance;
+        if (snap.decay != null && L.isPointLight)   L.decay = snap.decay;
+      }
+    }
+
+    // ---- MESHES: hide objects that were hidden, OR removed from the scene ----
+    if (gltfRoot) {
+      const hiddenSet = new Set(state.hiddenObjects || []);
+      const presentSet = state.presentObjects ? new Set(state.presentObjects) : null;
+      gltfRoot.traverse(o => {
+        if (!o.name) return;
+        // Was deleted at save time? Hide it (we don't actually delete from GLB on load — just hide)
+        if (presentSet && !presentSet.has(o.name)) {
+          o.visible = false;
+        }
+        // Was explicitly hidden via H key
+        if (hiddenSet.has(o.name)) o.visible = false;
+      });
+    }
+
+    // Master helper visibility
+    if ('helpersVisible' in state) {
+      setAllHelpersVisible(state.helpersVisible);
+      globalState.helpersVisible = state.helpersVisible;
+    }
+
+    gui.controllersRecursive().forEach(c => c.updateDisplay());
+    if (window._rebuildOutliner) window._rebuildOutliner();
+  }
+
+  // Reveal the scene only AFTER the published lighting is applied —
+  // prevents the "dim defaults flash then jump to bright" on load.
+  let _sceneRevealed = false;
+  function revealScene() {
+    if (_sceneRevealed) return;
+    _sceneRevealed = true;
+    const _hideLoader = () => {
+      _loadDone = true;   // tell the bar to finish to 100%
+      const waitFull = setInterval(() => {   // only reveal AFTER the bar visibly reaches the end
+        if (_shownProg >= 1) {
+          clearInterval(waitFull);
+          loaderEl.classList.add('hidden');
+          setTimeout(() => { loaderEl.style.display = 'none'; }, 800);
+        }
+      }, 30);
+    };
+    // ALSO wait for the embedded site (iframe) to finish loading, so entering the TV is instant.
+    // Safety timeout (8s) ensures the loader never hangs if the iframe is slow.
+    if (window._iframeReady) { _hideLoader(); return; }
+    let _done = false; const go = () => { if (_done) return; _done = true; _hideLoader(); };
+    const fr = document.getElementById('pf-frame');
+    if (fr) fr.addEventListener('load', go, { once: true });
+    setTimeout(go, 8000);
+  }
+
+  // Auto-load current.json (the "live published" version) on page boot,
+  // THEN reveal. Fallback reveal after 2.5s in case the file isn't there.
+  fetch('/saves/current.json').then(r => r.ok ? r.json() : null).then(state => {
+    if (state) {
+      applyState(state);
+      console.log('✓ Loaded live published state from current.json');
+    }
+    revealScene();
+  }).catch(() => revealScene());
+  setTimeout(revealScene, 2500); // safety fallback
+
+  // ====== EDITORS INSTALLED? — each panel gated by its OWN flag file (fully independent) ======
+  // Light Editor -> /saves/editor.enabled       (INSTALL_EDITOR.bat / REMOVE_EDITOR.bat)
+  // Text Editor  -> /saves/text-editor.enabled  (INSTALL_TEXT_EDITOR.bat / REMOVE_TEXT_EDITOR.bat)
+  window._editorEnabledPromise.then(enabled => {
+    if (enabled || IS_PREVIEW) return;
+    gui.domElement.style.display = 'none';   // Light Editor panel off
+    outliner.style.display = 'none';
+    window._editorRemoved = true;            // disables E camera-edit mode
+    console.log('Light editor removed (run INSTALL_EDITOR.bat to enable).');
+  });
+  window._textEditorEnabledPromise.then(enabled => {
+    if (!enabled || IS_PREVIEW) {
+      textGui.domElement.style.display = 'none';  // Text Editor panel off
+      console.log('Text editor removed (run INSTALL_TEXT_EDITOR.bat to enable).');
+      return;
+    }
+    _textEditorOn = true;
+    selectTarget(textUI.target);   // draw the selection outline now that the editor is active
+  });
+
+  // ====== PREVIEW MODE — lock camera, hide editor UI, listen for live edits ======
+  if (IS_PREVIEW) {
+    // Hide editor + outliner + headline + portfolio
+    gui.domElement.style.display = 'none';
+    textGui.domElement.style.display = 'none';
+    outliner.style.display = 'none';
+    document.getElementById('phase1-overlay').style.display = 'none';
+    document.getElementById('portfolio-shell').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    // Lock camera to chosen view
+    const targetCam = (PREVIEW_MODE === 'end') ? camEnd : camHome;
+    if (targetCam) {
+      camera.position.copy(targetCam.position);
+      camera.quaternion.copy(targetCam.quaternion);
+      if (targetCam.isPerspectiveCamera) {
+        camera.fov = targetCam.fov;
+        camera.updateProjectionMatrix();
+      }
+    }
+    // Override scroll handler so camera stays locked
+    window.removeEventListener('scroll', updateCameraFromScroll);
+    // Apply live edits as they come in
+    _liveChannel.onmessage = (ev) => {
+      if (ev.data) applyState(ev.data);
+    };
+    // Small label to show which preview this is
+    const label = document.createElement('div');
+    label.textContent = `LIVE PREVIEW · ${PREVIEW_MODE === 'end' ? 'Cam_End' : 'Cam_Home'}`;
+    label.style.cssText = `
+      position:fixed; top:16px; left:50%; transform:translateX(-50%);
+      padding:8px 18px; background:rgba(20,14,30,0.85); color:#c8b6e6;
+      font:11px/1 'Inter',sans-serif; letter-spacing:3px; text-transform:uppercase;
+      border:1px solid rgba(232,220,196,0.18); border-radius:6px;
+      backdrop-filter:blur(10px); z-index:600;
+    `;
+    document.body.appendChild(label);
+  } else {
+    // EDITOR mode — broadcast state to any open preview tabs every 120ms
+    setInterval(() => {
+      try { _liveChannel.postMessage(collectCurrentState()); } catch (e) {}
+    }, 120);
+  }
+
+  fSave.add({
+    load() {
+      fetch('/api/list').then(r => r.json()).then(r => {
+        if (!r.saves || r.saves.length === 0) { alert('No saves yet.'); return; }
+        const choice = prompt('Available saves:\n  ' + r.saves.join('\n  ') + '\n\nType name to load:');
+        if (!choice) return;
+        fetch('/saves/' + choice).then(rr => rr.json()).then(state => {
+          applyState(state);
+          alert('Loaded ' + choice);
+        });
+      });
+    }
+  }, 'load').name('📂 Load snapshot…');
+
+  // ✅ Make live default — overwrites current.json so visitors see this on next page load
+  fSave.add({
+    publish() {
+      if (!confirm('Make CURRENT light setup the LIVE published version?\n\nThis becomes what every visitor sees when they load the site.\n\nContinue?')) return;
+      const data = collectCurrentState();
+      fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).then(r => r.json()).then(r => {
+        alert('🚀 Published! Visitors will see this on next page load.');
+        console.log('Published as', r.published);
+      }).catch(e => alert('Publish failed: ' + e.message));
+    }
+  }, 'publish').name('🚀 Make this LIVE default');
+
+  // 🪟 Live preview windows — open new tabs that show the live result.
+  // Updates push through BroadcastChannel as you tweak sliders.
+  const fPreview = gui.addFolder('🪟 Live Preview');
+  fPreview.open();
+  fPreview.add({
+    openHome() { window.open(location.pathname + '?preview=home', '_blank'); }
+  }, 'openHome').name('🏠 Open Cam_Home preview');
+  fPreview.add({
+    openEnd() { window.open(location.pathname + '?preview=end', '_blank'); }
+  }, 'openEnd').name('🎬 Open Cam_End preview');
+
+  fSave.add({
+    listSaves() {
+      fetch('/api/list').then(r => r.json()).then(r => {
+        alert(r.saves.length ? 'Saves:\n  ' + r.saves.join('\n  ') : 'No saves yet.');
+      });
+    }
+  }, 'listSaves').name('📋 List saves');
+
+  // Export to clipboard (also still available)
+  gui.add({
+    exportValues() {
+      const out = {
+        renderer: {
+          toneMappingExposure: +renderer.toneMappingExposure.toFixed(3),
+        },
+        scene: {
+          environmentIntensity: +(scene.environmentIntensity || 0).toFixed(3),
+        },
+        bloom: {
+          strength: +bloomPass.strength.toFixed(3),
+          radius: +bloomPass.radius.toFixed(3),
+          threshold: +bloomPass.threshold.toFixed(3),
+        },
+        lights: {},
+      };
+      for (const [name, L] of Object.entries(_lights)) {
+        const o = {
+          visible: L.visible,
+          intensity: +L.intensity.toFixed(3),
+        };
+        if (L.color) o.color = '#' + L.color.getHexString();
+        if (L.groundColor) o.groundColor = '#' + L.groundColor.getHexString();
+        if (L.position) o.position = [+L.position.x.toFixed(2), +L.position.y.toFixed(2), +L.position.z.toFixed(2)];
+        if (L.target) o.target = [+L.target.position.x.toFixed(2), +L.target.position.y.toFixed(2), +L.target.position.z.toFixed(2)];
+        if (L.isSpotLight) { o.angle = +L.angle.toFixed(3); o.penumbra = +L.penumbra.toFixed(3); o.distance = +L.distance.toFixed(2); }
+        if (L.isPointLight) { o.distance = +L.distance.toFixed(2); o.decay = +L.decay.toFixed(2); }
+        out.lights[name] = o;
+      }
+      const text = JSON.stringify(out, null, 2);
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Settings copied to clipboard. Paste anywhere — JSON ready for code.');
+      }, () => {
+        console.log('Settings:', text);
+        alert('Could not write clipboard (browser blocked it). Settings logged to console — copy from there (F12).');
+      });
+    }
+  }, 'exportValues').name('📋 Copy values to clipboard');
+
+  // Reset (reload page)
+  gui.add({ reset() { location.reload(); } }, 'reset').name('🔄 Reset to defaults');
+
+  // ====== EDITOR MODE — full Blender-style ======
+  // (Helper spheres already created above so the GUI can target them.)
+
+  // Orbit + Transform controls (created but disabled until editor mode is on)
+  const orbit = new OrbitControls(camera, renderer.domElement);
+  orbit.enabled = false;
+  orbit.enableDamping = true;
+  orbit.dampingFactor = 0.08;
+  orbit.target.set(6, 2, 0);
+  // Blender-style mouse mapping:
+  //   Left mouse  = nothing (free for selection clicks)
+  //   Middle drag = ORBIT (rotate around target on all axes)
+  //   Right drag  = nothing
+  //   Wheel       = zoom in/out
+  //   Shift+Middle drag swaps to PAN (handled below via keydown/up)
+  orbit.mouseButtons = {
+    LEFT:   null,
+    MIDDLE: THREE.MOUSE.ROTATE,
+    RIGHT:  null,
+  };
+  orbit.update();
+  window._orbitCtrl = orbit;
+
+  // Shift modifier — while Shift is held, MIDDLE drag pans instead of orbits
+  window.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Shift') orbit.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+  });
+  window.addEventListener('keyup', (ev) => {
+    if (ev.key === 'Shift') orbit.mouseButtons.MIDDLE = THREE.MOUSE.ROTATE;
+  });
+
+  const transform = new TransformControls(camera, renderer.domElement);
+  let _xformBefore = null;
+  transform.addEventListener('dragging-changed', (e) => {
+    orbit.enabled = !e.value && editorState.editorMode;
+    if (transform.object) {
+      if (e.value) {
+        // Drag start — snapshot current transform
+        _xformBefore = {
+          obj: transform.object,
+          position: transform.object.position.clone(),
+          quaternion: transform.object.quaternion.clone(),
+          scale: transform.object.scale.clone(),
+        };
+      } else if (_xformBefore && _xformBefore.obj === transform.object) {
+        // Drag end — push undo
+        const s = _xformBefore;
+        pushUndo('Transform: ' + (s.obj.name || 'object'), () => {
+          s.obj.position.copy(s.position);
+          s.obj.quaternion.copy(s.quaternion);
+          s.obj.scale.copy(s.scale);
+        });
+        _xformBefore = null;
+      }
+    }
+  });
+  scene.add(transform.getHelper ? transform.getHelper() : transform);
+
+  // Editor state
+  const editorState = {
+    editorMode: false,
+    selectedLight: null,
+  };
+
+  // ====== SCENE OUTLINER (left panel) ======
+  const outliner = document.createElement('div');
+  outliner.id = 'outliner';
+  outliner.style.cssText = `
+    position: fixed; left: 12px; top: 12px; bottom: 12px; width: 280px;
+    background: rgba(20, 14, 30, 0.94); color: #f3eee8;
+    border: 1px solid rgba(232, 220, 196, 0.18); border-radius: 8px;
+    padding: 12px; font: 12px/1.4 ui-monospace, monospace;
+    overflow-y: auto; z-index: 400; display: none;
+  `;
+  document.body.appendChild(outliner);
+
+  const gltfRoot = root;  // saved reference to GLB root for outliner traversal
+
+  function rebuildOutliner() {
+    const sections = {
+      '💡 LIGHTS': [],
+      '📷 CAMERAS': [],
+      '📦 ROOM OBJECTS': [],
+      '🔧 OTHER': [],
+    };
+    // All lights from _lights map (includes user-added)
+    for (const [n, L] of Object.entries(_lights)) {
+      sections['💡 LIGHTS'].push({ obj: L, label: n });
+    }
+    // Cameras
+    if (camHome) sections['📷 CAMERAS'].push({ obj: camHome, label: 'Cam_Home' });
+    if (camEnd)  sections['📷 CAMERAS'].push({ obj: camEnd,  label: 'Cam_End' });
+    // Top-level GLB children (Floor, Walls, Table, TV, etc.) — skip cameras/lights
+    if (gltfRoot) {
+      gltfRoot.children.forEach(c => {
+        if (c.isLight || c.isCamera) return;
+        sections['📦 ROOM OBJECTS'].push({ obj: c, label: c.name || '(unnamed)' });
+      });
+    }
+
+    outliner.innerHTML = `
+      <div style="font-weight:700;letter-spacing:2px;color:#c8b6e6;margin-bottom:10px;font-size:11px">
+        SCENE OUTLINER
+      </div>
+      <div style="opacity:0.55;font-size:10px;margin-bottom:8px">
+        Click row to select · Eye to hide · Ctrl+Z to undo
+      </div>`;
+
+    for (const [section, items] of Object.entries(sections)) {
+      if (items.length === 0) continue;
+      const header = document.createElement('div');
+      header.style.cssText = 'font-weight:600;color:#e8dcc4;margin:14px 0 4px;font-size:10px;letter-spacing:3px;border-bottom:1px solid rgba(232,220,196,0.15);padding-bottom:4px';
+      header.textContent = `${section} (${items.length})`;
+      outliner.appendChild(header);
+
+      items.forEach(({ obj, label }) => {
+        const row = document.createElement('div');
+        row.dataset.objId = obj.uuid;
+        row.style.cssText = `
+          padding: 5px 8px; cursor: pointer; border-radius: 4px;
+          display: flex; justify-content: space-between; align-items: center;
+          margin: 2px 0; transition: background 0.1s;
+        `;
+        row.addEventListener('mouseenter', () => {
+          if (!row.classList.contains('selected'))
+            row.style.background = 'rgba(232, 220, 196, 0.08)';
+        });
+        row.addEventListener('mouseleave', () => {
+          if (!row.classList.contains('selected'))
+            row.style.background = 'transparent';
+        });
+
+        const labelEl = document.createElement('span');
+        labelEl.textContent = label;
+        labelEl.style.cssText = 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+
+        const actions = document.createElement('span');
+        actions.style.cssText = 'display:flex;gap:6px;flex-shrink:0';
+
+        // Eye = visibility toggle
+        const eye = document.createElement('button');
+        eye.title = 'Hide / Show';
+        eye.textContent = obj.visible ? '👁' : '◌';
+        eye.style.cssText = 'background:transparent;border:none;color:inherit;cursor:pointer;font-size:13px;padding:0';
+        eye.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const wasVisible = obj.visible;
+          obj.visible = !wasVisible;
+          eye.textContent = obj.visible ? '👁' : '◌';
+          pushUndo((wasVisible ? 'Hide: ' : 'Show: ') + label, () => {
+            obj.visible = wasVisible;
+            eye.textContent = wasVisible ? '👁' : '◌';
+          });
+        });
+        actions.appendChild(eye);
+
+        row.appendChild(labelEl);
+        row.appendChild(actions);
+
+        // Click row = select object in 3D
+        row.addEventListener('click', () => {
+          if (obj.isCamera) {
+            // For cameras, snap the active camera to that view
+            snapCameraTo(obj);
+          } else {
+            transform.attach(obj);
+            editorState.selected = label;
+          }
+          highlightOutlinerRow(obj.uuid);
+        });
+        outliner.appendChild(row);
+      });
+    }
+  }
+
+  function highlightOutlinerRow(uuid) {
+    outliner.querySelectorAll('[data-obj-id]').forEach(r => {
+      const isMatch = r.dataset.objId === uuid;
+      r.classList.toggle('selected', isMatch);
+      r.style.background = isMatch ? 'rgba(200, 182, 230, 0.28)' : 'transparent';
+    });
+  }
+  // Expose so canvas-click selection can also highlight
+  window._highlightOutliner = highlightOutlinerRow;
+  window._rebuildOutliner = rebuildOutliner;
+
+  // ---- UNDO STACK ----
+  const _undoStack = [];
+  function pushUndo(label, undoFn) {
+    _undoStack.push({ label, undoFn });
+    if (_undoStack.length > 50) _undoStack.shift();
+    console.log('[undo] stacked:', label, '(stack size:', _undoStack.length + ')');
+  }
+  window._undo = () => {
+    if (_undoStack.length === 0) { console.log('[undo] nothing to undo'); return; }
+    const last = _undoStack.pop();
+    try { last.undoFn(); console.log('[undo] reverted:', last.label); }
+    catch (err) { console.error('[undo] failed:', err); }
+  };
+  window.addEventListener('keydown', (ev) => {
+    if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
+    if ((ev.ctrlKey || ev.metaKey) && (ev.key === 'z' || ev.key === 'Z')) {
+      ev.preventDefault();
+      window._undo();
+    }
+  });
+
+  // Disable normal scroll camera animation while in editor mode
+  let originalScrollHandler = updateCameraFromScroll;
+  function updateCameraFromScroll_editorAware() {
+    if (editorState.editorMode) return;
+    return originalScrollHandler.apply(this, arguments);
+  }
+  window.removeEventListener('scroll', updateCameraFromScroll);
+  window.addEventListener('scroll', updateCameraFromScroll_editorAware, { passive: true });
+
+  // Click selection — raycaster against helpers AND scene meshes
+  function onCanvasClickEditor(e) {
+    if (!editorState.editorMode) return;
+    if (e.target !== renderer.domElement) return;
+    raycaster.setFromCamera(pointer, camera);
+
+    // First try light helpers
+    const helperHits = raycaster.intersectObjects(lightHelpers, false);
+    if (helperHits.length > 0) {
+      const helper = helperHits[0].object;
+      transform.attach(helper.userData.light);
+      editorState.selected = helper.userData.lightName;
+      editorState.selectedKind = 'light';
+      console.log('Selected light:', helper.userData.lightName);
+      e.stopPropagation();
+      return;
+    }
+
+    // Then any mesh in the scene
+    const meshHits = raycaster.intersectObject(scene, true);
+    if (meshHits.length > 0) {
+      // Skip helpers themselves and skip transform's own gizmo
+      const hit = meshHits.find(h => !h.object.userData.isLightHelper && !h.object.parent?.isTransformControlsRoot);
+      if (hit) {
+        // Walk up to the top-most "named" parent (so dragging moves the whole TV, not one cube)
+        let target = hit.object;
+        while (target.parent && target.parent !== scene && target.parent !== gltf?.scene) {
+          if (target.parent.name && target.parent !== scene) target = target.parent;
+          else break;
+        }
+        transform.attach(target);
+        editorState.selected = target.name || '(unnamed mesh)';
+        editorState.selectedKind = 'mesh';
+        console.log('Selected mesh:', editorState.selected);
+        e.stopPropagation();
+        return;
+      }
+    }
+
+    // Click on empty space → deselect
+    transform.detach();
+    editorState.selected = null;
+    editorState.selectedKind = null;
+  }
+  renderer.domElement.addEventListener('click', onCanvasClickEditor, true);
+
+  // Camera preset helpers
+  function snapCameraTo(srcCam) {
+    if (!srcCam) return;
+    camera.position.copy(srcCam.position);
+    camera.quaternion.copy(srcCam.quaternion);
+    if (srcCam.isPerspectiveCamera) {
+      camera.fov = srcCam.fov;
+      camera.updateProjectionMatrix();
+    }
+    orbit.target.copy(srcCam.position).add(new THREE.Vector3(0, 0, -1).applyQuaternion(srcCam.quaternion).multiplyScalar(8));
+    orbit.update();
+  }
+  function snapTopDown() {
+    camera.position.set(6, 30, 0);
+    camera.lookAt(6, 0, 0);
+    orbit.target.set(6, 0, 0);
+    orbit.update();
+  }
+
+  // Editor controls in GUI
+  const fEditor = gui.addFolder('🛠 EDITOR MODE');
+  fEditor.open();
+
+  fEditor.add(editorState, 'editorMode').name('Enable editor').onChange(on => {
+    orbit.enabled = on;
+    window._editorOn = on;
+    if (!on) transform.detach();
+    document.getElementById('phase1-overlay').style.display = on ? 'none' : 'flex';
+    document.getElementById('portfolio-shell').style.display = on ? 'none' : 'block';
+  });
+
+  fEditor.add({ go() { snapCameraTo(camHome); } }, 'go').name('📷 View Cam_Home');
+  fEditor.add({ go() { snapCameraTo(camEnd); } }, 'go').name('📷 View Cam_End');
+  fEditor.add({ go() { snapTopDown(); } }, 'go').name('📷 Top-down view');
+  fEditor.add({ go() {
+    transform.setMode('translate');
+  } }, 'go').name('Tool: Translate (G)');
+  fEditor.add({ go() {
+    transform.setMode('rotate');
+  } }, 'go').name('Tool: Rotate (R)');
+  fEditor.add({ go() {
+    transform.setMode('scale');
+  } }, 'go').name('Tool: Scale (S)');
+
+  // Keyboard shortcuts: E toggles editor, G/R/S like Blender
+  window.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'e' || e.key === 'E') {
+      // If editor was removed via REMOVE_EDITOR.bat, ignore
+      if (window._editorRemoved) return;
+      e.preventDefault();
+      editorState.editorMode = !editorState.editorMode;
+      window._editorOn = editorState.editorMode;
+      orbit.enabled = editorState.editorMode;
+      gui.controllersRecursive().forEach(c => c.updateDisplay());
+      document.getElementById('phase1-overlay').style.display = editorState.editorMode ? 'none' : 'flex';
+      document.getElementById('portfolio-shell').style.display = editorState.editorMode ? 'none' : 'block';
+      if (!editorState.editorMode) transform.detach();
+      console.log('Editor mode:', editorState.editorMode);
+    }
+    if (!editorState.editorMode) return;
+    if (e.key === 'g' || e.key === 'G') transform.setMode('translate');
+    if (e.key === 'r' || e.key === 'R') transform.setMode('rotate');
+    if (e.key === 's' || e.key === 'S') transform.setMode('scale');
+    if (e.key === 'h' || e.key === 'H') {
+      // Toggle hide on selected
+      if (transform.object) {
+        const obj = transform.object;
+        const wasVisible = obj.visible;
+        obj.visible = !wasVisible;
+        pushUndo((wasVisible ? 'Hide: ' : 'Show: ') + (obj.name || 'object'), () => {
+          obj.visible = wasVisible;
+        });
+        console.log(obj.name, 'visible =', obj.visible);
+      }
+    }
+    // Number keys for camera presets
+    if (e.key === '1') snapCameraTo(camHome);
+    if (e.key === '2') snapCameraTo(camEnd);
+    if (e.key === '3') snapTopDown();
+    if (e.key === 'Delete' && transform.object) {
+      const obj = transform.object;
+      const parent = obj.parent;
+      // Is it one of our tracked lights?
+      let lightName = null;
+      for (const [n, light] of Object.entries(_lights)) {
+        if (light === obj) { lightName = n; break; }
+      }
+      if (lightName) {
+        const helper = obj.children.find(c => c.userData?.isLightHelper);
+        const targetObj = obj.target;
+        scene.remove(obj);
+        if (targetObj) scene.remove(targetObj);
+        delete _lights[lightName];
+        transform.detach();
+        const folder = gui.folders.find(f => f._title === lightName);
+        if (folder) folder.destroy();
+        pushUndo('Delete light: ' + lightName, () => {
+          _lights[lightName] = obj;
+          scene.add(obj);
+          if (targetObj) scene.add(targetObj);
+          if (helper) obj.add(helper);
+          addLightFolder(lightName, obj);
+        });
+      } else if (parent) {
+        // Generic mesh / object delete
+        parent.remove(obj);
+        transform.detach();
+        pushUndo('Delete: ' + (obj.name || 'object'), () => {
+          parent.add(obj);
+        });
+      }
+    }
+  });
+
+  // Add-light buttons
+  const fAdd = gui.addFolder('➕ Add Light');
+  let addCounter = 1;
+  function spawnAt() {
+    // Spawn at the camera's eye position so it's near where you are looking
+    return camera.position.clone().add(new THREE.Vector3(0, 0, -3).applyQuaternion(camera.quaternion));
+  }
+  // Undo-aware add helper
+  function spawnLight(name, L, hasTarget) {
+    _lights[name] = L;
+    scene.add(L);
+    if (hasTarget && L.target) scene.add(L.target);
+    addHelperToLight(name, L);
+    addLightFolder(name, L);
+    transform.attach(L);
+    editorState.selected = name;
+    pushUndo('Add ' + name, () => {
+      const helper = L.children.find(c => c.userData?.isLightHelper);
+      scene.remove(L);
+      if (hasTarget && L.target) scene.remove(L.target);
+      delete _lights[name];
+      transform.detach();
+      const folder = gui.folders.find(f => f._title === name);
+      if (folder) folder.destroy();
+    });
+  }
+
+  fAdd.add({ go() {
+    const L = new THREE.PointLight(0xffffff, 30, 20, 2);
+    L.position.copy(spawnAt());
+    spawnLight(`point_${addCounter++}`, L, false);
+  } }, 'go').name('+ Point Light');
+  fAdd.add({ go() {
+    const L = new THREE.SpotLight(0xffffff, 50, 25, Math.PI/4, 0.4, 2);
+    L.position.copy(spawnAt());
+    L.target.position.copy(spawnAt().add(new THREE.Vector3(0, -3, 0)));
+    spawnLight(`spot_${addCounter++}`, L, true);
+  } }, 'go').name('+ Spot Light');
+  fAdd.add({ go() {
+    const L = new THREE.DirectionalLight(0xffffff, 1.0);
+    L.position.copy(spawnAt());
+    L.target.position.set(0, 0, 0);
+    spawnLight(`dir_${addCounter++}`, L, true);
+  } }, 'go').name('+ Directional Light');
+  fAdd.add({ go() {
+    const L = new THREE.HemisphereLight(0xffffff, 0x222222, 0.5);
+    const name = `hemi_${addCounter++}`;
+    _lights[name] = L;
+    scene.add(L);
+    addLightFolder(name, L);
+    pushUndo('Add ' + name, () => {
+      scene.remove(L);
+      delete _lights[name];
+      const folder = gui.folders.find(f => f._title === name);
+      if (folder) folder.destroy();
+    });
+  } }, 'go').name('+ Hemisphere Light');
+
+  // GUI undo button
+  gui.add({ undo() { window._undo(); } }, 'undo').name('↶ Undo (Ctrl+Z)');
+
+  setLanguage(currentLang);
+
+  // Dump useful info to HUD (toggle with ?debug=1)
+  if (location.search.includes('debug')) {
+    debugHud.style.display = 'block';
+    debugHud.textContent = `meshes: ${allMeshNames.length} | crt: ${crtTargetMesh?.name || 'NONE'} | win: ${windowTargetMesh?.name || 'NONE'} | camHome: ${!!camHome} | camEnd: ${!!camEnd}`;
+  }
+
+  // Loader is now hidden by revealScene() — only after published lighting applies.
+}, undefined, (err) => {
+  console.error('GLB load failed:', err);
+  loaderEl.querySelector('.label').textContent = 'LOAD FAILED — check console';
+});
+
+/* ====================================================================== */
+/* SCROLL CAMERA                                                          */
+/* ====================================================================== */
+function easeInOut(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t; }
+
+// ============================================================
+// CRT POWER-OFF TRANSITION CONFIG (mirrored from N-2 codex original)
+// ============================================================
+const SCENE_TRANSITIONS = {
+  beam:     { start: 0.75, peak: 0.92, end: 0.975 },
+  blackout: { fadeStart: 0.84, peakStart: 0.92, fadeEnd: 0.99 },
+  lockProgress: 0.98,
+};
+
+const tvBeamEl     = document.getElementById('tv-beam');
+const tvBlackoutEl = document.getElementById('tv-blackout');
+const portfolioEl  = document.getElementById('portfolio-shell');
+const pfFrame = document.getElementById('pf-frame');
+const pfBack  = document.getElementById('pf-back');
+
+// Single exit path used by the back button AND the scroll-up-at-start gesture.
+// Animates the scroll from where we are back to 0, so the cinematic plays in reverse
+// (the camera retreats out of the TV the same way it came in — not an instant jump).
+function exitTv() {
+  if (!window._pfLocked) return;
+  window._pfLocked = false;
+  // CRITICAL: prevent the race where updateCRTTransition sees scrollY still above lockProgress
+  // on the very next frame and re-locks the TV (which freezes the renderer for the rest of the
+  // exit because animate() bails on _pfLocked). The flag is cleared when the tick completes.
+  window._exitingTv = true;
+  document.documentElement.style.overflow = '';   // unlock
+  setMusicMuffled(false);                           // back in the room -> radio at full volume again
+  // PERFORMANCE: the portfolio iframe keeps painting (grain overlays, spread images, big hero text)
+  // during the exit scroll, which competes with the 3D scene + scroll tween and causes the visible
+  // lag the user reported. Hide it instantly so the exit runs alone. Restored when the room is settled.
+  // Two-iframe variant: only the ACTIVE iframe needs hiding — the other is already invisible.
+  const _activeFrame = window.activePortfolioFrame || pfFrame;
+  let _pfPrevPE = '', _pfPrevOp = '';
+  if (_activeFrame) {
+    _pfPrevPE = _activeFrame.style.pointerEvents; _pfPrevOp = _activeFrame.style.opacity;
+    _activeFrame.style.pointerEvents = 'none';
+    _activeFrame.style.opacity = '0';
+    // tell the iframe to stop its own internal animation work while we exit (best-effort, no-op if unhandled)
+    try { _activeFrame.contentWindow && _activeFrame.contentWindow.postMessage({ type: 'yassen:tv-exit-start' }, '*'); } catch (e) {}
+  }
+  // NOTE: we DEFER resuming the room's videos until AFTER the exit animation finishes.
+  // Resuming them while the 3D scene is also re-rendering + the smooth-scroll tween runs
+  // makes the whole site freeze for a moment ("الموقع كله بيعلق"). Wait until the room is back.
+  const startY = window.scrollY, dur = 1300, t0 = performance.now();
+  (function tick(now){
+    const t = Math.min(1, (now - t0) / dur);
+    const k = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;               // easeInOutCubic
+    window.scrollTo(0, startY * (1 - k));
+    if (t < 1) requestAnimationFrame(tick);
+    else {
+      // STAGGERED RESUME: when the tween ends, three expensive things used to fire in the same
+      // frame — videoCRT.play(), videoWindowSlot.video.play(), and iframe opacity restore (which
+      // re-kicks all the iframe's grain/mix-blend-mode layers). That pile-up caused the visible
+      // stutter user reported on exit. Spread it over three frames (~120ms apart).
+      try { if (videoCRT) videoCRT.play().catch(()=>{}); } catch (e) {}                  // frame 0: CRT first (most visible)
+      setTimeout(() => {
+        try { if (videoWindowSlot && videoWindowSlot.video) videoWindowSlot.video.play().catch(()=>{}); } catch (e) {}
+      }, 120);
+      setTimeout(() => {
+        if (_activeFrame) {
+          // Restore opacity but FORCE pointer-events:none — the room state must never let the
+          // iframe catch clicks (only entering the TV sets it back to 'auto'). _pfPrevPE could be
+          // 'auto' from older syncIframeToLang behavior; restoring that would re-introduce the
+          // click-stealing bug after exit.
+          _activeFrame.style.pointerEvents = 'none';
+          _activeFrame.style.opacity = _pfPrevOp;
+          try { _activeFrame.contentWindow && _activeFrame.contentWindow.postMessage({ type: 'yassen:tv-exit-end' }, '*'); } catch (e) {}
+        }
+      }, 240);
+      // Clear the exit guard so future TV entries can re-lock normally.
+      window._exitingTv = false;
+    }
+  })(performance.now());
+}
+
+// Observe wheel INSIDE the iframe (passive — never blocks native scroll). If the
+// portfolio is at the very start AND the user makes a sustained upward gesture,
+// exit the TV. A single twitch won't trigger; needs ~280 px of upward delta.
+let _exitAccum = 0, _exitResetT = null;
+const _EXIT_THRESHOLD = 280;
+function attachScrollUpExit(frameElOpt) {
+  try {
+    // Two-iframe variant: attach to a specific iframe if passed; otherwise default to the primary.
+    const frameEl = frameElOpt || pfFrame;
+    const iw = frameEl && frameEl.contentWindow;
+    if (!iw || iw.__yhasExitWatcher) return;
+    iw.__yhasExitWatcher = true;
+    iw.addEventListener('wheel', (e) => {
+      if (!window._pfLocked) return;
+      if (iw.scrollY <= 1 && e.deltaY < 0) {
+        _exitAccum += -e.deltaY;
+        clearTimeout(_exitResetT);
+        _exitResetT = setTimeout(() => { _exitAccum = 0; }, 600);              // reset after 600ms of stillness
+        if (_exitAccum >= _EXIT_THRESHOLD) { _exitAccum = 0; exitTv(); }
+      } else if (e.deltaY > 0) {
+        _exitAccum = 0;                                                         // any downward cancels
+      }
+    }, { passive: true });
+  } catch (e) {}
+}
+
+// Pick the portfolio file matching the current language. Arabic -> index-h-1, English -> EN-P.
+function portfolioSrcForLang(lang) { return (lang === 'en') ? '/test/EN-P.html' : '/test/index-h-1.html'; }
+// LAZY-LOAD PORTFOLIO IFRAMES: only the current-language iframe loads at boot. The other stays
+// empty (no src) until the user actually switches language — saves ~300 MB RAM and ~40% load time.
+// Tradeoff: the FIRST language switch will pause ~1-2s while the second iframe loads.
+const pfFrameAlt = document.getElementById('pf-frame-alt');
+if (pfFrame && pfFrameAlt) {
+  pfFrame.addEventListener('load', () => { window._iframeReady = true; attachScrollUpExit(); });
+  pfFrameAlt.addEventListener('load', () => { try { attachScrollUpExit(pfFrameAlt); } catch (e) {} });
+  pfFrame.src = portfolioSrcForLang(currentLang);             // ONLY the current language loads at boot
+  // pfFrameAlt.src is intentionally NOT set yet — syncIframeToLang() sets it on first language switch.
+}
+// On language flip: just toggle which iframe is visible. Instant. No reload. No jank.
+// Both iframes always point at fixed DOM elements (pfFrame, pfFrameAlt) — we ONLY toggle styles.
+// `window.activePortfolioFrame` always points at the currently-visible iframe so other code
+// (exitTv, scroll-up watcher) keeps working with whichever is active.
+window.activePortfolioFrame = pfFrame;
+function syncIframeToLang() {
+  if (!pfFrame || !pfFrameAlt) return;
+  const want = portfolioSrcForLang(currentLang);
+  // LAZY-LOAD: if neither iframe has the wanted src yet, set the alt iframe's src now (first switch).
+  // First switch will take ~1-2s while the new iframe loads; subsequent switches reuse cached frames.
+  if (pfFrame.getAttribute('src') !== want && pfFrameAlt.getAttribute('src') !== want) {
+    pfFrameAlt.src = want;
+  }
+  // Pick whichever iframe currently has the wanted src loaded.
+  const wantedFrame = (pfFrame.getAttribute('src') === want) ? pfFrame : pfFrameAlt;
+  const otherFrame  = (wantedFrame === pfFrame) ? pfFrameAlt : pfFrame;
+  if (window.activePortfolioFrame === wantedFrame) return;     // already showing the right one
+  // Show the wanted one on top, hide the other.
+  // BUG FIX: do NOT set pointer-events:auto on the wanted iframe here. The user discovered the
+  // iframe was stealing clicks from the room's 3D buttons (Ctrl+A from the room returned the
+  // in-TV portfolio text — proof the iframe was the active hit-test target). Pointer-events:auto
+  // is now set ONLY when the TV-lock actually fires (see updateCRTTransition entry block).
+  wantedFrame.style.opacity = '1';
+  otherFrame.style.opacity  = '0';
+  otherFrame.style.pointerEvents = 'none';   // keep the now-hidden iframe non-interactive
+  // wantedFrame intentionally NOT set to 'auto' here — entry code below handles that.
+  window.activePortfolioFrame = wantedFrame;
+  window._iframeReady = true;                                  // preloaded — always ready
+  // PERF: do NOT call wantedFrame.contentWindow.focus() or dispatchEvent('resize') here.
+  // The iframe's internal layout() reads scrollWidth — forced reflow on a heavy portfolio page
+  // (grain layers, mix-blend-mode, 5 wide panels) costs 50-200ms of in-iframe work that visibly
+  // lags the whole page. The TV-entry code path already calls focus + resize when user actually
+  // scrolls into the TV, so doing it on every language flip while still in the room is wasted.
+}
+if (pfBack) pfBack.addEventListener('click', exitTv);
+const portfolioNavEl = document.getElementById('portfolio-nav');
+
+// Math helpers
+function clampN(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function invLerp(a, b, v) { return a === b ? 0 : clampN((v - a) / (b - a), 0, 1); }
+function smooth01(v) { v = clampN(v, 0, 1); return v * v * (3 - 2 * v); }
+function easeOutCubic(v) { v = clampN(v, 0, 1); return 1 - Math.pow(1 - v, 3); }
+function lerpN(a, b, t) { return a + (b - a) * t; }
+function sampleRamp(stops, progress) {
+  if (progress <= stops[0][0]) return stops[0][1];
+  for (let i = 1; i < stops.length; i++) {
+    if (progress <= stops[i][0]) {
+      const prev = stops[i-1], next = stops[i];
+      const t = invLerp(prev[0], next[0], progress);
+      return lerpN(prev[1], next[1], t);
+    }
+  }
+  return stops[stops.length - 1][1];
+}
+
+// Smoothed scroll progress — eases each frame toward the actual scroll target.
+// This kills trackpad jitter/lag and makes the cinematic glide.
+let _smoothScrollProgress = 0;
+let _scrollSmoothLastT = performance.now();
+
+function updateCameraFromScroll() {
+  if (!camHome || !camEnd) return;
+  // Frame-rate-independent dt (clamped so a long pause doesn't snap the camera).
+  const now = performance.now();
+  const dt = Math.min(0.05, (now - _scrollSmoothLastT) / 1000);
+  _scrollSmoothLastT = now;
+  // 4 viewport heights of scroll covers the full cinematic (camera + CRT transition)
+  const camRange = window.innerHeight * 4.0;
+  const target = clampN(window.scrollY / camRange, 0, 1);
+  // Adaptive smoothing: base rate cranked from 9→30/s so the camera catches up in ~50ms (3 frames)
+  // instead of ~270ms (16 frames). The old slower rate left the camera visibly trailing the user's
+  // scroll input — felt like "lag" even though the main thread was responsive. Keeps the trackpad
+  // jitter-smoothing benefit (still exponential lerp), just tighter response.
+  const gap = Math.abs(target - _smoothScrollProgress);
+  const rate = 30 + Math.min(gap * 200, 30); // 30/s..60/s (was 9..30)
+  const factor = 1 - Math.exp(-rate * dt);
+  _smoothScrollProgress += (target - _smoothScrollProgress) * factor;
+  // Snap when very close (avoid endless tiny lerps)
+  if (Math.abs(target - _smoothScrollProgress) < 0.0005) _smoothScrollProgress = target;
+  const raw = _smoothScrollProgress;
+  scrollProgress = raw;
+
+  // ---- CAMERA PHASE: 0..beam.start (e.g., 0..0.75 of scroll) ----
+  const camPhaseEnd = SCENE_TRANSITIONS.beam.start;
+  const camP = easeInOut(clampN(raw / camPhaseEnd, 0, 1));
+  camera.position.lerpVectors(camHome.position, camEnd.position, camP);
+  camera.quaternion.copy(camHome.quaternion).slerp(camEnd.quaternion, camP);
+  if (camHome.isPerspectiveCamera && camEnd.isPerspectiveCamera) {
+    camera.fov = camHome.fov + (camEnd.fov - camHome.fov) * camP;
+    camera.updateProjectionMatrix();
+  }
+
+  // Headline overlay fades during camera phase
+  const overlay = document.getElementById('phase1-overlay');
+  if (overlay) overlay.style.opacity = String(Math.max(0, 1 - camP * 1.6));
+
+  // ---- CRT TRANSITION PHASE ----
+  updateCRTTransition(raw);
+}
+
+function updateCRTTransition(progress) {
+  if (!tvBeamEl || !tvBlackoutEl) return;
+
+  // In editor mode: don't run the transition (page locked at scroll 0 anyway)
+  if (window._editorOn) {
+    tvBeamEl.style.opacity = '0';
+    tvBlackoutEl.style.opacity = '0';
+    if (portfolioEl) portfolioEl.style.opacity = '1';
+    if (canvas) canvas.style.opacity = '1';
+    return;
+  }
+
+  const cfg = SCENE_TRANSITIONS;
+
+  // Beam shape — starts as a 2px dot, expands horizontally then vertically, then fades
+  const beamWidth = sampleRamp([
+    [cfg.beam.start, 2],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.2), window.innerWidth * 0.38],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.4), window.innerWidth * 0.42],
+    [cfg.beam.peak, window.innerWidth],
+    [cfg.beam.end, window.innerWidth],
+  ], progress);
+  const beamHeight = sampleRamp([
+    [cfg.beam.start, 2],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.2), 2],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.4), window.innerHeight * 0.06],
+    [cfg.beam.peak, window.innerHeight],
+    [cfg.beam.end, window.innerHeight],
+  ], progress);
+  const beamOpacity = sampleRamp([
+    [cfg.beam.start, 0.3],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.2), 0.7],
+    [lerpN(cfg.beam.start, cfg.beam.peak, 0.4), 0.92],
+    [cfg.beam.peak, 1],
+    [cfg.beam.end, 0],
+  ], progress);
+  const beamActive = progress >= cfg.beam.start && progress <= cfg.beam.end;
+  tvBeamEl.style.width  = beamWidth  + 'px';
+  tvBeamEl.style.height = beamHeight + 'px';
+  tvBeamEl.style.opacity = beamActive ? String(beamOpacity) : '0';
+
+  // Blackout fades in over the camera scene, then fades out revealing portfolio
+  let blackoutOpacity = 0;
+  if (progress >= cfg.blackout.fadeStart && progress < cfg.blackout.peakStart) {
+    blackoutOpacity = smooth01(invLerp(cfg.blackout.fadeStart, cfg.blackout.peakStart, progress));
+  } else if (progress >= cfg.blackout.peakStart && progress < cfg.blackout.fadeEnd) {
+    blackoutOpacity = 1 - smooth01(invLerp(cfg.blackout.peakStart, cfg.blackout.fadeEnd, progress));
+  }
+  tvBlackoutEl.style.opacity = String(blackoutOpacity);
+
+  // 3D canvas fades out and portfolio fades in, locked once past lockProgress
+  const handoff = easeOutCubic(invLerp(cfg.beam.end - 0.005, 1, progress));
+  const bleed   = easeOutCubic(invLerp(cfg.blackout.peakStart - 0.005, cfg.lockProgress, progress)) * 0.48;
+  if (canvas) canvas.style.opacity = String(1 - handoff);
+  if (portfolioEl) {
+    const pfActive = progress >= cfg.lockProgress;
+    portfolioEl.style.opacity = pfActive ? '1' : String(Math.max(handoff, bleed));
+    portfolioEl.style.pointerEvents = pfActive ? 'auto' : 'none';
+    // PERF: only call when the boolean actually FLIPS (was called every frame). setMusicMuffled
+    // had an internal no-op guard but the call itself + the AudioContext suspended-check inside
+    // accumulated tiny stalls during scroll. Now: zero work per frame at rest.
+    if (window._lastPfActive !== pfActive) { window._lastPfActive = pfActive; setMusicMuffled(pfActive); }
+    // PERF: tell the iframe when we're in transit so it can DROP mix-blend-mode on its baked
+    // grain/film layers (compositor stops re-blending 15+ huge images each frame).
+    const inTrans = handoff > 0 && !pfActive;
+    if (window._lastInTrans !== inTrans) {
+      window._lastInTrans = inTrans;
+      const f = window.activePortfolioFrame || pfFrame;
+      try { if (f && f.contentWindow) f.contentWindow.postMessage({ type: inTrans ? 'yassen:tv-transition-start' : 'yassen:tv-transition-end' }, '*'); } catch (e) {}
+    }
+    if (pfActive) {
+      // Skip the re-lock during exitTv()'s scroll-back tick: scrollY is still above lockProgress
+      // for the first frames of the exit, so without this guard updateCRTTransition would re-lock
+      // the TV, animate() would bail, and the renderer would freeze for the whole exit.
+      if (!window._pfLocked && !window._exitingTv) {
+        window._pfLocked = true; document.documentElement.style.overflow = 'hidden';   // lock page scroll -> only the iframe scrolls
+        // Pause the room's background videos (CRT + window) — they're hidden now and
+        // their decoding competes with the portfolio's project videos, causing lag.
+        try { if (videoCRT) videoCRT.pause(); } catch (e) {}
+        try { if (videoWindowSlot && videoWindowSlot.video) videoWindowSlot.video.pause(); } catch (e) {}
+        // Hand control to the iframe: enable its pointer events (was kept 'none' in the room so
+        // the iframe wouldn't steal clicks from the TV/Radio buttons), then focus it (keyboard
+        // scroll lands in the right document) and nudge a re-layout (horizontal reel is correct).
+        { const f = window.activePortfolioFrame || pfFrame;
+          if (f) f.style.pointerEvents = 'auto';
+          try { if (f && f.contentWindow) { f.contentWindow.focus(); f.contentWindow.dispatchEvent(new Event('resize')); } } catch (e) {} }
+      }
+      if (canvas) canvas.style.opacity = '0';
+    }
+  }
+  if (portfolioNavEl) {
+    portfolioNavEl.style.opacity = String(easeOutCubic(invLerp(cfg.lockProgress + 0.005, 1, progress)));
+  }
+}
+// (scroll listener removed — animate loop drives this each frame for smoother
+// behavior on trackpads / high-frequency scroll devices)
+
+/* ====================================================================== */
+/* RAYCAST + CURSOR                                                       */
+/* ====================================================================== */
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+const tmpVec = new THREE.Vector3();
+
+function pickButton() {
+  if (!camera || clickables.length === 0) return null;
+  raycaster.setFromCamera(pointer, camera);
+  const targets = clickables.map(c => c.object).filter(o => o && o.visible);
+  const hits = raycaster.intersectObjects(targets, true);
+  for (const hit of hits) {
+    let n = hit.object;
+    while (n) {
+      const c = clickables.find(cc => cc.object === n);
+      if (c) return c;
+      n = n.parent;
+    }
+  }
+  return null;
+}
+
+window.addEventListener('mousemove', (e) => {
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  document.getElementById('cursor').style.transform = `translate(${e.clientX-4}px, ${e.clientY-4}px)`;
+  inkTrail.points.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+  if (inkTrail.points.length > 60) inkTrail.points.shift();
+});
+
+let tvButtonAnimating = false, tvButtonTargetZ = null;
+function onTVButtonClick() {
+  if (tvButtonAnimating) return;
+  const newLang = (currentLang === 'en') ? 'ar' : 'en';
+  if (tvButton) {
+    tvButtonTargetZ = (newLang === 'ar') ? tvButtonAltZ : tvButtonRestZ;
+    tvButtonAnimating = true;
+  }
+  setLanguage(newLang);
+}
+function onRadioButtonClick() { toggleMusic(); if (typeof markRadioSeen === 'function') markRadioSeen(); if (typeof refreshRadioHintText === 'function') refreshRadioHintText(); }
+
+window.addEventListener('click', () => {
+  const c = pickButton();
+  if (!c) return;
+  if (c.name === 'TV-Button') onTVButtonClick();
+  else if (c.name === 'Radio_Button') onRadioButtonClick();
+});
+
+/* ====================================================================== */
+/* INK TRAIL                                                              */
+/* ====================================================================== */
+const trailCanvas = document.getElementById('cursor-trail');
+const trailCtx = trailCanvas.getContext('2d');
+const inkTrail = { points: [] };
+function resizeTrail() { trailCanvas.width = window.innerWidth; trailCanvas.height = window.innerHeight; }
+resizeTrail();
+
+function renderInkTrail() {
+  const now = performance.now();
+  trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+  if (inkTrail.points.length < 2) return;
+  for (let i = 1; i < inkTrail.points.length; i++) {
+    const a = inkTrail.points[i-1], b = inkTrail.points[i];
+    const ageB = (now - b.t) / 1000;
+    if (ageB > 1) continue;
+    trailCtx.strokeStyle = `rgba(40,25,12,${Math.max(0,1-ageB)*.65})`;
+    trailCtx.lineWidth = Math.max(0.5, 2.5*(1-ageB));
+    trailCtx.lineCap = 'round';
+    trailCtx.beginPath(); trailCtx.moveTo(a.x, a.y); trailCtx.lineTo(b.x, b.y); trailCtx.stroke();
+  }
+}
+
+/* ====================================================================== */
+/* HOVER GLOW — emissive on the button mesh itself (not a sprite quad)    */
+/* ====================================================================== */
+// One-time cleanup — restore any emissive that the old buggy hover glow had set.
+let _hoverGlowCleanedUp = false;
+function _cleanupOldEmissive() {
+  if (_hoverGlowCleanedUp) return;
+  _hoverGlowCleanedUp = true;
+  if (window.__yassen?.scene) {
+    window.__yassen.scene.traverse(o => {
+      if (o.isMesh && o.userData._origEmissiveStored && o.material?.emissive) {
+        o.material.emissive.setHex(o.userData._origEmissiveHex || 0x000000);
+        o.material.emissiveIntensity = o.userData._origEmissiveIntensity ?? 1;
+        o.material.needsUpdate = true;
+      }
+    });
+  }
+}
+
+// Hover feedback (Option A): cursor → pointer + floating tooltip when over a button.
+// Doesn't touch any 3D materials. Skips itself in editor mode (you have transform handles there).
+const _tooltipEl = document.getElementById('btn-tooltip');
+const _tooltipText = {
+  'Radio_Button': () => musicState.playing ? 'Click to stop music' : 'Click to play music',
+  'TV-Button':    () => currentLang === 'ar' ? 'انقر للإنجليزية' : 'Click to switch to Arabic',
+};
+let _lastHoverName = null;
+
+function updateHoverGlow() {
+  _cleanupOldEmissive();
+  if (window._editorOn) {
+    // Editor takes over — hide tooltip + restore cursor
+    if (_lastHoverName) {
+      document.body.style.cursor = '';
+      _tooltipEl.style.opacity = '0';
+      _lastHoverName = null;
+    }
+    return;
+  }
+  if (!camera || clickables.length === 0) return;
+
+  raycaster.setFromCamera(pointer, camera);
+  const targets = clickables.map(c => c.object).filter(o => o && o.visible);
+  const hits = raycaster.intersectObjects(targets, true);
+
+  let hoveredName = null;
+  for (const hit of hits) {
+    let n = hit.object;
+    while (n) {
+      const c = clickables.find(cc => cc.object === n);
+      if (c) { hoveredName = c.name; break; }
+      n = n.parent;
+    }
+    if (hoveredName) break;
+  }
+
+  if (hoveredName) {
+    if (hoveredName !== _lastHoverName) {
+      _lastHoverName = hoveredName;
+      document.body.style.cursor = 'pointer';
+      const fn = _tooltipText[hoveredName];
+      if (fn) _tooltipEl.textContent = fn();
+      // Intensify outline strength on hover — buttons stay outlined regardless
+      if (window._outlinePass) {
+        window._outlinePass.edgeStrength = 8.0;  // boosted
+        window._outlinePass.edgeGlow = 1.0;
+      }
+    }
+    // Position tooltip near the cursor (refresh each frame in case of move)
+    const cx = (pointer.x*.5+.5)*window.innerWidth;
+    const cy = (-pointer.y*.5+.5)*window.innerHeight;
+    _tooltipEl.style.left = cx + 'px';
+    _tooltipEl.style.top  = cy + 'px';
+    _tooltipEl.style.opacity = '1';
+  } else if (_lastHoverName) {
+    _lastHoverName = null;
+    document.body.style.cursor = '';
+    _tooltipEl.style.opacity = '0';
+    // Restore default outline strength (buttons stay outlined)
+    if (window._outlinePass) {
+      window._outlinePass.edgeStrength = 4.0;  // default
+      window._outlinePass.edgeGlow = 0.6;
+    }
+  }
+}
+
+/* ====================================================================== */
+/* RESIZE + LOOP                                                          */
+/* ====================================================================== */
+window.addEventListener('resize', () => {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h);
+  composer.setSize(w, h);
+  if (window._outlinePass) window._outlinePass.setSize(w, h);
+  if (camera.isPerspectiveCamera) { camera.aspect = w/h; camera.updateProjectionMatrix(); }
+  resizeTrail();
+});
+
+// WASD + Space/C fly state — used in editor mode (E reserved for editor toggle)
+const _flyKeys = { w: false, a: false, s: false, d: false, space: false, c: false, shift: false };
+window.addEventListener('keydown', (ev) => {
+  if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
+  const k = ev.key.toLowerCase();
+  if (k === 'w' || k === 'a' || k === 's' || k === 'd' || k === 'c') _flyKeys[k] = true;
+  if (ev.key === ' ') _flyKeys.space = true;
+  if (ev.key === 'Shift') _flyKeys.shift = true;
+});
+window.addEventListener('keyup', (ev) => {
+  const k = ev.key.toLowerCase();
+  if (k === 'w' || k === 'a' || k === 's' || k === 'd' || k === 'c') _flyKeys[k] = false;
+  if (ev.key === ' ') _flyKeys.space = false;
+  if (ev.key === 'Shift') _flyKeys.shift = false;
+});
+
+function applyFlyMovement(dt) {
+  if (!window._editorOn) return;
+  const cam = window.__yassen.camera();
+  if (!cam) return;
+  const speed = (_flyKeys.shift ? 20 : 7) * dt; // shift = run
+  const fwd = new THREE.Vector3();
+  cam.getWorldDirection(fwd);
+  fwd.y = 0; fwd.normalize();
+  const right = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize();
+  const move = new THREE.Vector3();
+  if (_flyKeys.w) move.add(fwd);
+  if (_flyKeys.s) move.sub(fwd);
+  if (_flyKeys.d) move.add(right);
+  if (_flyKeys.a) move.sub(right);
+  if (_flyKeys.space) move.y += 1; // up
+  if (_flyKeys.c)     move.y -= 1; // down
+  if (move.lengthSq() > 0) {
+    move.normalize().multiplyScalar(speed);
+    cam.position.add(move);
+    if (window._orbitCtrl) window._orbitCtrl.target.add(move);
+  }
+}
+
+// Shift + mouse wheel = WASD-style fly forward/back (intercept before OrbitControls)
+window.addEventListener('wheel', (e) => {
+  if (!window._editorOn) return;
+  if (!e.shiftKey) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const cam = window.__yassen.camera();
+  if (!cam) return;
+  const fwd = new THREE.Vector3();
+  cam.getWorldDirection(fwd);
+  // scroll up (deltaY < 0) → forward (+fwd); scroll down → backward
+  const step = -Math.sign(e.deltaY) * 0.8;
+  fwd.multiplyScalar(step);
+  cam.position.add(fwd);
+  if (window._orbitCtrl) window._orbitCtrl.target.add(fwd);
+}, { capture: true, passive: false });
+
+// ===== Floating pills: language toggle ABOVE the TV + dynamic play/stop hint ABOVE the radio =====
+const hintLang = document.getElementById('hint-lang');
+const hintRadio = document.getElementById('hint-radio');
+// hints reset every reload — only hidden within the current session after interaction
+let _radioSeen = false;
+let _tvSeen = false;
+function markTvSeen() { _tvSeen = true; }
+function markRadioSeen() { _radioSeen = true; refreshRadioHintText(); }
+function refreshRadioHintText() {
+  if (!hintRadio) return;
+  const playing = (typeof musicState !== 'undefined' && musicState.playing);
+  if (currentLang === 'ar') {
+    hintRadio.textContent = playing ? 'اضغط لإطفاء الموسيقى' : 'اضغط لتشغيل الموسيقى';
+    hintRadio.setAttribute('dir', 'rtl');
+  } else {
+    hintRadio.textContent = playing ? 'Click to stop music' : 'Click to play music';
+    hintRadio.setAttribute('dir', 'ltr');
+  }
+}
+function refreshLangPillText() {
+  if (!hintLang) return;
+  // Pill is for the visitor who DOESN'T speak the current language — so it's written ENTIRELY
+  // in their language (the opposite of what's on screen). Arabic visitor lands on an English
+  // page and sees Arabic instructions; English visitor lands on Arabic and sees English.
+  if (currentLang === 'ar') {
+    // Site is Arabic → write the hint fully in English so an English visitor understands.
+    hintLang.textContent = 'Click for English';
+    hintLang.setAttribute('dir', 'ltr');
+    hintLang.setAttribute('lang', 'en');
+  } else {
+    // Site is English → write the hint fully in Arabic so an Arabic visitor understands.
+    hintLang.textContent = 'اضغط للعربية';
+    hintLang.setAttribute('dir', 'rtl');
+    hintLang.setAttribute('lang', 'ar');
+  }
+}
+refreshLangPillText();
+refreshRadioHintText();
+// (language pill is text-only — not clickable, just a visual hint)
+const _hintVec = new THREE.Vector3();
+function _projectToScreen(obj) {
+  obj.getWorldPosition(_hintVec);
+  _hintVec.project(camera);
+  return { x: (_hintVec.x + 1) / 2 * window.innerWidth,
+           y: (-_hintVec.y + 1) / 2 * window.innerHeight,
+           inFront: _hintVec.z < 1 };
+}
+function updateHints() {
+  if (window._pfLocked) {
+    if (hintLang) hintLang.style.opacity = '0';
+    if (hintRadio) hintRadio.style.opacity = '0';
+    return;
+  }
+  const _set = (el, obj, dy, hide, dx) => {
+    if (!el || !obj) return;
+    if (hide) { el.style.opacity = '0'; return; }
+    const p = _projectToScreen(obj);
+    if (!p.inFront) { el.style.opacity = '0'; return; }
+    el.style.left = (p.x + (dx || 0)) + 'px';
+    el.style.top = (p.y + dy) + 'px';
+    el.style.opacity = '1';
+  };
+  _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
+  _set(hintRadio, radioButton, -180, _radioSeen, 90);                // radio hint shifted right 90px to sit over the actual visible knob
+}
+
+// ===== Full-body emissive pulse on the TV and radio so users SEE they are clickable from the start =====
+function _setupPulseObject(obj, hex) {
+  if (!obj || obj.userData._pulseReady) return;
+  obj.userData._pulseReady = true;
+  obj.traverse((c) => {
+    if (c.isMesh && c.material) {
+      c.material = c.material.clone();                               // clone so we don't tint other meshes sharing the material
+      c.material.emissive = new THREE.Color(hex);
+      c.userData._pulseBaseInt = c.material.emissiveIntensity || 0;
+    }
+  });
+}
+function _stopPulseObject(obj) {
+  if (!obj) return;
+  obj.traverse((c) => {
+    if (c.isMesh && c.userData._pulseBaseInt !== undefined) {
+      c.material.emissiveIntensity = c.userData._pulseBaseInt;
+    }
+  });
+}
+function _pulseObject(obj, t) {
+  if (!obj) return;
+  const k = 0.35 + 0.85 * (0.5 + 0.5 * Math.sin(t * 2.4));            // breathes 0.35 -> 1.2 -> 0.35
+  obj.traverse((c) => {
+    if (c.isMesh && c.userData._pulseBaseInt !== undefined) {
+      c.material.emissiveIntensity = k;
+    }
+  });
+}
+function updatePulse() {
+  const t = performance.now() / 1000;
+  if (tvButton)   { _setupPulseObject(tvButton, 0xffb368);  if (_tvSeen)    _stopPulseObject(tvButton);  else _pulseObject(tvButton, t); }
+  if (radioButton){ _setupPulseObject(radioButton, 0xffb368); if (_radioSeen) _stopPulseObject(radioButton); else _pulseObject(radioButton, t + 0.6); }
+}
+
+let _lastFrame = performance.now();
+function animate() {
+  requestAnimationFrame(animate);
+  const now = performance.now();
+  const dt = Math.min(0.05, (now - _lastFrame) / 1000);
+  _lastFrame = now;
+  // Inside the TV (portfolio open): the 3D canvas is hidden, so stop rendering it.
+  // This hands the main thread to the iframe so the portfolio scrolls smoothly
+  // instead of stuttering for the first seconds after entering.
+  if (window._pfLocked) { markTvSeen(); return; }
+  // Skip scroll-driven camera update if editor mode is active (orbit takes over)
+  if (!window._editorOn) updateCameraFromScroll();
+  updateHints();
+  updatePulse();
+  applyFlyMovement(dt);
+  if (window._orbitCtrl && window._editorOn) window._orbitCtrl.update();
+  if (tvButton && tvButtonAnimating && tvButtonTargetZ !== null) {
+    const cur = tvButton.rotation.z;
+    const diff = tvButtonTargetZ - cur;
+    if (Math.abs(diff) < 0.01) { tvButton.rotation.z = tvButtonTargetZ; tvButtonAnimating = false; }
+    else tvButton.rotation.z = cur + diff*0.18;
+  }
+  updateHoverGlow();
+  renderInkTrail();
+  composer.render();
+}
+animate();
+
+/* ====================================================================== */
+/* FORM + UNLOCK                                                          */
+/* ====================================================================== */
+const form = document.getElementById('contact-form');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const t = document.getElementById('toast');
+  t.textContent = STRINGS[currentLang]['toast-form'];
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+  form.reset();
+});
+
+// PERF: pre-warm videos on the FIRST mousemove (long before the user clicks anything).
+// The original problem was that the first .play() on each video did codec init on the same
+// frame as the user's first click, freezing the main thread and starving the hover-detect /
+// scroll handlers — that's the "click TV button → site stops, cursor turns to I-beam" lag.
+// Videos are muted, so .play() needs no user-activation gesture; mousemove is fine. The full
+// unlockMedia below still runs on click/key for AudioContext resume + a keyboard-only fallback.
+let _videosWarmed = false;
+function _warmVideos() {
+  if (_videosWarmed) return;
+  _videosWarmed = true;
+  let i = 0;
+  function next() {
+    if (i < videoTextures.length) {
+      try { videoTextures[i].play().catch(()=>{}); } catch (e) {}
+      i++;
+      setTimeout(next, 60);
+    }
+  }
+  setTimeout(next, 0);
+}
+window.addEventListener('mousemove', _warmVideos, { once: true, passive: true });
+window.addEventListener('pointermove', _warmVideos, { once: true, passive: true });
+
+let unlocked = false;
+function unlockMedia() {
+  if (unlocked) return;
+  unlocked = true;
+  // AudioContext was built during boot (suspended). This gesture just .resume()s it — cheap.
+  if (typeof _audioCtx !== 'undefined' && _audioCtx && _audioCtx.state === 'suspended') {
+    try { _audioCtx.resume().catch(()=>{}); } catch (e) {}
+  }
+  // Keyboard-only fallback: if mousemove never fired (no mouse), warm the videos now.
+  _warmVideos();
+}
+// Unlock on any gesture: click, touch, scroll, key
+window.addEventListener('click', unlockMedia, { once: true });
+window.addEventListener('pointerdown', unlockMedia, { once: true });
+window.addEventListener('touchstart', unlockMedia, { once: true });
+window.addEventListener('keydown', unlockMedia, { once: true });
+window.addEventListener('wheel', unlockMedia, { once: true, passive: true });
+window.addEventListener('scroll', unlockMedia, { once: true, passive: true });
+
+// Also keep retrying play() periodically — some browsers eventually allow muted video
+let retryAttempts = 0;
+const retryPlay = setInterval(() => {
+  let allPlaying = true;
+  videoTextures.forEach(v => {
+    if (v.paused) { allPlaying = false; v.play().catch(()=>{}); }
+  });
+  if (allPlaying || ++retryAttempts > 20) clearInterval(retryPlay);
+}, 1000);
+
+// On every page load, force scroll to the top so the cinematic always starts at Cam_Home
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+window.addEventListener('load', () => window.scrollTo(0, 0));
+
+window.__yassen = {
+  setLanguage, toggleMusic, setMusicMuffled, scene, camera: () => camera, renderer,
+  musicDebug() {
+    return {
+      playing: musicState.playing, muffled: musicState.muffled, idx: musicState.trackIndex,
+      activeVol: +active.volume.toFixed(3), activeSrc: (active.src||'').split('/').pop(), activePaused: active.paused,
+      ambientVol: +audioAmbient.volume.toFixed(3),
+      ctx: _audioCtx ? _audioCtx.state : 'none', lowpassHz: _lowpass ? Math.round(_lowpass.frequency.value) : 'none',
+    };
+  },
+  videos: videoTextures,
+  videoStatus() {
+    return videoTextures.map((v, i) => ({
+      i, src: v.src.split('/').pop(),
+      paused: v.paused, t: +v.currentTime.toFixed(2),
+      readyState: v.readyState, error: v.error?.code,
+      networkState: v.networkState,
+    }));
+  },
+  forcePlay() {
+    videoTextures.forEach(v => v.play().catch(e => console.warn(v.src, '→', e.message)));
+  },
+};
+
+// === CLICK-TO-START OVERLAY ===
+// Some browsers refuse muted-video autoplay until the user clicks the page.
+// Detect that case and show a tap-to-start overlay so the videos always play.
+(function () {
+  const overlay = document.createElement('div');
+  overlay.id = 'video-unlock';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 950;
+    background: rgba(10, 7, 16, 0.92);
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 16px;
+    color: #f3eee8; font-family: 'Inter', sans-serif;
+    cursor: pointer; backdrop-filter: blur(8px);
+  `;
+  overlay.innerHTML = `
+    <div style="font-family:'Fraunces',serif;font-style:italic;font-size:48px;color:#c8b6e6">click anywhere</div>
+    <div style="font-size:11px;letter-spacing:4px;color:rgba(232,220,196,.6);text-transform:uppercase">to start the videos</div>
+  `;
+  document.body.appendChild(overlay);
+
+  function attemptPlay() {
+    return Promise.all(videoTextures.map(v => v.play().then(()=>true).catch(()=>false)))
+      .then(results => results.every(r => r));
+  }
+
+  function removeOverlay() {
+    overlay.style.display = 'none';
+    overlay.remove();
+  }
+
+  // Try immediately when videos are ready
+  setTimeout(async () => {
+    const ok = await attemptPlay();
+    if (!ok) {
+      // Show overlay
+      overlay.style.display = 'flex';
+      overlay.addEventListener('click', async () => {
+        await attemptPlay();
+        removeOverlay();
+      }, { once: true });
+    }
+  }, 500);
+
+  // Also try every 2 seconds in case overlay isn't seen
+  const i = setInterval(async () => {
+    const ok = await attemptPlay();
+    if (ok) { clearInterval(i); removeOverlay(); }
+  }, 2000);
+})();
+</script>
+</body>
+</html>

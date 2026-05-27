@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-baked="1"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yassen Elkhatib — Performance-driven Video Editor (Portfolio)</title>
+<meta name="description" content="Yassen Elkhatib — performance-driven video editor for short-form & long-form content. Reels, TikTok, social media ads. Produced more than twenty videos for over five brands.">
+<meta name="author" content="Yassen Elkhatib">
+<meta name="theme-color" content="#EFE2C8">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32">
+<link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
+<link rel="canonical" href="/test/EN-P.html">
+<link rel="alternate" hreflang="en" href="/test/EN-P.html">
+<link rel="alternate" hreflang="ar" href="/test/index-h-1.html">
+<link rel="alternate" hreflang="x-default" href="/test/EN-P.html">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Yassen Elkhatib — Video Editor Portfolio">
+<meta property="og:description" content="Performance-driven video editor for short-form & long-form content.">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_EG">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yassen Elkhatib — Video Editor Portfolio">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Yassen Elkhatib","jobTitle":"Video Editor","email":"mailto:yassenelkhatib0q@gmail.com","sameAs":["https://behance.net/Yassen-El-Khatib","https://linkedin.com/in/yassen-el-khatib"]}</script>
+<link href="/vendor/fonts/fonts-v5.css" rel="stylesheet">
+<script src="/vendor/gsap.min.js" defer></script>
+<style>
+  /* Z-50: zoom is applied by the parent iframe in index-z50.html (iframe sized 200% + scale 0.5),
+     which gives this page a true doubled viewport — identical to Chrome Ctrl+- to 50%. */
+  @font-face{ font-family: 'Panorama'; src: url('../assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display: swap; }
+  @font-face{ font-family: 'Vintage Town'; src: url('../assets/fonts/VintageTown.otf') format('opentype'); font-display: swap; }
+  @font-face{ font-family: 'Wanlaners'; src: url('../assets/fonts/Wanlaners.otf') format('opentype'); font-display: swap; }
+  :root{
+    --paper: #EFE2C8; --paper2:#F4EAD2;
+    --ink: #5A3520; --ink-soft: #7A4A28;          /* warm brown — no black anywhere */
+    --accent: #C44638;   /* vintage red — titles, accents */
+    --stamp: #AC6A2C;    /* warm orange-brown — secondary accent / shadow */
+    --gold: #B8842E;     /* deep gold — hero name fill, WCAG-passing on the cream paper */
+    --line: rgba(90,53,32,.28);
+    --fs-body: 1.042vw;
+  }
+  *{margin: 0;padding: 0;box-sizing: border-box;}
+  html{ scroll-behavior: smooth; }
+  html,body{ overflow-x: clip; }   /* clip (not hidden) so position:sticky keeps working */
+  body{ background: var(--paper); color: var(--ink); font-family: 'Wanlaners','Fraunces',serif; font-size: var(--fs-body); line-height: 1.7; }
+  body::before{ content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.10'/></svg>");
+    mix-blend-mode: multiply; opacity: .5; }
+  body::after{ content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(var(--ink) .5px, transparent .6px); background-size: 0.208vw 0.208vw; opacity: .05; }
+  .rough{ filter: url(#inkrough); }
+
+  /* ===== horizontal reel driven by vertical scroll (Figma-style smooth motion) ===== */
+  #track{ position: relative; }                       /* tall spacer; height set by JS */
+  #stage{ position: sticky; top: 0; height: 100vh; overflow: hidden; z-index: 1; }
+  #reel{ display: flex; flex-direction: row; height: 100vh; direction: ltr; will-change: transform; }
+  /* scrollbar hidden (scrolling still works) */
+  html,body{ scrollbar-width: none; -ms-overflow-style: none; }
+  ::-webkit-scrollbar{ width: 0; height: 0; display: none; }
+  .panel{ flex: 0 0 auto; height: 100vh; padding: 1.562vw 2.917vw 11.458vw; display: flex; flex-direction: column; justify-content: center;   /* asymmetric bottom padding pulls the vertical centre upward */
+          direction: rtl; position: relative; overflow: hidden;   /* clip layers/images to the panel — no bleeding past the page */
+          background: #d8cdb2 url('assets/poster-bg.jpg') center / cover no-repeat; }   /* each panel its own copy */
+
+  /* vertical "film leader" section title */
+  .leader{ flex: 0 0 6.771vw; background: var(--ink); color: var(--paper); display: flex; align-items: center; justify-content: center; }
+  .leader span{ writing-mode: vertical-rl; font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(52.5px,3.333vw, 129px); letter-spacing: .04em; }
+  .leader .n{ writing-mode: horizontal-tb; font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.729vw, 27px); color: var(--accent); border: 2px solid var(--accent); border-radius: 50%; width: 1.979vw; height: 3.519vh; display: flex; align-items: center; justify-content: center; margin-bottom: 1.296vh; }
+  .leader .inner{ display: flex; flex-direction: column; align-items: center; gap: 0.729vw; }
+
+  /* ===== poster panel (landscape) ===== */
+  /* ABSOLUTE SCALE: width changed from 100vw to fixed 1920px so the zoom-based scaling works
+     uniformly. Under CSS `zoom: 0.X` the vw unit still resolves to the real viewport, breaking
+     the panel sizing. Fixing it at 1920px (the design baseline) lets zoom handle all scaling. */
+  .poster{ width: 100.000vw; max-width: 100.000vw; flex-direction: row; align-items: center; gap: 2.604vw; border-left: none; padding: 3.646vw 6vw; }
+  .panel::before{ content: ""; position: absolute; inset: 0.833vw; border: 2px solid var(--ink); box-shadow: inset 0 0 0 1px var(--paper), inset 0 0 0 4px var(--ink); pointer-events: none; opacity: .85; z-index: 1; }
+  .filmstrip{ display: flex; flex-direction: row; gap: 0; border: 3px solid var(--ink); background: var(--ink); transform: rotate(-1.2deg); box-shadow: 0.312vw 0.417vw 0 rgba(26,21,16,.25); }
+  .filmstrip .col{ display: flex; flex-direction: column; }
+  .perfs-v{ display: flex; flex-direction: column; justify-content: space-between; padding: 0.417vw 0.208vw; gap: 0.521vw; }
+  .perfs-v span{ width: 0.365vw; height: 1.019vh; background: var(--paper); border-radius: 1px; }
+  .frame{ display: block; width: 11.979vw; aspect-ratio: 16/10; position: relative; border: 2px solid var(--paper); overflow: hidden; background: var(--paper2); }
+  .frame img{ width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.45) contrast(1.15) brightness(.92); }
+  .frame::after{ content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--ink) 30%, transparent 31%); background-size: 0.156vw 0.156vw; mix-blend-mode: multiply; opacity: .35; }
+  .frame .cap{ position: absolute; bottom: 0; right: 0; left: 0; background: rgba(26,21,16,.82); color: var(--paper); font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.625vw, 24px); padding: 0.208vw 0.417vw; }
+  .frame.placeholder{ display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); }
+
+  .poster-right{ text-align: right; max-width: 92%; }
+  .credits{ font-size: clamp(16.5px,1.042vw, 40.5px); line-height: 1.6; color: var(--ink-soft); border-right: 3px solid var(--ink); padding-right: 0.729vw; margin-bottom: 2.037vh; }
+  .credits b{ color: var(--ink); }
+  .role-tag{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); letter-spacing: 0.104vw; color: var(--accent); display: block; margin-bottom: 0.370vh; }
+  .hero-name{ display: flex; flex-wrap: wrap; gap: 0; align-items: flex-end; direction: ltr; position: relative; z-index: 300; }   /* LTR + words joined; z above grain (250) + spread images so the hero stays crisp */
+  .hero-word{ font-family: 'Vintage Town','Fraunces',serif; font-size: clamp(105px,9vw, 225px); line-height: 1.3; padding-bottom: .18em; white-space: nowrap; font-feature-settings: "swsh" 1,"calt" 1,"dlig" 1,"liga" 1;
+    color: var(--gold);
+    text-shadow: 3px 3px 0 var(--accent), 8px 8px 0 var(--ink-soft); }   /* color is editable from the editor now (no webkit-text-fill-color override) */
+  .hero-role{ font-family: 'Wanlaners','Fraunces',sans-serif; font-weight: 700; font-size: clamp(33px,2.6vw, 51px); margin-top: 0.741vh; }
+  .hero-sub{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.729vw, 27px); letter-spacing: 0.104vw; color: var(--ink-soft); margin-top: 0.370vh; }
+  .tagline{ font-style: italic; font-size: clamp(33px,2.6vw, 45px); margin-top: 1.667vh; max-width: 24ch; border-top: 1px solid var(--line); padding-top: 1.296vh; }
+  /* unify the whole poster on NT Panorama Naskh (one font); kill letter-spacing so Arabic stays joined */
+  .poster .role-tag, .poster .credits, .poster .credits b, .poster .hero-sub, .poster .tagline{
+    font-family: 'Wanlaners','Fraunces',serif;
+    letter-spacing: normal;
+  }
+  .poster .role-tag{ font-size: clamp(12px,0.781vw, 30px); }
+  .poster .hero-sub{ font-size: clamp(13.5px,0.885vw, 33px); }
+  .stamp{ position: absolute; top: 50%; left: 3vw; width: 7.604vw; height: 13.519vh; border-radius: 50%; border: 2px solid var(--paper); background: var(--stamp); color: var(--paper); display: flex; align-items: center; justify-content: center; text-align: center; font-family: 'Cairo',sans-serif; transform: translateY(-50%) rotate(-8deg); opacity: 1; box-shadow: 0 0 0 3px var(--stamp), 4px 5px 0 rgba(26,21,16,.28); z-index: 400; }   /* middle-left, above grain/spread overlays */
+  .stamp::before{ content: "●"; position: absolute; top: 1.296vh; font-size: clamp(12px,0.469vw, 18px); color: var(--paper); opacity: .85; }   /* tiny "live" dot */
+  .stamp b{ font-size: clamp(16.5px,1.094vw, 42px); font-weight: 900; display: block; line-height: 1.15; }
+  .stamp small{ font-size: clamp(12px,0.573vw, 21px); opacity: .92; }
+
+  /* ===== content panels ===== */
+  .panel h2.t{ font-family: 'Vintage Town','Fraunces',serif; font-size: clamp(69px,6vw, 129px); line-height: 1; margin-bottom: 2.222vh; color: var(--accent); }   /* vintage red for section titles */
+  .about{ width: min(42.708vw,92vw); }
+  .about p{ font-family: 'Fraunces','EB Garamond',serif; font-weight: 500; font-size: clamp(33px,2.2vw, 45px); line-height: 1.55; color: var(--ink-soft);
+    direction: ltr; text-align: left; }   /* English reads LEFT-to-RIGHT, even though the page is RTL */
+  .stats{ display: flex; flex-wrap: wrap; gap: 1.771vw; margin-top: 2.778vh; }
+  .stats div{ border-top: 3px solid var(--ink); padding-top: 0.741vh; }
+  .stats b{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(37.5px,2.396vw, 93px); display: block; line-height: 1; }
+  .stats span{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.729vw, 27px); color: var(--ink-soft); }
+
+  .card{ width: 19.792vw; justify-content: center; }
+  .card .meta{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); letter-spacing: 1px; color: var(--accent); margin-bottom: 0.556vh; }
+  .card h3{ font-family: 'Reem Kufi',sans-serif; font-weight: 700; font-size: clamp(22.5px,1.458vw, 55.5px); margin-bottom: 0.556vh; }
+  .card .when{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); color: var(--ink-soft); margin-bottom: 1.296vh; }
+  .card ul{ list-style: none; }
+  .card li{ font-size: clamp(16.5px,1.042vw, 40.5px); line-height: 1.7; padding-right: 1.042vw; position: relative; margin-bottom: 0.926vh; color: var(--ink-soft); }
+  .card li::before{ content: "◾"; position: absolute; right: 0; color: var(--accent); font-size: clamp(12px,0.521vw, 19.5px); top: 0.926vh; }
+
+  .pcard{ width: 20.833vw; justify-content: center; text-decoration: none; color: var(--ink); }
+  .pcard .ph{ aspect-ratio: 16/9; position: relative; overflow: hidden; background: var(--ink); border: 2px solid var(--ink); box-shadow: 0.260vw 0.312vw 0 rgba(26,21,16,.18); }
+  .pcard .ph img{ width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.45) contrast(1.15) brightness(.92); }
+  .pcard .ph::after{ content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--ink) 30%, transparent 31%); background-size: 0.156vw 0.156vw; mix-blend-mode: multiply; opacity: .32; }
+  .pcard .ph.placeholder{ display: flex; align-items: center; justify-content: center; color: var(--paper2); font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.781vw, 30px); }
+  .pcard .play{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .pcard .play span{ width: 3.021vw; height: 5.370vh; border-radius: 50%; background: rgba(231,220,194,.92); display: flex; align-items: center; justify-content: center; font-size: clamp(18px,1.146vw, 43.5px); padding-right: 0.208vw; }
+  .pcard .meta{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); color: var(--accent); letter-spacing: 1px; margin-top: 1.296vh; }
+  .pcard h3{ font-family: 'Reem Kufi',sans-serif; font-size: clamp(21px,1.354vw, 52.5px); margin: 0.260vw 0 0.417vw; }
+  .pcard p{ font-size: clamp(15px,0.990vw, 37.5px); line-height: 1.7; color: var(--ink-soft); }
+
+  .skills{ width: min(39.583vw,92vw); }
+  .skill-row{ margin-bottom: 2.037vh; }
+  .skill-row h4{ font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.729vw, 27px); letter-spacing: 0.104vw; color: var(--accent); border-bottom: 2px solid var(--ink); padding-bottom: 0.556vh; margin-bottom: 0.741vh; }
+  .skill-row p{ font-size: clamp(18px,1.146vw, 43.5px); line-height: 1.8; }
+
+  .contact{ width: 100.000vw; max-width: 100.000vw; align-items: center; text-align: center; }
+  /* RESPONSIVE: margin/padding/font-size now scale linearly with viewport (1920 baseline).
+     At 1024 the rows used to look more spread because fixed px sizes took a bigger viewport
+     proportion. Now everything scales together with the design. */
+  .contact .big{ font-family: 'Vintage Town','Fraunces',serif; font-size: clamp(72px,8vw, 165px); margin-bottom: 2.037vh; color: var(--accent); }
+  .contact .rows{ width: min(31.250vw,90vw); font-family: 'Cairo',sans-serif; font-size: clamp(15px,0.990vw, 37.5px); font-weight: 700; }   /* all contact rows bold */
+  .contact .r{ display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 0.521vw 0.208vw; }
+  .contact .r span:first-child{ color: var(--ink-soft); }
+  .contact a{ color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); }
+
+  /* fixed UI */
+  #topbar{ position: fixed; top: 0; right: 0; left: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center;
+    padding: 0.833vw 1.875vw; background: rgba(231,220,194,.78); border-bottom: 1px solid rgba(26,21,16,.22); backdrop-filter: blur(0.417vw); -webkit-backdrop-filter: blur(0.417vw); }
+  #topbar .brand{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(24px,1.562vw, 60px); line-height: 1; }
+  #topbar .links{ display: flex; gap: 1.562vw; font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.833vw, 31.5px); font-weight: 600; }
+  #topbar a{ color: var(--ink); text-decoration: none; cursor: pointer; position: relative; padding-bottom: 0.463vh; transition: color .25s; }
+  #topbar a::after{ content: ""; position: absolute; right: 0; bottom: 0; height: 0.185vh; width: 0; background: var(--stamp); transition: width .3s ease; }
+  #topbar a:hover{ color: var(--stamp); }
+  #topbar a:hover::after{ width: 100%; }
+  #hint{ position: fixed; bottom: 1.667vh; right: 1.458vw; z-index: 30; font-family: 'Cairo',sans-serif; font-size: clamp(12px,0.677vw, 25.5px); letter-spacing: 0.104vw; color: var(--ink-soft); background: rgba(231,220,194,.8); padding: 0.312vw 0.625vw; border: 1px solid var(--line); animation: bob 2s ease-in-out infinite; }
+  @keyframes bob{ 0%,100%{transform: translateX(0);opacity: .7;} 50%{transform: translateX(-0.312vw);opacity: 1;} }
+  #prog{ position: fixed; bottom: 0; right: 0; height: 0.370vh; background: var(--accent); z-index: 31; width: 0; }
+
+  /* ===== first panel: your paper image behind the text ===== */
+  .poster{
+    background: #d8cdb2 url('assets/poster-bg.jpg') center / cover no-repeat;
+  }
+  /* TEST: finer, even paper grain on the first panel (to match notch) */
+  .poster::after{ content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='120' height='120'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)' opacity='0.5'/></svg>");
+    background-size: 6.250vw 6.250vw; mix-blend-mode: multiply; opacity: .4; }
+  .poster .poster-right, .poster .filmstrip, .poster .stamp{ position: relative; z-index: 300; }  /* text/film stay above the paper AND above baked grain/spread images (z:240–250) */
+  /* Lift ALL panel content (titles, paragraphs, logos, contact rows, etc.) above the baked grain (z:220–250)
+     so the vintage overlay never washes out the actual content. baked-layer elements explicitly opt out. */
+  .panel > .sec-head, .panel > .logos, .panel > .rows, .panel > p, .panel > .big{ position: relative; z-index: 300; }
+
+  /* ===== NT Panorama Naskh for the Arabic CONTENT inside الخبرة / الأعمال / المهارات / التواصل ===== */
+  /* (section titles already use Panorama; Latin labels/links keep their font on purpose) */
+  .card h3, .card li, .card .meta, .card .when,
+  .pcard h3, .pcard p, .pcard .meta,
+  .skill-row p, .skill-row h4,
+  .contact .rows .r span:first-child{
+    font-family: 'Wanlaners','Fraunces',serif;
+    letter-spacing: normal;          /* labels had letter-spacing — kills Arabic letter-joining */
+  }
+  .card .meta, .pcard .meta, .skill-row h4{ font-size: clamp(12px,0.781vw, 30px); }   /* labels a touch bigger in Panorama */
+  .card li, .pcard p, .skill-row p{ line-height: 1.85; }          /* a touch more leading for Panorama */
+
+  /* ===== ported from Figma: global aged texture (foxing + fold), behind all content ===== */
+  .textures{ position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .textures .foxing{ position: absolute; inset: 0; mix-blend-mode: multiply; opacity: .45;
+    background: radial-gradient(circle at 12% 18%, rgba(154,128,89,.18), transparent 22%),
+      radial-gradient(circle at 85% 80%, rgba(154,128,89,.20), transparent 26%),
+      radial-gradient(circle at 50% 50%, transparent 60%, rgba(154,128,89,.16) 100%); }
+  .textures .fold{ position: absolute; top: 50%; left: 0; width: 100%; height: 0.185vh;
+    background: linear-gradient(to bottom, rgba(255,255,255,.18), rgba(0,0,0,.10)); }
+
+  /* ===== ported from Figma: skills as chips (font/colour unchanged) ===== */
+  .skill-row .chips{ list-style: none; display: flex; flex-wrap: wrap; gap: 0.521vw; margin-top: 0.370vh; }
+  .skill-row .chips li{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(13.5px,0.938vw, 36px); color: var(--ink);
+    padding: 0.312vw 0.729vw; border: 1.5px solid var(--ink); background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink); }
+
+  /* ===== ported from Figma: numbered badge on experience cards ===== */
+  .card-num{ position: absolute; top: 2.407vh; left: 1.354vw; width: 2.083vw; height: 3.704vh; border: 2px solid var(--ink);
+    border-radius: 50%; background: var(--paper); display: flex; align-items: center; justify-content: center;
+    font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(16.5px,1.042vw, 40.5px); color: var(--ink); z-index: 2; }
+
+  /* ===== sections: title on TOP (Figma layout), content below ===== */
+  .panel.sec{ justify-content: flex-start; padding-top: 11.111vh; align-items: stretch; }
+  .panel.sec > *{ width: 100%; max-width: 61.458vw; margin-inline: auto; }   /* center text content within the full-screen panel */
+  /* RESPONSIVE FIX: at wider viewports (2K, 4K) the logos panels need to span wider than the 1180px
+     text cap above, otherwise flex shrinks the logos and they overlap. Let .logos scale with viewport. */
+  .panel.exp > .logos, .panel.skills > .logos { max-width: 61.458vw; }
+  .panel.about, .panel.exp, .panel.skills{ width: 100.000vw; max-width: 100.000vw; }   /* each section fills the design baseline (zoom scales visually) */
+
+  /* ===== logo grid (الخبرة + المهارات) =====
+     RESPONSIVE: all sizes wrapped in calc() with min(1, 100vw/1920) so they shrink linearly
+     with viewport down to the design baseline. At 1920 = full size; at 1366 = ~71%; capped at 1
+     so 4K screens keep design size. Without this, logos stayed at design width while their
+     inline translate offsets scaled — making them overlap on smaller screens. */
+  .logos{ display: flex; flex-wrap: wrap; gap: 2.292vw; align-items: center; }
+  /* الخبرة: all logos in ONE horizontal row */
+  #work .logos{ flex-wrap: nowrap; gap: 0.833vw; justify-content: center; }
+  #work .logo-tile{ width: 10.677vw; height: 14.352vh; }
+  /* NO box — just the logo, big, printed into the paper (multiply blend over the paper texture) */
+  .logo-tile{ position: relative; width: 11.198vw; height: 15.278vh; background: transparent; border: none; padding: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform .25s ease;
+    mix-blend-mode: multiply; }   /* blend on the tile (not the img) so the hover transform doesn't change the backdrop -> no colour shift */
+  .logo-tile img{ width: 86%; height: 86%; object-fit: contain;
+    filter: none !important; opacity: 1 !important; }      /* show logos in their ORIGINAL brand colours */
+  .logo-tile .logo-fallback{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(19.5px,1.250vw, 48px); color: var(--ink); text-align: center; padding: 0 0.521vw; line-height: 1.2; }
+  .logo-tile.hasimg .logo-fallback{ display: none; }                       /* real logo loaded -> hide the text label */
+  .logo-tile:not(.hasimg){ border: 1px dashed rgba(26,21,16,.3); }         /* faint outline only for empty placeholders */
+  .logo-tile:hover{ transform: scale(1.16) translateY(-0.417vw); }  /* grow + lift, but DON'T jump above the grain (no z-index bump) */
+  .baked-layer{ pointer-events: none; contain: paint; will-change: auto; }   /* click-through + paint isolation so each blended layer recomposites independently */
+  /* PERF: while the parent TV transition is in flight, kill the expensive mix-blend-mode + opacity tricks.
+     They drop back in once the user is fully inside the TV (transition ended) or fully out. */
+  html.tv-transitioning .baked-layer{ mix-blend-mode: normal !important; opacity: 0 !important; }
+  .logos.big .logo-tile{ width: 13.021vw; height: 17.593vh; }
+
+  /* ===== section head: number badge + big title (matches first index, clear & large) ===== */
+  .sec-head{ display: flex; align-items: center; gap: 0.938vw; margin-bottom: 2.778vh; }
+  .sec-head .t{ margin: 0; }
+  .panel.sec > .sec-head{ margin-bottom: 3.148vh; }
+
+  /* ===== experience modal — full-screen, animated (GSAP) ===== */
+  #modal{ position: fixed; inset: 0; z-index: 60; display: none; }
+  #modal.open{ display: block; }
+  #modal .backdrop{ position: absolute; inset: 0; background: rgba(26,21,16,.6); opacity: 0; }
+  #modal .box{ position: absolute; inset: 0; z-index: 1; direction: ltr; background: var(--paper);
+    display: grid; grid-template-columns: 1fr 1fr; opacity: 0; font-family: 'Wanlaners','Fraunces',serif; }
+  #modal .box{ font-family: 'Wanlaners','Fraunces',serif; }   /* default modal text = Wanlaners; h3 is overridden to Vintage Town */
+  #modal .close{ position: fixed; bottom: 12.037vh; left: 50%; transform: translateX(-50%); z-index: 70; opacity: 1; padding: 0.625vw 2.083vw; border: 2px solid var(--ink); border-radius: 52.031vw;
+    background: var(--paper); font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(19.5px,1.250vw, 48px); line-height: 1; cursor: pointer; color: var(--ink); white-space: nowrap; transition: background .2s,color .2s; box-shadow: 0 0.312vw 1.562vw rgba(0,0,0,.35); }
+  #modal .close:hover{ background: var(--ink); color: var(--paper); }
+  #modal .m-left{ direction: rtl; padding: 5.000vw 3.125vw 3.125vw; text-align: right; display: flex; flex-direction: column; gap: 1.354vw; overflow: auto; }
+  #modal #m-logoslot{ width: 9.375vw; height: 12.500vh; flex: 0 0 auto; transform: translateY(2.083vw); }   /* the clicked logo flies & lands here; nudged down (translate = no reflow) */
+  /* Modal description is English content; override the page's RTL direction so periods + brackets
+     sit on the correct side of the line. Bullet padding switched from right to left to match. */
+  #modal .m-desc, #modal .m-desc *{ direction: ltr; text-align: left; }
+  #modal.lay-jade .m-desc{ text-align: center !important; }   /* preserve Jade's centered layout */
+  #modal .m-desc li{ padding-right: 0 !important; padding-left: 1.458vw !important; }
+  #modal .m-desc li::before{ right: auto !important; left: 0 !important; }
+  #modal .m-desc h3{ font-family: 'Vintage Town','Fraunces',serif; font-weight: 700; font-size: clamp(54px,3.5vw, 84px); color: var(--accent); margin-bottom: 2.037vh; line-height: 1.1; }
+  #modal .m-desc ul{ list-style: none; }
+  #modal .m-desc li{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(33px,2vw, 45px); line-height: 1.55; color: var(--ink); position: relative; padding-right: 1.458vw; margin-bottom: 1.481vh; }
+  #modal .m-desc li::before{ content: "◾"; position: absolute; right: 0; top: 1.296vh; font-size: clamp(12px,0.625vw, 24px); color: var(--accent); }
+  #modal .m-story{ font-family: 'Fraunces',serif; font-size: clamp(30px,1.9vw, 39px); line-height: 1.55; color: var(--ink); }   /* clean Fraunces body for English */
+  #modal.lay-jade .m-story{ font-size: clamp(25.5px,1.85vw, 36px); line-height: 1.6; max-width: min(48.958vw,92%); margin-inline: auto; word-spacing: 0.28em; }   /* bigger story text + wide box + looser word spacing */
+  #modal .m-right{ border-left: 3px solid var(--ink); background: var(--paper); position: relative; }   /* media box — same paper as the text side */
+  #modal .m-right::after{ content: ""; position: absolute; inset: 2.500vw; border: 0.104vw dashed rgba(26,21,16,.18); }   /* intentional placeholder frame */ /* empty box for media (you'll fill it) */
+  #modal .m-right.has-video::after{ display: none; }   /* hide the dashed placeholder once a video is in */
+  #modal .m-video{ position: absolute; inset: 0; overflow: hidden; }
+  #modal .m-video video{ width: 100%; height: 100%; object-fit: cover; display: block; filter: none; }   /* show videos in their original colors (no vintage tint) */
+  #modal .m-video .m-grain{ display: none; }   /* grain removed — show videos clean and colourful */
+  /* ===== ALL video logos: video LEFT, text + logo RIGHT, brown wash ===== */
+  #modal.vleft .box{ direction: rtl; }                                  /* swap: text+logo -> right, video -> left */
+  #modal .m-video::after{ display: none; }   /* brown wash removed — full original video colour */
+  /* ===== ALX: video fills the LEFT half, text on the right (back-button stays bottom-centre, default) ===== */
+  /* ===== JADE: 2-column split — description on LEFT (small text), RIGHT column stacks logo → title → video.
+     Uses display:contents on both .m-left and .m-desc to flatten the wrapper hierarchy, so the leaf
+     elements (#m-list, #m-logoslot, h3, .m-right) become direct grid items of .box and can be placed
+     via grid-template-areas. ===== */
+  #modal.lay-jade .box{
+    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "logo  video"
+      "title video"
+      "story video";
+    direction: ltr;
+    padding: 3.125vw 3.125vw 6.250vw;
+    gap: 1.042vw 2.083vw;
+  }
+  #modal.lay-jade .m-left{ display: contents; }
+  #modal.lay-jade .m-desc{ display: contents; }
+  #modal.lay-jade #m-list{
+    grid-area: story;
+    align-self: start; text-align: left;
+    max-width: none; margin: 0;
+    overflow: auto;
+  }
+  #modal.lay-jade #m-logoslot{
+    grid-area: logo;
+    justify-self: start; align-self: start;
+    width: 10.417vw; height: 13.889vh; transform: none; margin: 0;
+  }
+  #modal.lay-jade .m-desc h3{
+    grid-area: title;
+    justify-self: start; align-self: start;
+    text-align: left; margin: 0;
+    font-size: clamp(39px,2.2vw, 60px);
+  }
+  #modal.lay-jade .m-right{
+    grid-area: video;
+    display: block;
+    justify-self: stretch; align-self: stretch;
+    border: 3px solid var(--ink); border-left: 3px solid var(--ink); border-bottom: 3px solid var(--ink);
+    background: #1a1510; position: relative; overflow: hidden;
+  }
+  #modal.lay-jade .m-right::after{ display: none; }
+  #modal.lay-jade .m-video{ position: absolute; inset: 0; }
+  #modal.lay-jade .m-video video{ width: 100%; height: 100%; object-fit: cover; }
+  #modal.lay-jade .m-story{
+    font-size: clamp(19.5px,1.05vw, 25.5px);     /* smaller per request */
+    line-height: 1.65; max-width: none; margin: 0; word-spacing: normal;
+  }
+  #modal.lay-jade .m-desc ul{ display: block; text-align: left; }
+  #modal.lay-jade .m-desc li{ font-size: clamp(19.5px,1.05vw, 25.5px); line-height: 1.5; margin-bottom: 0.741vh; padding-right: 0; padding-left: 1.146vw; }
+  #modal.lay-jade .m-desc li::before{ right: auto; left: 0; top: 0.833vh; }
+
+  /* ===== old-TV "back to the start" button (fixed; grain sits ON TOP of it) ===== */
+  #tv-home{ position: fixed; bottom: 2.407vh; left: 1.354vw; z-index: 40; width: 3.229vw; height: 5.741vh; display: grid; place-items: center;
+    background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 0.729vw; cursor: pointer; overflow: hidden;
+    box-shadow: 0 0.312vw 1.146vw rgba(0,0,0,.3); transition: transform .25s ease, background .2s, color .2s; }
+  #tv-home:hover{ transform: translateY(-0.208vw) scale(1.06); background: var(--ink); color: var(--paper); }
+  #tv-home svg{ position: relative; z-index: 1; }
+  #tv-home::after{ content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='120' height='120'><filter id='tvg'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23tvg)' opacity='0.55'/></svg>");
+    background-size: 4.688vw 4.688vw; }
+
+  /* ===== ported from Figma: real mobile layout (vertical stack) ===== */
+  @media(max-width:767px){
+    #stage{ position:static; height:auto; overflow:visible; }
+    #reel{ flex-direction:column; height:auto; transform:none !important; }
+    .panel{ width:100% !important; max-width:100% !important; height:auto; min-height:auto;
+      padding:54px 24px; border-left:none; border-bottom:2px solid var(--ink); }
+    .poster{ flex-direction:column; gap:28px; padding:90px 24px 54px; }
+    .poster-right{ max-width:100%; }
+    .filmstrip{ flex-direction:row; }
+    .leader{ flex:0 0 auto; width:100%; height:64px; border-left:none; border-bottom:2px solid var(--ink); }
+    .leader .inner{ flex-direction:row; gap:12px; }
+    .leader span{ writing-mode:horizontal-tb; font-size:38px; letter-spacing:0; }
+    .leader .n{ margin-bottom:0; }
+    .card-num{ top:18px; left:18px; }
+    #hint{ display:none; }
+    #topbar .links{ display:none; }
+    #modal .box{ grid-template-columns:1fr; }
+    #modal .m-right{ border-left:none; border-top:3px solid var(--ink); min-height:160px; }
+  }
+</style>
+<style></style><style></style><style></style><style></style><style></style><style></style><style></style><style>
+  /* WCAG: visible skip link for keyboard users */
+  .skip-link{position: absolute;left: -520.781vw;top: 0;background: var(--ink,#5A3520);color: var(--paper,#fff);padding: 0.521vw 0.938vw;z-index: 10000;border-radius: 0 0 0.312vw 0;text-decoration: none;font-family: system-ui,sans-serif;font-size: clamp(12px,0.729vw, 27px)}
+  .skip-link:focus{left: 0}
+  /* Mobile: give tap feedback when hover isn't available */
+  @media (hover:none){
+    .logo-tile:active{transform:scale(1.16) translateY(-4px);transition:transform .12s ease}
+  }
+</style></head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<button id="tv-home" type="button" aria-label="Back to start" title="Back to start">
+  <svg viewBox="0 0 30 30" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M10 8 L6 3"></path><path d="M15 8 L19 3"></path>
+    <rect x="3" y="8" width="17" height="15" rx="2"></rect>
+    <rect x="6" y="11" width="11" height="9" rx="1"></rect>
+    <circle cx="23.5" cy="12.5" r="1.2"></circle><circle cx="23.5" cy="16.5" r="1.2"></circle>
+    <path d="M6 23 L4 27 M17 23 L19 27"></path>
+  </svg>
+</button>
+<svg width="0" height="0" style="position:absolute"><filter id="inkrough"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.014" numOctaves="2" result="n"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="3"></feDisplacementMap></filter></svg>
+
+<div class="textures"><div class="foxing"></div><div class="fold"></div></div>
+
+<!-- HO (topbar) — hidden for now -->
+<div id="topbar" style="display:none">
+  <span class="brand">Yassen</span>
+  <div class="links">
+    <a href="#about" data-go="about">About</a><a href="#work" data-go="work">Experience</a><a href="#skills" data-go="skills">Skills</a><a href="#contact" data-go="contact">Contact</a>
+  </div>
+</div>
+<div id="hint" style="opacity: 1;" class="">Scroll to advance →</div>
+<div id="prog" style="width: 0%;"></div>
+
+<div id="track" style="height: 795.833vh"><div id="stage"><div id="reel" style="position: relative;">
+
+  <!-- POSTER -->
+  <section class="panel poster id="main" style="" data-edit="section · Entirely desig" data-edit-id="section-·-entirely-desig">
+    <div class="stamp" data-edit="div · متاحللعمل الآن" data-edit-id="div-·-متاحللعمل-الآن" contenteditable="false">Entirely designed by me</div>
+    <div class="poster-right" data-edit="div · Yassen" data-edit-id="div-·-yassen-">
+      <h1 class="hero-name" data-edit="h1 · Yassen" data-edit-id="h1-·-yassen-">
+        <span class="hero-word" data-edit="Name: Yassen" data-edit-id="name:-yassen" contenteditable="false" style="translate: 3.438vw -9.907vh; font-size: clamp(154.5px,9.792vw, 379.5px)">Yassen</span>
+        <span class="hero-word" data-edit="Name: Elkhatib" data-edit-id="name:-elkhatib" style="translate: -3.177vw 10.926vh; transform: scale(1.75)">Elkhatib</span>
+      </h1>
+      <div class="hero-role" data-edit="Hero role" data-edit-id="hero-role" style="letter-spacing: 0.14em; font-size: clamp(25.5px,1.667vw, 64.5px); translate: -15.990vw 6.111vh; transform: scale(1.9)"></div>
+      <div class="hero-sub" data-edit="Hero sub" data-edit-id="hero-sub" style="translate: 18.073vw -19.259vh; transform: scale(0.2)"></div>
+      <p class="tagline" data-edit="Tagline" data-edit-id="tagline" style="translate: -24.062vw -6.574vh; transform: scale(0.2)"></p>
+    </div>
+  
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 250; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- ABOUT -->
+  <section class="panel about sec" id="about" style="" data-edit="section · About me
+    P" data-edit-id="section-·-about-me-p">
+    <div class="sec-head"><h2 class="t" data-edit="Title: About" data-edit-id="title:-about" style="translate: -8.073vw 2.500vh; font-size: clamp(162px,10.260vw, 397.5px)">About me</h2></div>
+    <p data-edit="p · about paragraph" data-edit-id="p-·-about-paragraph" style="transform: none; font-weight: 600; translate: 0px 0px; font-size: clamp(22.5px,1.458vw, 55.5px); line-height: 1.5" class="" contenteditable="false">I'm Yassen Elkhatib — as you saw on this site. I didn't want this to be just another website like a hundred others — I set out to build you an experience worth remembering. For you to actually enjoy it — that's what I aim for in every video I design, in the sound and colors I pick, and in every element that lifts a video from ordinary into something professional and distinctive. Through my modest experience with clients, my highest goal stays the same: their comfort and their trust. I've worked solo and on teams, and both taught me how to deal with different people and different elements, and how to deliver the best video possible. Thank you.</p>
+  
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 240; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- EXPERIENCE (logos; click a logo to open its work) -->
+  <section class="panel exp sec" id="work" style="" data-edit="section · Experience
+   " data-edit-id="section-·-experience-">
+    <div class="sec-head"><h2 class="t" data-edit="Title: Experience" data-edit-id="title:-experience" style="translate: -11.875vw 3.796vh; font-size: clamp(118.5px,7.500vw, 291px)">Experience</h2></div>
+    <div class="logos" data-edit="div · ALX&nbsp;Arabia
+   " data-edit-id="div-·-alx-arabia-" style="translate: 0px -1px">
+      <button class="logo-tile hasimg" data-exp="alx" style="translate: -39.010vw 4.259vh"><img src="assets/logos/alx.png" alt="ALX Arabia" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: ALX Arabia" data-edit-id="logo:-alx-arabia" style="filter: grayscale(1) sepia(0.55) brightness(0.386) contrast(1.518); transform: scale(1.19);" class=""><span class="logo-fallback">ALX&nbsp;Arabia</span></button>
+      <button class="logo-tile hasimg" data-exp="enactus" style="translate: 4.167vw 4.167vh"><img src="assets/logos/enactus.png" alt="Enactus" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Enactus" data-edit-id="logo:-enactus" style="filter: grayscale(1) sepia(0.55) brightness(0.323) contrast(1.644); transform: scale(1.19);" class=""><span class="logo-fallback">Enactus</span></button>
+      <button class="logo-tile hasimg" data-exp="jade" style="translate: 1px 4.352vh"><img src="assets/logos/jade.png" alt="Jade Textile" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Jade Textile" data-edit-id="logo:-jade-textile" style="filter: grayscale(1) sepia(0.55) brightness(0.332) contrast(1.626); transform: scale(1.19);" class=""><span class="logo-fallback">Jade&nbsp;·&nbsp;Optara</span></button>
+      <button class="logo-tile hasimg" data-exp="jad" style="translate: 41.771vw 4.259vh"><img src="assets/logos/jad.png" alt="JAD" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: JAD" data-edit-id="logo:-jad" style="filter: grayscale(1) sepia(0.55) brightness(0.386) contrast(1.518); transform: scale(1.19);"><span class="logo-fallback">JAD</span></button>
+      <button class="logo-tile hasimg" data-exp="depi" style="translate: -7.969vw 4.259vh"><img src="assets/logos/depi.png" alt="DEPI" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: DEPI" data-edit-id="logo:-depi" style="filter: grayscale(1) sepia(0.55) brightness(0.332) contrast(1.626); transform: scale(1.33);" class=""><span class="logo-fallback">DEPI</span></button>
+    </div>
+  
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 230; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- SKILLS (logos) -->
+  <section class="panel skills sec" id="skills">
+    <div class="sec-head"><h2 class="t" data-edit="Title: Skills" data-edit-id="title:-skills" style="font-size: clamp(129px,8.229vw, 319.5px); translate: -17.917vw 2.593vh">Skills</h2></div>
+    <div class="logos big">
+      <div class="logo-tile hasimg"><img src="assets/logos/ae.svg" alt="After Effects" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: After Effects" data-edit-id="logo:-after-effects"><span class="logo-fallback">After&nbsp;Effects</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/pr.svg" alt="Premiere" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Premiere" data-edit-id="logo:-premiere" class=""><span class="logo-fallback">Premiere</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/ps.svg" alt="Photoshop" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Photoshop" data-edit-id="logo:-photoshop"><span class="logo-fallback">Photoshop</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/ai.svg" alt="Illustrator" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Illustrator" data-edit-id="logo:-illustrator"><span class="logo-fallback">Illustrator</span></div>
+      <div class="logo-tile hasimg" style="translate: -6.823vw 0.278vh"><img src="assets/logos/blender.svg" alt="Blender" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Blender" data-edit-id="logo:-blender" class=""><span class="logo-fallback">Blender</span></div>
+      <div class="logo-tile hasimg" style="translate: -6.875vw 0.278vh"><img src="assets/logos/capcut.png" alt="CapCut" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: CapCut" data-edit-id="logo:-capcut" class=""><span class="logo-fallback">CapCut</span></div>
+      <div class="logo-tile hasimg" style="translate: -7.344vw 0.556vh"><img src="assets/logos/canva.svg" alt="Canva" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Canva" data-edit-id="logo:-canva" class=""><span class="logo-fallback">Canva</span></div>
+    </div>
+  
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 220; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- CONTACT -->
+  <section class="panel contact" id="contact" style="">
+    <div class="big" data-edit="Contact heading" data-edit-id="contact-heading" style="font-style: italic;">Let's build something together</div>
+    <div class="rows">
+      <div class="r"><span data-edit="span · Email" data-edit-id="span-·-email" class="">Email</span><a href="mailto:yassenelkhatib0q@gmail.com" data-edit="a · yassenelkhatib" data-edit-id="a-·-yassenelkhatib" style="translate: -0.260vw" class="">yassenelkhatib0q@gmail.com</a></div>
+      <div class="r"><span>Phone</span><a href="tel:+201101951744" dir="ltr" data-edit="a · +20 110 195" data-edit-id="a-·-+20-110-195-17" style="translate: -0.260vw">+20 110 195 1744</a></div>
+      <div class="r"><span>Behance</span><a href="https://behance.net/Yassen-El-Khatib" target="_blank" rel="noopener" data-edit="a · behance.net/ya" data-edit-id="a-·-behance.net/ya" style="translate: -0.260vw">behance.net/Yassen-El-Khatib</a></div>
+      <div class="r"><span>LinkedIn</span><a href="https://linkedin.com/in/yassen-el-khatib" target="_blank" rel="noopener" data-edit="a · linkedin.com/i" data-edit-id="a-·-linkedin.com/i" style="translate: -0.260vw" class="">linkedin.com/in/yassen-el-khatib</a></div>
+    </div>
+  
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 110; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 210; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+<img src="/assets/baked/layer-10.jpg" class="baked-layer" style="width: 46.354vw; height: auto; left: 26.562vw; top: -4.479vw; opacity: 0.2; mix-blend-mode: darken; z-index: 10; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-11.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 86.875vw; top: -2.448vw; opacity: 1; mix-blend-mode: darken; transform: rotate(3deg); z-index: 200; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-12.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 175.729vw; top: -0.625vw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 190; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-13.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 284.479vw; top: -1.406vw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 160; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-14.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 374.115vw; top: -1.927vw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 150; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-15.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 87.188vw; top: -1.823vw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 140; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-16.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 85.938vw; top: -1.093vw; opacity: 1; mix-blend-mode: darken; transform: rotate(3deg); z-index: 180; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-17.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 174.792vw; top: -0.989vw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 170; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-18.jpg" class="baked-layer" style="width: 38.229vw; height: auto; left: 283.594vw; top: -1.614vw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 130; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-19.jpg" class="baked-layer" style="width: 100.000vw; height: auto; left: 98.854vw; top: -17.552vw; opacity: 0.45; mix-blend-mode: multiply; z-index: 70; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"></div></div></div>
+
+</div></div></div>
+
+<!-- experience detail modal -->
+<div id="modal" aria-hidden="true">
+  <div class="backdrop" data-close=""></div>
+  <div class="box">
+    <div class="m-left">
+      <div id="m-logoslot"></div>
+      <div class="m-desc"><h3 id="m-title"></h3><ul id="m-list"></ul></div>
+    </div>
+    <div class="m-right"><!-- empty box — media goes here later --></div>
+  </div>
+  <button class="close" data-close="" aria-label="Close">Back</button>
+</div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const reel  = document.getElementById('reel');
+  const prog  = document.getElementById('prog');
+  const hint  = document.getElementById('hint');
+  let maxX = 0, targetX = 0, curX = 0, raf = null;
+  const isMobile = () => window.innerWidth < 768;
+
+  function layout(){
+    if (isMobile()){ track.style.height = ''; reel.style.transform = ''; return; }
+    maxX = Math.max(0, reel.scrollWidth - window.innerWidth);
+    track.style.height = (maxX + window.innerHeight) + 'px';   // vertical scroll distance == horizontal travel
+    onScroll();
+  }
+  function onScroll(){
+    if (isMobile()) return;
+    targetX = Math.min(Math.max(window.scrollY, 0), maxX);
+    if (!raf) raf = requestAnimationFrame(tick);
+    const p = maxX > 0 ? targetX / maxX : 0;
+    if (prog) prog.style.width = (p * 100) + '%';
+    if (hint) hint.style.opacity = window.scrollY > 80 ? '0' : '1';
+  }
+  function tick(){
+    curX += (targetX - curX) * 0.12;          // spring-ish smoothing (Figma feel)
+    if (Math.abs(targetX - curX) < 0.4) curX = targetX;
+    reel.style.transform = 'translateX(' + (-curX) + 'px)';
+    raf = (curX !== targetX) ? requestAnimationFrame(tick) : null;
+  }
+  // nav -> jump to the vertical position that brings a panel to the left edge
+  document.querySelectorAll('#topbar a[data-go]').forEach(a => {
+    a.addEventListener('click', () => {
+      const el = document.getElementById(a.dataset.go);
+      if (!el) return;
+      if (isMobile()) { el.scrollIntoView({ behavior:'smooth' }); return; }
+      window.scrollTo({ top: Math.min(el.offsetLeft, maxX), behavior:'smooth' });
+    });
+  });
+  // old-TV button -> smoothly return to the first panel (top of the page)
+  const tvHome = document.getElementById('tv-home');
+  if (tvHome) tvHome.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // keyboard arrows nudge the page scroll
+  window.addEventListener('keydown', (e) => {
+    if (isMobile()) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') window.scrollBy({ top: 360, behavior:'smooth' });
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   window.scrollBy({ top:-360, behavior:'smooth' });
+  });
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', layout);
+  window.addEventListener('load', layout);
+  layout();
+})();
+</script>
+
+<script>
+(function(){
+  const EXP = {
+    alx:{ title:'Content Creator — ALX Arabia', story:"At ALX I worked as a Content Creator running the whole pipeline — shooting with the gear, writing the scripts, generating the ideas and picking the strongest ones. I'd sketch the concept first so it matched each brand's identity, then produce it as a polished, ad-ready video. I worked alongside scriptwriters, photographers and graphic designers and learned a lot from each of them. A genuinely fun experience that confirmed for me how good real team work can be.", items:['End-to-end production: editing, motion, color, sound design and subtitling.','Videos and copy for marketing campaigns delivered in four to five days.','Using AI tools to speed up production and lift the quality.'] },
+    enactus:{ title:'Video Editor & Motion Designer — Enactus', story:'Enactus was a fully collaborative effort. I worked closely with the team and the photographers — they were building a product, and my job was to figure out how it would come through on screen: we picked the style, the sound and the rhythm that fit each audience and each shot, and invented a lot of new camera angles. I was on the team behind the Ramadan campaign that gathers all the chapters into one competition and series of events under heavy time pressure, and I owned the motion. I came out with a real bump in experience and learned a lot from the team.', items:['More than five short promo videos for student campaigns.','Tight deadlines inside a fast-moving team.','Infographic-driven motion design that simplifies the message.'] },
+    jade:{ title:'UI/UX Designer — Optara', story:"At Jade Textile I started on the factory floor, not on the screen — I sat with the workers and the engineers until I genuinely understood what they needed. Then I built Optara: one platform that ties the departments together and schedules production, used by people from very different mindsets on the same live data. The challenge was keeping the interface simple for everyone, so I iterated version after version until it got smoother and clearer, then added motion in After Effects — a full system born out of understanding the people before the code.", items:['Designed and built the Optara interface for production scheduling in a textile factory.','One UI serving three different user types on the same live data.','Built the whole app solo in roughly two months with an AI-supported workflow.'] },
+    jad:{ title:'Video Editor — JAD', story:"JAD is a brand built by a young team specialised in making picture frames. I designed a campaign of ad videos for them, and my role wasn't only the edit: I went on location with them and ran the camera angles alongside the photographer to make sure every shot served the cut I had in mind. I chose a quiet, intriguing style that doesn't explain everything — leaves the viewer curious about what's being offered. I bent the rhythm to each product: energy where it needed energy, calm where calm served — so the feel always sells the piece.", items:['Short ads for social-media campaigns.','Performance-driven editing aligned with the brand direction.'] },
+    depi:{ title:'Diploma — Digital Egypt Pioneers Initiative (DEPI)', story:'The DEPI diploma took my understanding of animation to a deeper level. I worked inside a team where we coordinated down to the smallest detail, and I was responsible for animation and motion on the graduation project. I learned how to actually animate characters and make my videos more refined and on-point, and I came out with a noticeable jump in my level. A standout experience that combined learning, teamwork and real delivery.', items:['Group motion-graphics project with a structured production pipeline.','Took part in idea development, execution and final delivery.'] },
+  };
+  // second click on the logo inside the modal -> open the company site (new tab). JAD has no link yet.
+  const LINKS = {
+    alx:'https://www.alxafrica.com/',
+    enactus:'https://enactusegypt.org/',
+    jade:'https://jade-textile.com/',
+    depi:'https://depi.gov.eg/content/home',
+  };
+  // each project's showreel clip (DEPI has none -> keeps the placeholder)
+  const VIDS = {
+    alx:'/assets/videos/alx.mp4',
+    enactus:'/assets/videos/enactus.mp4',
+    jad:'/assets/videos/jad.mp4',
+    jade:'/assets/videos/jade.mp4',
+  };
+  const modal = document.getElementById('modal');
+  const mt = document.getElementById('m-title'), ml = document.getElementById('m-list');
+  const slot = document.getElementById('m-logoslot');
+  const mRight = modal.querySelector('.m-right');
+  let clone = null, srcTile = null, busy = false, cloneScale = 1;
+
+  function fill(d){ mt.textContent = d.title; ml.innerHTML = d.story ? ('<p class="m-story">' + d.story + '</p>') : d.items.map(i => '<li>'+i+'</li>').join(''); }
+  function makeVid(v){
+    const vid = document.createElement('video');
+    vid.src = v; vid.muted = true; vid.loop = true; vid.autoplay = true; vid.setAttribute('playsinline',''); vid.setAttribute('preload','auto');
+    return vid;
+  }
+  function fillMedia(k){
+    clearMedia();
+    const v = VIDS[k];
+    if (!v) { mRight.classList.remove('has-video'); return; }   // no clip -> keep placeholder
+    mRight.classList.add('has-video');
+    if (k === 'jade') { modal.classList.add('lay-jade'); }      // jade: video on TOP, content centred below
+    else { modal.classList.add('vleft'); if (k === 'alx') modal.classList.add('lay-alx'); }   // alx & rest: video on the LEFT
+    const wrap = document.createElement('div'); wrap.className = 'm-video ' + k;
+    const vid = makeVid(v);
+    const grain = document.createElement('span'); grain.className = 'm-grain';
+    wrap.appendChild(vid); wrap.appendChild(grain); mRight.appendChild(wrap);
+    if (vid.play) { const p = vid.play(); if (p && p.catch) p.catch(()=>{}); }
+  }
+  function clearMedia(){
+    modal.classList.remove('vleft', 'lay-alx', 'lay-jade');
+    mRight.classList.remove('has-video');
+    const w = mRight.querySelector('.m-video');
+    if (w) { const vd = w.querySelector('video'); if (vd) { try { vd.pause(); } catch(e){} vd.removeAttribute('src'); if (vd.load) vd.load(); } w.remove(); }
+  }
+
+  function openExp(tile, k){
+    const d = EXP[k]; if (!d || busy) return; busy = true;
+    // Defensive: a previous open that didn't finish (rapid clicks, animation stall) can leave an
+    // orphan clone glued to the body. Kill it before starting fresh so two logos never overlap.
+    if (clone) { try { clone.remove(); } catch(e){} clone = null; }
+    if (srcTile) { try { srcTile.style.visibility = ''; } catch(e){} srcTile = null; }
+    fill(d);
+    fillMedia(k);            // load this project's video (with grain) into the media box
+    const r = tile.getBoundingClientRect();
+    clone = tile.cloneNode(true);
+    clone.style.translate = '';                                                   // the position offset lives on the button — drop it so the clone flies cleanly into the slot
+    var cimg = clone.querySelector('img');                                        // KEEP the per-logo zoom so we can animate it (smooth shrink-in / grow-out)
+    var sm = cimg ? (cimg.style.transform || '').match(/scale\(([\d.]+)\)/) : null;
+    cloneScale = sm ? parseFloat(sm[1]) : 1;                                       // remember the logo's real zoom for the close animation
+    Object.assign(clone.style, { position:'fixed', margin:'0', left:r.left+'px', top:r.top+'px', width:r.width+'px', height:r.height+'px', zIndex:'90' });
+    document.body.appendChild(clone);
+    var link = LINKS[k];
+    if (link){ clone.style.cursor='pointer'; clone.title='Visit site ↗'; clone.addEventListener('click', function(){ window.open(link, '_blank', 'noopener'); }); }
+    tile.style.visibility = 'hidden'; srcTile = tile;
+    modal.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';   // lock page scroll while the panel is open
+    const sr = slot.getBoundingClientRect();
+    const back = modal.querySelector('.backdrop'), box = modal.querySelector('.box');
+    if (!window.gsap) {                                  // GSAP failed to load -> show everything, no animation
+      back.style.opacity = '1'; box.style.opacity = '1';
+      if (cimg) cimg.style.transform = 'scale(1)';       // fit the slot
+      Object.assign(clone.style, { left:sr.left+'px', top:sr.top+'px', width:sr.width+'px', height:sr.height+'px' });
+      busy = false; return;
+    }
+    var tlo = gsap.timeline({ onComplete:()=>{ busy=false; } });
+    tlo.fromTo('#modal .backdrop', { opacity:0 }, { opacity:1, duration:.35 }, 0)
+      .fromTo('#modal .box', { opacity:0 }, { opacity:1, duration:.5, ease:'power2.out' }, 0)
+      .to(clone, { left:sr.left, top:sr.top, width:sr.width, height:sr.height, duration:.6, ease:'power3.inOut' }, 0)
+      .fromTo('#modal .m-desc', { opacity:0, y:26 }, { opacity:1, y:0, duration:.45, ease:'power2.out' }, 0.3)   // explicit end -> never gets stuck at 0
+      .fromTo('#modal .m-right', { opacity:0 }, { opacity:1, duration:.45 }, 0.3);
+    if (cimg) tlo.to(cimg, { scale:1, duration:.6, ease:'power3.inOut' }, 0);   // smooth SHRINK as it flies into the slot
+    // The back button is NOT animated and lives OUTSIDE .box (so the box's scale can't shrink/hide it).
+    // It is visible by default via CSS. Safety net below only un-sticks the box/text if the
+    // GSAP ticker stalls (rAF throttled in a hidden/iframe tab, heavy page) -> rAF-INDEPENDENT timer.
+    setTimeout(() => {
+      if (!modal.classList.contains('open')) return;
+      box.style.transform = 'none'; box.style.opacity = '1';
+      modal.querySelectorAll('.m-desc, .m-right').forEach(e => { e.style.opacity = '1'; e.style.transform = 'none'; });
+    }, 1100);
+  }
+  function close(){
+    if (busy || !modal.classList.contains('open')) return; busy = true;
+    const finish = () => { clearMedia(); if(clone){clone.remove(); clone=null;} if(srcTile)srcTile.style.visibility=''; modal.classList.remove('open'); document.documentElement.style.overflow = ''; if(window.gsap) gsap.set(['#modal .box','#modal .backdrop','#modal .m-desc','#modal .m-right','#modal .close'],{clearProps:'all'}); busy=false; };
+    // Null-safe: if close() is called when no openExp() succeeded, just reset and bail.
+    if (!srcTile || !window.gsap) { finish(); return; }
+    const r = srcTile.getBoundingClientRect();
+    const cimg = clone ? clone.querySelector('img') : null;
+    var tlc = gsap.timeline({ onComplete:finish });
+    tlc.to(['#modal .m-desc', '#modal .m-right', '#modal .close'], { opacity:0, duration:.2 }, 0)
+      .to(clone, { left:r.left, top:r.top, width:r.width, height:r.height, duration:.5, ease:'power3.inOut' }, 0)
+      .to('#modal .box', { opacity:0, duration:.3 }, .2)
+      .to('#modal .backdrop', { opacity:0, duration:.3 }, .2)
+      .call(() => { if (srcTile) srcTile.style.visibility = ''; }, null, .5)   // reveal the real logo (which sits UNDER the grain) behind the copy
+      .to(clone, { opacity:0, duration:.28, ease:'power2.out' }, .5);          // fade the copy out -> the grain fades IN over the logo (no sudden snap)
+    if (cimg) tlc.to(cimg, { scale:cloneScale, duration:.5, ease:'power3.inOut' }, 0);   // smooth GROW back to the real logo's size
+  }
+  document.querySelectorAll('.logo-tile[data-exp]').forEach(t => t.addEventListener('click', () => openExp(t, t.dataset.exp)));
+  modal.querySelectorAll('[data-close]').forEach(e => e.addEventListener('click', close));
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+// PERF: parent TV signals us during scroll-into / scroll-out so we can drop expensive paint work.
+// SECURITY: only accept messages from same origin — random framing pages can't toggle our state.
+window.addEventListener('message', function(e){
+  if (!e || !e.data || typeof e.data !== 'object') return;
+  if (e.origin && e.origin !== window.location.origin) return;
+  if (e.data.type === 'yassen:tv-transition-start' || e.data.type === 'yassen:tv-exit-start') document.documentElement.classList.add('tv-transitioning');
+  else if (e.data.type === 'yassen:tv-transition-end' || e.data.type === 'yassen:tv-exit-end') document.documentElement.classList.remove('tv-transitioning');
+});
+</script>
+
+<!-- EDITOR-SLOT -->
+
+
+
+<!-- editor permanently disabled on this page; all saved overrides are already baked into inline styles --><div id="give-freely-root-mbnbehikldjhnfehhnaidhjhoofhpehk" class="give-freely-root" data-extension-id="mbnbehikldjhnfehhnaidhjhoofhpehk" data-extension-name="CSS Peeper" style="display: block;"></div><veepn-lock-screen><style>@font-face{font-family: FigtreeVF;src: url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2 supports variations"),url(chrome-extension://majdfhpaihoncoakbjgbdhglocklcgno/fonts/FigtreeVF.woff2) format("woff2-variations");font-weight: 100 1000;font-display: swap}</style></veepn-lock-screen>
+<!-- BAKED-ASPECT-FIX-START — option 3: JS adjusts .baked-layer top/bottom per viewport aspect ratio.
+     If this causes issues, user says "x-delete" and the block between these markers gets removed. -->
+<script>
+(function () {
+  var DESIGN_ASPECT = 16 / 9;
+  var stored = new WeakMap();
+  function apply() {
+    var ratio = window.innerWidth / window.innerHeight;
+    var mult = DESIGN_ASPECT / ratio;   // 1 at 16:9, >1 on narrower (4:3), <1 on wider (21:9)
+    document.querySelectorAll(".baked-layer").forEach(function (el) {
+      if (!stored.has(el)) stored.set(el, el.getAttribute("style") || "");
+      var orig = stored.get(el);
+      var adjusted = orig.replace(/(top|bottom):\s*(-?[\d.]+)vw/g, function (_, prop, val) {
+        return prop + ": " + (parseFloat(val) * mult).toFixed(3) + "vw";
+      });
+      el.setAttribute("style", adjusted);
+    });
+  }
+  apply();
+  var resizeT;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(apply, 60);
+  });
+})();
+</script>
+<!-- BAKED-ASPECT-FIX-END -->
+</body></html>
