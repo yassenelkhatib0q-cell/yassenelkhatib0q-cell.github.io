@@ -920,7 +920,7 @@ function setLanguage(lang) {
 /* ====================================================================== */
 const canvas = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(1);  // Pinned to 1 (was: Math.min(devicePixelRatio, 2)) — halves GPU pixel work on Retina/HiDPI screens. Visible softness on 4K monitors but cursor glides on laptops.
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
