@@ -3290,6 +3290,41 @@ function updatePulse() {
   if (radioButton){ _setupPulseObject(radioButton, 0xffb368); if (_radioSeen) _stopPulseObject(radioButton); else _pulseObject(radioButton, t + 0.6); }
 }
 
+// PERF: pause the background window video while the user is actively scrolling.
+// videoCRT and videoWindowSlot.video both compete for the GPU video decoder.
+// On laptops, that competition shows up as scroll-into-TV stutter on trackpad.
+// Pausing the window video for the duration of a scroll gesture (and 250ms after)
+// gives videoCRT the full decoder. Visual cost: the city/window background freezes
+// for the duration of a scroll then resumes — barely visible since the user's eye
+// is on the camera motion, and the window is small in the frame.
+let _winVidPausedByScroll = false;
+let _winVidResumeTimer = null;
+function _pauseWindowVideoForScroll() {
+  if (_winVidPausedByScroll) return;
+  if (window._pfLocked) return; // already paused inside TV — don't touch
+  if (!videoWindowSlot || !videoWindowSlot.video) return;
+  if (videoWindowSlot.video.paused) return; // already paused for another reason
+  _winVidPausedByScroll = true;
+  try { videoWindowSlot.video.pause(); } catch (e) {}
+}
+function _resumeWindowVideoAfterScroll() {
+  if (!_winVidPausedByScroll) return;
+  _winVidPausedByScroll = false;
+  if (window._pfLocked) return; // user entered TV — let the TV-lock logic own it
+  if (!videoWindowSlot || !videoWindowSlot.video) return;
+  try { videoWindowSlot.video.play().catch(()=>{}); } catch (e) {}
+}
+window.addEventListener('scroll', () => {
+  _pauseWindowVideoForScroll();
+  clearTimeout(_winVidResumeTimer);
+  _winVidResumeTimer = setTimeout(_resumeWindowVideoAfterScroll, 250);
+}, { passive: true });
+window.addEventListener('wheel', () => {
+  _pauseWindowVideoForScroll();
+  clearTimeout(_winVidResumeTimer);
+  _winVidResumeTimer = setTimeout(_resumeWindowVideoAfterScroll, 250);
+}, { passive: true });
+
 let _lastFrame = performance.now();
 function animate() {
   requestAnimationFrame(animate);
