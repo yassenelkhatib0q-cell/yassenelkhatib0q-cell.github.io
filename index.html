@@ -3290,36 +3290,6 @@ function updatePulse() {
   if (radioButton){ _setupPulseObject(radioButton, 0xffb368); if (_radioSeen) _stopPulseObject(radioButton); else _pulseObject(radioButton, t + 0.6); }
 }
 
-// PERF: low-quality mode toggle. Disables bloom + outline post-processing while
-// the user is actively scrolling (and 200ms after they stop). Cuts GPU cost roughly
-// in half during the heaviest moment (scroll-into-TV cinematic on laptop GPUs).
-// Visible cost: TV/lamp bloom glow fades out during scroll, returns when settled.
-let _lowQ = false;
-let _lowQTimer = null;
-function _enterLowQ() {
-  if (_lowQ) return;
-  _lowQ = true;
-  if (outlinePass) outlinePass.enabled = false;
-  if (bloomPass)   bloomPass.enabled   = false;
-}
-function _exitLowQ() {
-  if (!_lowQ) return;
-  _lowQ = false;
-  if (outlinePass) outlinePass.enabled = true;
-  if (bloomPass)   bloomPass.enabled   = true;
-}
-window.addEventListener('scroll', () => {
-  _enterLowQ();
-  clearTimeout(_lowQTimer);
-  _lowQTimer = setTimeout(_exitLowQ, 200);
-}, { passive: true });
-// Also catch trackpad wheel events (some fire wheel without changing scrollY when at scroll limits)
-window.addEventListener('wheel', () => {
-  _enterLowQ();
-  clearTimeout(_lowQTimer);
-  _lowQTimer = setTimeout(_exitLowQ, 200);
-}, { passive: true });
-
 let _lastFrame = performance.now();
 function animate() {
   requestAnimationFrame(animate);
