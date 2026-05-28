@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Cache busting — tell browsers / proxies / GitHub Pages CDN to never cache this HTML.
+     GitHub Pages defaults to ~10min cache on HTML; this drops it to zero so deploys appear instantly. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Yassen Elkhatib — Performance-driven Video Editor</title>
 <meta name="description" content="Vintage retro-cinematic portfolio of Yassen Elkhatib — performance-driven video editor for short-form & long-form content, social media ads, Reels and TikTok. Step into the room.">
 <meta name="author" content="Yassen Elkhatib">
@@ -584,7 +589,7 @@
 <!-- DEPLOY-CONFIRM MARKER: red dot positioned approximately over the TV screen in the 3D
      room (works only at scroll 0 — once the camera moves the dot won't follow because it's
      a DOM overlay, not a 3D object). REMOVE when done. -->
-<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:28px; height:28px; border-radius:50%; background:#3aa0ff; box-shadow:0 0 16px rgba(58,160,255,.9), inset 0 0 6px rgba(255,255,255,.5); z-index:99999; pointer-events:none;" title="deploy v3: smoothing restored (revert)"></div>
+<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:32px; height:32px; border-radius:50%; background:#ffd700; box-shadow:0 0 20px rgba(255,215,0,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none;" title="deploy v4: bloom+outline fade during scroll (the absolute fix)"></div>
 
 <div id="loader">
   <div class="brand">YASSEN</div>
@@ -3326,6 +3331,8 @@ let _winVidResumeTimer = null;
 function _pauseWindowVideoForScroll() {
   // Mark body as "actively scrolling" so CSS can drop expensive filters on hint pills.
   document.body.classList.add('scroll-perf-mode');
+  // PERF: trigger bloom + outline fade-out (lerps to 0 in ~200ms, then pass.enabled=false)
+  _setPassFadeTarget(0);
   if (_winVidPausedByScroll) return;
   if (window._pfLocked) return; // already paused inside TV — don't touch
   if (!videoWindowSlot || !videoWindowSlot.video) return;
@@ -3335,11 +3342,36 @@ function _pauseWindowVideoForScroll() {
 }
 function _resumeWindowVideoAfterScroll() {
   document.body.classList.remove('scroll-perf-mode');
+  // PERF: trigger bloom + outline fade-in (lerps back to 1 in ~400ms — slow enough to not pop)
+  _setPassFadeTarget(1);
   if (!_winVidPausedByScroll) return;
   _winVidPausedByScroll = false;
   if (window._pfLocked) return; // user entered TV — let the TV-lock logic own it
   if (!videoWindowSlot || !videoWindowSlot.video) return;
   try { videoWindowSlot.video.play().catch(()=>{}); } catch (e) {}
+}
+// PERF: BLOOM + OUTLINE FADE. The fix that actually matters for trackpad lag.
+// During active scroll: bloomPass + outlinePass fade strength to 0 over ~200ms, then we
+// flip pass.enabled=false (GPU stops doing them entirely). After scroll settles + 250ms
+// grace, target flips back to 1 and the passes re-enable and fade back over ~400ms.
+// The slow fade-in is what keeps it from looking like a pop.
+const _origBloomStrength    = bloomPass.strength;
+const _origOutlineStrength  = outlinePass.edgeStrength;
+let   _bloomTargetFactor    = 1.0;
+let   _bloomCurrentFactor   = 1.0;
+function _setPassFadeTarget(f) { _bloomTargetFactor = f; }
+function _updatePassFade(dt) {
+  const goingDown = _bloomTargetFactor < _bloomCurrentFactor;
+  const rate = goingDown ? 10 : 5; // 10/s out (fast, ~200ms), 5/s in (slow, ~400ms — kills the pop)
+  const factor = 1 - Math.exp(-rate * dt);
+  _bloomCurrentFactor += (_bloomTargetFactor - _bloomCurrentFactor) * factor;
+  if (Math.abs(_bloomTargetFactor - _bloomCurrentFactor) < 0.002) _bloomCurrentFactor = _bloomTargetFactor;
+  bloomPass.strength       = _origBloomStrength   * _bloomCurrentFactor;
+  outlinePass.edgeStrength = _origOutlineStrength * _bloomCurrentFactor;
+  // Once fully faded out, disable the passes entirely so the GPU skips their work each frame.
+  const off = _bloomCurrentFactor < 0.005;
+  bloomPass.enabled   = !off;
+  outlinePass.enabled = !off;
 }
 window.addEventListener('scroll', () => {
   _pauseWindowVideoForScroll();
@@ -3388,6 +3420,7 @@ function animate() {
   }
   updateHoverGlow();
   renderInkTrail();
+  _updatePassFade(dt); // PERF: lerp bloom + outline strength toward target before render
   composer.render();
 }
 animate();
