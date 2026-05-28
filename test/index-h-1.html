@@ -46,7 +46,8 @@
     gap: clamp(8px, 1vw, 14px);
     z-index: 51;
   }
-  .yx-music-controls button {
+  .yx-music-controls button,
+  .yx-music-controls > a {
     width:  clamp(42px, 4.2vw, 60px);
     height: clamp(42px, 4.2vw, 60px);
     border-radius: 50%;
@@ -58,14 +59,22 @@
     transition: background .2s, transform .2s, border-color .2s, color .2s;
     box-shadow: 0 6px 18px rgba(0,0,0,.55);
     padding: 0;
+    text-decoration: none;
   }
-  .yx-music-controls button:hover {
+  .yx-music-controls button:hover,
+  .yx-music-controls > a:hover {
     background: #e8dcc4; color: #0a0710;
     transform: translateY(-3px);
     border-color: rgba(232,220,196,.7);
   }
-  .yx-music-controls button:active { transform: translateY(-1px) scale(.96); }
+  .yx-music-controls button:active,
+  .yx-music-controls > a:active { transform: translateY(-1px) scale(.96); }
   .yx-music-controls svg { width: 52%; height: 52%; }
+  /* Small visual gap between the "go back" button and the music-control pair.
+     RTL: the back button is still the leftmost VISUAL position in the row;
+     since AR is RTL, give it the inverse margin so the layout still feels balanced. */
+  .yx-music-controls > a.yx-back-btn { margin-right: clamp(6px, 0.8vw, 14px); }
+  [dir="rtl"] .yx-music-controls > a.yx-back-btn { margin-right: 0; margin-left: clamp(6px, 0.8vw, 14px); }
   .yx-music-controls button.playing .ic-play  { display: none; }
   .yx-music-controls button:not(.playing) .ic-pause { display: none; }
   /* Preview mode: hide everything that would imply interaction, freeze the page,
@@ -371,6 +380,12 @@
 <div class="yx-cinema-bar top"></div>
 <div class="yx-cinema-bar bottom"></div>
 <div class="yx-music-controls" id="yxMusicControls" aria-label="عناصر التحكم بالموسيقى">
+  <a class="yx-back-btn" href="/" title="رجوع لاختيار التجربة" aria-label="الرجوع لاختيار التجربة">
+    <!-- House icon — universal "back to start" / "home", reads well in EN and AR -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-5v-7H10v7H5a2 2 0 0 1-2-2z"></path>
+    </svg>
+  </a>
   <button id="yxMusicToggle" type="button" title="تشغيل/إيقاف الموسيقى" aria-label="تشغيل أو إيقاف الموسيقى">
     <!-- Old-piano-keys icon (retro) -->
     <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
