@@ -81,6 +81,11 @@
   html.yx-preview .yx-cinema-bar,
   html.yx-preview .yx-music-controls { display: none !important; }
   html.yx-preview, html.yx-preview body { pointer-events: none !important; }
+  /* In-TV mode — when the 3D site loads this portfolio inside the CRT iframe
+     with ?inTV=1, hide the back/music/switch controls AND the portfolio's own
+     cinema bars (the 3D site has its own; doubling them looks bad). */
+  html.yx-in-tv .yx-music-controls,
+  html.yx-in-tv .yx-cinema-bar { display: none !important; }
   @font-face{ font-family: 'Panorama'; src: url('../assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display: swap; }
   @font-face{ font-family: 'Vintage Town'; src: url('../assets/fonts/VintageTown.otf') format('opentype'); font-display: swap; }
   @font-face{ font-family: 'Wanlaners'; src: url('../assets/fonts/Wanlaners.otf') format('opentype'); font-display: swap; }
@@ -947,6 +952,14 @@ window.addEventListener('message', function(e){
 <!-- Music control + preview-mode logic (added for the selector entry path) -->
 <script>
 (function() {
+  // ── IN-TV MODE (loaded inside the 3D site's CRT iframe) ─────────────────
+  // The 3D site appends ?inTV=1 to the iframe src. That signals: hide the
+  // back/music/switch controls + the portfolio's own cinema bars (since the
+  // 3D site already has its own). Just the content shows, nothing else.
+  if (location.search.indexOf('inTV=1') !== -1) {
+    document.documentElement.classList.add('yx-in-tv');
+  }
+
   // ── PREVIEW MODE (selector iframe) ──────────────────────────────────────
   // When loaded as /test/EN-P.html?preview=1 inside the landing selector's iframe:
   //   - Disable all interactions
