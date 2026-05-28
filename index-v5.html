@@ -3470,15 +3470,14 @@ function updateHints() {
     el.style.top = (p.y + dy) + 'px';
     el.style.opacity = '1';
   };
-  _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
-  // Radio hint: on desktop +90px X nudge centers the pill over the visible
-  // radio knob. On a landscape phone the camera FOV shifts and that +90 pushes
-  // the pill onto the TV screen — so on mobile-3d, drop the X offset and the
-  // Y lift so the pill sits directly over the projected radio position.
+  // Mobile-3d hint positions (per Yassen):
+  //   hint-lang (TV button):     dy = -50  (was -110 desktop)
+  //   hint-tv-screen (CRT):      dy = -40  (was -160 desktop)
+  //   hint-radio:                dy = -90, dx = +100 (was 0)
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
-  // Mobile-3d radio: dy=-90 (was -60, raised 30px per Yassen). Desktop -180.
-  _set(hintRadio, radioButton, _isLM ? -90 : -180, _radioSeen, _isLM ? 0 : 90);
-  _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
+  _set(hintLang,     tvButton,        _isLM ? -50  : -110, false,        0);
+  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _radioSeen,   _isLM ? 100 : 90);
+  _set(hintTvScreen, window._crtMesh, _isLM ? -40  : -160, _scrollHide,  0);
 }
 
 // ===== Full-body emissive pulse on the TV and radio so users SEE they are clickable from the start =====
