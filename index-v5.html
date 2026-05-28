@@ -1450,12 +1450,9 @@ gltfLoader.load('assets/room.glb', (gltf) => {
   if (crtTargetMesh) {
     crtTargetMesh.geometry.computeBoundingBox();
     const bb = crtTargetMesh.geometry.boundingBox;
-    // Click-zone size as a fraction of the CRT bounds. Width bumped to 0.68
-    // (was 0.55) per Yassen — keeps the rectangle landscape-shaped and a bit
-    // wider so it reads as a TV screen, not a square. Area = 0.68 * 0.55 =
-    // 37.4% of the full CRT mesh face.
-    const w = (bb.max.x - bb.min.x) * 0.68;
-    const h = (bb.max.y - bb.min.y) * 0.55;
+    // Click-zone now 1.0 x 1.0 of the CRT bounds per Yassen — full TV face.
+    const w = (bb.max.x - bb.min.x) * 1.0;
+    const h = (bb.max.y - bb.min.y) * 1.0;
     const tvClick = new THREE.Mesh(
       new THREE.PlaneGeometry(w, h),
       // Transparent (invisible to the eye) but NOT material.visible:false — the
