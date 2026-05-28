@@ -978,6 +978,58 @@ const bloomPass = new UnrealBloomPass(
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
 
+/* ============================================================================
+   GRACEFUL DEGRADATION FOR VISITORS WITHOUT GPU ACCELERATION
+   ============================================================================
+   ~5% of visitors have hardware acceleration disabled in their browser (off by
+   default in some corporate setups, or auto-disabled when drivers are old).
+   For them, WebGL renders on the CPU at 5-15fps — the site would feel broken.
+   This block detects software rendering and automatically:
+     - Disables UnrealBloomPass (heaviest post-processing pass)
+     - Disables OutlinePass (second heaviest)
+     - Lowers pixel ratio to 0.75 (further reduces fillrate)
+     - Shows a small dismissible notice in their language
+   Visitors with GPU accel ON see no notice and full quality. */
+(function _detectSoftwareWebGL() {
+  try {
+    const gl = renderer.getContext();
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!ext) return; // some browsers block this — skip detection silently
+    const r = String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || '');
+    const v = String(gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)   || '');
+    // SwiftShader = Chrome's software fallback. llvmpipe = Mesa software.
+    // Microsoft Basic Render = Windows D3D11 software fallback.
+    const isSoftware = /SwiftShader|llvmpipe|Microsoft Basic Render|Software/i.test(r + ' ' + v);
+    if (!isSoftware) return;
+    console.warn('[perf] Software WebGL detected ('+r+'). Disabling bloom + outline + lowering pixel ratio to keep the site usable. Enable hardware acceleration in your browser for full quality.');
+    bloomPass.enabled   = false;
+    outlinePass.enabled = false;
+    renderer.setPixelRatio(0.75);
+    // Show a dismissible notice (EN + AR)
+    setTimeout(_showHWAccelNotice, 600); // delay so DOM is ready
+  } catch (e) { /* detection is best-effort, never throw */ }
+})();
+function _showHWAccelNotice() {
+  if (localStorage.getItem('hwAccelNoticeDismissed') === '1') return;
+  const el = document.createElement('div');
+  el.id = '_hwAccelNotice';
+  el.style.cssText = 'position:fixed;top:14px;left:14px;z-index:1500;max-width:340px;padding:14px 18px;background:rgba(10,7,16,.94);border:1px solid rgba(255,180,80,.4);border-radius:8px;color:#e8dcc4;font:13px/1.5 "Inter",system-ui,sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.5);';
+  const isAR = (window.currentLang === 'ar') || document.documentElement.lang === 'ar';
+  if (isAR) { el.style.left = ''; el.style.right = '14px'; el.dir = 'rtl'; }
+  el.innerHTML = isAR
+    ? '<div style="font-weight:600;margin-bottom:6px;color:#ffd070">جودة مخفضة</div>'
+      + '<div style="opacity:.85;margin-bottom:12px;font-size:12.5px">تسريع الأجهزة معطّل في متصفحك، فخفّضنا الجودة لتجربة قابلة للاستخدام. للجودة الكاملة، فعّل تسريع الأجهزة من إعدادات المتصفح وأعد تحميل الصفحة.</div>'
+      + '<button id="_hwBtn" style="background:transparent;border:1px solid rgba(232,220,196,.3);color:#e8dcc4;padding:6px 14px;border-radius:4px;cursor:pointer;font:inherit">حسناً</button>'
+    : '<div style="font-weight:600;margin-bottom:6px;color:#ffd070">Low-quality mode</div>'
+      + '<div style="opacity:.85;margin-bottom:12px;font-size:12.5px">Hardware acceleration is off in your browser, so we lowered the visual quality to keep things usable. For the full experience: enable hardware acceleration in your browser settings, then reload.</div>'
+      + '<button id="_hwBtn" style="background:transparent;border:1px solid rgba(232,220,196,.3);color:#e8dcc4;padding:6px 14px;border-radius:4px;cursor:pointer;font:inherit">OK</button>';
+  document.body.appendChild(el);
+  el.querySelector('#_hwBtn').addEventListener('click', () => {
+    try { localStorage.setItem('hwAccelNoticeDismissed', '1'); } catch(e){}
+    el.remove();
+  });
+}
+
 /* ====================================================================== */
 /* ENVIRONMENT (cubemap)                                                  */
 /* ====================================================================== */
