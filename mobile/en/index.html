@@ -207,55 +207,138 @@
     text-decoration: underline;
   }
 
-  /* Experience / project cards */
-  .project {
+  /* Experience: logo grid → expand rectangle (mobile pattern requested by Yassen) */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .logo-tile {
     background: var(--paper);
     border: 1.5px solid var(--ink);
     border-radius: 6px;
-    margin-bottom: 14px;
-    overflow: hidden;
-  }
-  .project-head {
+    padding: 18px 8px 12px;
+    text-align: center;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px 12px;
-    border-bottom: 1px solid var(--line);
+    gap: 8px;
+    cursor: pointer;
+    transition: background .15s, transform .15s, border-color .15s;
+    -webkit-tap-highlight-color: transparent;
   }
-  .project-head img {
-    width: 44px; height: 44px;
+  .logo-tile:active {
+    background: var(--paper2);
+    transform: scale(.97);
+    border-color: var(--accent);
+  }
+  .logo-tile.active {
+    background: var(--paper2);
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .logo-tile img {
+    width: 54px; height: 54px;
     object-fit: contain;
     filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
   }
-  .project-head .project-name {
+  .logo-tile .lt-name {
     font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
-    font-size: 19px;
-    color: var(--accent);
-    line-height: 1;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.1;
   }
-  .project-head .project-role {
-    font-size: 11px;
+
+  /* Expand rectangle — vertical 9:16 video on the LEFT, text on the RIGHT, logo top-right.
+     Stacks (video on top, text below) on phones narrower than 480px so the video isn't tiny. */
+  .expand-rect {
+    margin-top: 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px var(--paper), 0 8px 24px rgba(0,0,0,.18);
+    overflow: hidden;
+    display: none;
+    position: relative;
+  }
+  .expand-rect.open { display: block; animation: erOpen .25s ease-out; }
+  @keyframes erOpen { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .er-body {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+  }
+  .er-video-wrap {
+    flex: 0 0 38%;
+    aspect-ratio: 9 / 16;          /* vertical video */
+    background: #1a1510;
+    border: 1.5px solid var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .er-video-wrap video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .er-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding-right: 50px;            /* leave space for the corner logo */
+    position: relative;
+  }
+  .er-title {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: 18px;
+    color: var(--accent);
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .er-role {
+    font-size: 10.5px;
     letter-spacing: 1.4px;
     text-transform: uppercase;
     color: var(--ink-soft);
-    margin-top: 3px;
-    font-weight: 600;
+    font-weight: 700;
+    margin-bottom: 10px;
   }
-  .project-video {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: #1a1510;
-    display: block;
-  }
-  .project-story {
-    padding: 14px 16px 16px;
-    font-size: 13.5px;
-    line-height: 1.7;
+  .er-story {
+    font-size: 13px;
+    line-height: 1.55;
     color: var(--ink);
   }
-  .project-link {
+  /* logo top-right corner */
+  .er-corner-logo {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px; height: 36px;
+    object-fit: contain;
+    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
+    z-index: 2;
+  }
+  .er-close {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 28px; height: 28px;
+    border: 1px solid var(--ink);
+    background: var(--paper2);
+    color: var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    z-index: 3;
+  }
+  .er-link {
     display: inline-block;
-    margin: 0 16px 14px;
+    margin-top: 10px;
     font-size: 11px;
     letter-spacing: 1.4px;
     text-transform: uppercase;
@@ -264,6 +347,31 @@
     border-bottom: 1px solid var(--accent);
     padding-bottom: 1px;
     font-weight: 600;
+  }
+  /* No-video state (e.g. DEPI): hide the video wrap, let text fill */
+  .expand-rect.no-video .er-video-wrap { display: none; }
+  .expand-rect.no-video .er-text { padding-right: 50px; }
+
+  /* Narrow phones: stack video on top, text below. Logo still top-right of the whole rect. */
+  @media (max-width: 479px) {
+    .er-body {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .er-video-wrap {
+      flex: 0 0 auto;
+      width: 60%;
+      max-width: 220px;
+      align-self: flex-start;
+    }
+    .er-text {
+      padding-right: 0;
+    }
+    .er-corner-logo {
+      top: 12px;
+      right: 12px;
+      width: 32px; height: 32px;
+    }
   }
 
   /* Skills grid */
@@ -343,72 +451,44 @@
 <section class="section">
   <h2>Experience</h2>
 
-  <div class="project">
-    <div class="project-head">
+  <div class="logo-grid" id="expGrid">
+    <button class="logo-tile" data-key="alx" type="button">
       <img src="/test/assets/logos/alx.png" alt="ALX Arabia">
-      <div>
-        <div class="project-name">ALX Arabia</div>
-        <div class="project-role">Content Creator</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/alx.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">At ALX I worked as a Content Creator running the whole pipeline — shooting with the gear, writing the scripts, generating the ideas and picking the strongest ones. End-to-end production: editing, motion, color, sound design and subtitling. Tight 4-5 day deliveries using AI tools to speed production and lift quality.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
+      <span class="lt-name">ALX Arabia</span>
+    </button>
+    <button class="logo-tile" data-key="enactus" type="button">
       <img src="/test/assets/logos/enactus.png" alt="Enactus">
-      <div>
-        <div class="project-name">Enactus</div>
-        <div class="project-role">Video Editor &amp; Motion Designer</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/enactus.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">Fully collaborative effort. Worked closely with the team and photographers — they were building a product, my job was how it would come through on screen. 5+ short promo videos under tight deadlines. Infographic-driven motion design that simplifies the message.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
-      <img src="/test/assets/logos/jade.png" alt="Jade Textile · Optara">
-      <div>
-        <div class="project-name">Jade · Optara</div>
-        <div class="project-role">UI/UX Designer</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/jade.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">Started on the factory floor, not on the screen — sat with the workers and engineers until I genuinely understood the need. Built Optara: one platform tying departments together and scheduling production, used by three user types on the same live data. Built solo in ~2 months with an AI-supported workflow.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
+      <span class="lt-name">Enactus</span>
+    </button>
+    <button class="logo-tile" data-key="jade" type="button">
+      <img src="/test/assets/logos/jade.png" alt="Jade · Optara">
+      <span class="lt-name">Jade · Optara</span>
+    </button>
+    <button class="logo-tile" data-key="jad" type="button">
       <img src="/test/assets/logos/jad.png" alt="JAD">
-      <div>
-        <div class="project-name">JAD</div>
-        <div class="project-role">Video Editor</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/jad.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">JAD is a brand built by a young team specialised in making picture frames. I designed a campaign of ad videos for them — wasn't only the edit: I went on location and ran camera angles alongside the photographer to make sure every shot served the cut. Quiet, intriguing style that leaves the viewer curious.</p>
+      <span class="lt-name">JAD</span>
+    </button>
+    <button class="logo-tile" data-key="depi" type="button">
+      <img src="/test/assets/logos/depi.png" alt="DEPI">
+      <span class="lt-name">DEPI</span>
+    </button>
   </div>
 
-  <div class="project">
-    <div class="project-head">
-      <img src="/test/assets/logos/depi.png" alt="DEPI">
-      <div>
-        <div class="project-name">DEPI</div>
-        <div class="project-role">Diploma — Digital Egypt Pioneers Initiative</div>
+  <!-- Expand rectangle: appears when a logo is tapped. Logo top-right, video on left (vertical 9:16), text on right. -->
+  <div class="expand-rect" id="expRect" aria-hidden="true">
+    <img class="er-corner-logo" id="erLogo" src="" alt="">
+    <div class="er-body">
+      <div class="er-video-wrap" id="erVideoWrap">
+        <video id="erVideo" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+      <div class="er-text">
+        <div class="er-title" id="erTitle"></div>
+        <div class="er-role" id="erRole"></div>
+        <div class="er-story" id="erStory"></div>
+        <a class="er-link" id="erLink" href="#" target="_blank" rel="noopener" style="display:none">View →</a>
       </div>
     </div>
-    <p class="project-story">The DEPI diploma took my understanding of animation to a deeper level. Worked inside a team where we coordinated down to the smallest detail, and I was responsible for animation and motion on the graduation project. A standout experience combining learning, teamwork and real delivery.</p>
-    <a class="project-link" href="https://depi.gov.eg/content/home" target="_blank" rel="noopener">View DEPI →</a>
+    <button class="er-close" id="erClose" type="button" aria-label="Close">✕</button>
   </div>
 </section>
 
@@ -452,9 +532,130 @@
   <a href="/test/EN-P.html">→ open the full desktop version</a>
 </footer>
 
-<audio id="ybAudio" preload="none"></audio>
+<!-- Two audio elements so we can crossfade — one's the current track, the other's the next. -->
+<audio id="ybAudioA" preload="none" crossorigin="anonymous"></audio>
+<audio id="ybAudioB" preload="none" crossorigin="anonymous"></audio>
 
 <script>
+/* ========================================================================
+   EXPERIENCE — logo grid → expand rectangle
+   ======================================================================== */
+(function() {
+  const PROJECTS = {
+    alx: {
+      title: 'ALX Arabia',
+      role:  'Content Creator',
+      logo:  '/test/assets/logos/alx.png',
+      video: '/assets/videos/alx.mp4',
+      link:  null,
+      story: 'At ALX I ran the whole pipeline — shooting, scripting, generating and picking ideas. End-to-end production: editing, motion, color, sound design and subtitling. Tight 4–5 day deliveries, AI tools to speed it up and lift the quality.'
+    },
+    enactus: {
+      title: 'Enactus',
+      role:  'Video Editor & Motion Designer',
+      logo:  '/test/assets/logos/enactus.png',
+      video: '/assets/videos/enactus.mp4',
+      link:  null,
+      story: 'Fully collaborative. Worked closely with the team and photographers — they were building a product, my job was how it would come through on screen. 5+ short promo videos under tight deadlines, infographic-driven motion that simplifies the message.'
+    },
+    jade: {
+      title: 'Jade · Optara',
+      role:  'UI/UX Designer',
+      logo:  '/test/assets/logos/jade.png',
+      video: '/assets/videos/jade.mp4',
+      link:  null,
+      story: 'Started on the factory floor, not on the screen — sat with workers and engineers until I understood the need. Built Optara: one platform tying departments together, used by three user types on the same live data. Built solo in ~2 months with an AI-supported workflow.'
+    },
+    jad: {
+      title: 'JAD',
+      role:  'Video Editor',
+      logo:  '/test/assets/logos/jad.png',
+      video: '/assets/videos/jad.mp4',
+      link:  null,
+      story: 'A young team specialised in picture frames. I designed a campaign of ad videos — not only the edit: I went on location and ran camera angles alongside the photographer to make sure every shot served the cut. Quiet, intriguing style that leaves the viewer curious.'
+    },
+    depi: {
+      title: 'DEPI',
+      role:  'Diploma — Digital Egypt Pioneers Initiative',
+      logo:  '/test/assets/logos/depi.png',
+      video: null,
+      link:  'https://depi.gov.eg/content/home',
+      story: 'The DEPI diploma took my understanding of animation deeper. A team where we coordinated to the smallest detail, and I was responsible for animation and motion on the graduation project. A standout experience combining learning, teamwork and real delivery.'
+    }
+  };
+
+  const grid    = document.getElementById('expGrid');
+  const rect    = document.getElementById('expRect');
+  const erLogo  = document.getElementById('erLogo');
+  const erTitle = document.getElementById('erTitle');
+  const erRole  = document.getElementById('erRole');
+  const erStory = document.getElementById('erStory');
+  const erLink  = document.getElementById('erLink');
+  const erVid   = document.getElementById('erVideo');
+  const erClose = document.getElementById('erClose');
+  let openKey = null;
+
+  function openProject(key) {
+    const p = PROJECTS[key]; if (!p) return;
+    erLogo.src       = p.logo;
+    erLogo.alt       = p.title;
+    erTitle.textContent = p.title;
+    erRole.textContent  = p.role;
+    erStory.textContent = p.story;
+    if (p.link) {
+      erLink.href = p.link;
+      erLink.style.display = '';
+      erLink.textContent = 'View ' + p.title + ' →';
+    } else {
+      erLink.style.display = 'none';
+    }
+    if (p.video) {
+      rect.classList.remove('no-video');
+      erVid.src = p.video;
+      erVid.load();
+      erVid.play().catch(()=>{});
+    } else {
+      rect.classList.add('no-video');
+      erVid.removeAttribute('src');
+      erVid.load();
+    }
+    rect.classList.add('open');
+    rect.setAttribute('aria-hidden', 'false');
+    // Highlight the active tile
+    grid.querySelectorAll('.logo-tile').forEach(t => t.classList.toggle('active', t.dataset.key === key));
+    openKey = key;
+    // Scroll the rectangle into view (smooth)
+    setTimeout(() => rect.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeProject() {
+    rect.classList.remove('open');
+    rect.setAttribute('aria-hidden', 'true');
+    try { erVid.pause(); } catch(e){}
+    erVid.removeAttribute('src');
+    erVid.load();
+    grid.querySelectorAll('.logo-tile').forEach(t => t.classList.remove('active'));
+    openKey = null;
+  }
+
+  grid.addEventListener('click', (e) => {
+    const tile = e.target.closest('.logo-tile');
+    if (!tile) return;
+    const key = tile.dataset.key;
+    if (openKey === key) closeProject();
+    else openProject(key);
+  });
+  erClose.addEventListener('click', closeProject);
+})();
+
+/* ========================================================================
+   MUSIC — radio-from-another-room: Web Audio lowpass filter + crossfade
+   ========================================================================
+   Audio path:    audio element → MediaElementSource → BiquadFilter (lowpass @ 1400Hz)
+                  → GainNode → AudioContext.destination
+   The lowpass cuts highs so the music sounds muffled, like it's coming through
+   a wall from another room. The Q value (0.7) keeps it natural.
+   Two audio elements (A and B) share one filter chain so we can crossfade by
+   ramping their gains in opposite directions over 3 seconds. */
 (function() {
   const TRACKS = [
     '/assets/music/radio-inkspots-en.mp3',
@@ -463,37 +664,118 @@
     '/assets/music/music-en-1.mp3',
     '/assets/music/music-en-2.mp3'
   ];
-  const audio  = document.getElementById('ybAudio');
+  const FADE_SECONDS = 3;
+  const TARGET_GAIN  = 0.65;          // 0..1 (a touch quiet because it's "from another room")
+  const FILTER_HZ    = 1400;          // lowpass cutoff — lower = more muffled
+
+  const audioA = document.getElementById('ybAudioA');
+  const audioB = document.getElementById('ybAudioB');
   const toggle = document.getElementById('ybMusicToggle');
   const sw     = document.getElementById('ybMusicSwitch');
-  if (!audio || !toggle || !sw) return;
-  let idx = 0;
-  let userPaused = true;
-  audio.src = TRACKS[idx];
-  audio.loop = true;
-  audio.volume = 0.55;
+  if (!audioA || !audioB || !toggle || !sw) return;
+
+  [audioA, audioB].forEach(a => { a.preload = 'metadata'; });
+
+  let curIdx = 0;
+  let cur = audioA;        // currently audible
+  let nxt = audioB;        // the one waiting / fading in
+  let userWantsPlay = false;
+  let actx = null, gA = null, gB = null;
+  let curGain, nxtGain;
+  let crossfading = false;
+
+  // Build the Web Audio graph lazily (after first user gesture, per autoplay policies)
+  function ensureCtx() {
+    if (actx) return true;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return false;
+      actx = new Ctx();
+      const filter = actx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = FILTER_HZ;
+      filter.Q.value = 0.7;
+      const srcA = actx.createMediaElementSource(audioA);
+      const srcB = actx.createMediaElementSource(audioB);
+      gA = actx.createGain();  gA.gain.value = TARGET_GAIN;
+      gB = actx.createGain();  gB.gain.value = 0;
+      srcA.connect(gA).connect(filter);
+      srcB.connect(gB).connect(filter);
+      filter.connect(actx.destination);
+      curGain = gA; nxtGain = gB;
+      return true;
+    } catch (e) { actx = null; return false; }
+  }
   function setPlay(p) {
     toggle.classList.toggle('playing', p);
     toggle.setAttribute('aria-label', p ? 'Pause music' : 'Play music');
   }
-  toggle.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play().then(() => { userPaused = false; setPlay(true); }).catch(()=>{});
+  function swapRoles() {
+    const tA = cur; cur = nxt; nxt = tA;
+    const tG = curGain; curGain = nxtGain; nxtGain = tG;
+  }
+  function crossfadeToNext() {
+    if (crossfading) return;
+    crossfading = true;
+    const nextIdx = (curIdx + 1) % TRACKS.length;
+    ensureCtx();
+    nxt.src = TRACKS[nextIdx];
+    nxt.loop = false;
+    nxt.play().catch(()=>{});
+    const now = actx.currentTime;
+    curGain.gain.cancelScheduledValues(now);
+    nxtGain.gain.cancelScheduledValues(now);
+    curGain.gain.setValueAtTime(curGain.gain.value, now);
+    nxtGain.gain.setValueAtTime(0, now);
+    curGain.gain.linearRampToValueAtTime(0, now + FADE_SECONDS);
+    nxtGain.gain.linearRampToValueAtTime(TARGET_GAIN, now + FADE_SECONDS);
+    setTimeout(() => {
+      try { cur.pause(); cur.currentTime = 0; } catch(e){}
+      curIdx = nextIdx;
+      swapRoles();
+      crossfading = false;
+    }, FADE_SECONDS * 1000);
+  }
+
+  // Watch current track's progress; start crossfade ~3.2s before end
+  function onTimeUpdate() {
+    if (!cur.duration || isNaN(cur.duration)) return;
+    if (crossfading) return;
+    if (cur.duration - cur.currentTime <= FADE_SECONDS + 0.2 && !cur.paused) {
+      crossfadeToNext();
+    }
+  }
+  audioA.addEventListener('timeupdate', () => { if (cur === audioA) onTimeUpdate(); });
+  audioB.addEventListener('timeupdate', () => { if (cur === audioB) onTimeUpdate(); });
+  audioA.addEventListener('ended', () => { if (cur === audioA && !crossfading) crossfadeToNext(); });
+  audioB.addEventListener('ended', () => { if (cur === audioB && !crossfading) crossfadeToNext(); });
+
+  toggle.addEventListener('click', async () => {
+    ensureCtx();
+    if (actx && actx.state === 'suspended') { try { await actx.resume(); } catch(e){} }
+    if (cur.paused) {
+      if (!cur.src) cur.src = TRACKS[curIdx];
+      cur.play().then(() => { userWantsPlay = true; setPlay(true); }).catch(()=>{});
     } else {
-      audio.pause();
-      userPaused = true;
+      cur.pause();
+      userWantsPlay = false;
       setPlay(false);
     }
   });
+
   sw.addEventListener('click', () => {
-    idx = (idx + 1) % TRACKS.length;
-    const wasPlaying = !audio.paused;
-    audio.src = TRACKS[idx];
-    audio.loop = true;
-    if (wasPlaying || !userPaused) audio.play().then(() => setPlay(true)).catch(()=>{});
+    if (!cur.paused || userWantsPlay) {
+      crossfadeToNext();
+    } else {
+      // Not playing — just jump to next track silently for when user hits play next
+      curIdx = (curIdx + 1) % TRACKS.length;
+      cur.src = TRACKS[curIdx];
+    }
   });
-  audio.addEventListener('play',  () => setPlay(true));
-  audio.addEventListener('pause', () => setPlay(false));
+  audioA.addEventListener('play',  () => { if (cur === audioA) setPlay(true); });
+  audioB.addEventListener('play',  () => { if (cur === audioB) setPlay(true); });
+  audioA.addEventListener('pause', () => { if (cur === audioA && !crossfading) setPlay(false); });
+  audioB.addEventListener('pause', () => { if (cur === audioB && !crossfading) setPlay(false); });
 })();
 </script>
 

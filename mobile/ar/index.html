@@ -192,60 +192,132 @@
     text-decoration: underline;
   }
 
-  /* Experience / project cards */
-  .project {
+  /* Experience: logo grid → expand rectangle */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .logo-tile {
     background: var(--paper);
     border: 1.5px solid var(--ink);
     border-radius: 6px;
-    margin-bottom: 14px;
-    overflow: hidden;
-  }
-  .project-head {
+    padding: 18px 8px 12px;
+    text-align: center;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px 12px;
-    border-bottom: 1px solid var(--line);
+    gap: 8px;
+    cursor: pointer;
+    transition: background .15s, transform .15s, border-color .15s;
+    -webkit-tap-highlight-color: transparent;
   }
-  .project-head img {
-    width: 44px; height: 44px;
-    object-fit: contain;
-    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
+  .logo-tile:active { background: var(--paper2); transform: scale(.97); border-color: var(--stamp); }
+  .logo-tile.active { background: var(--paper2); border-color: var(--stamp); border-width: 2px; }
+  .logo-tile img { width: 54px; height: 54px; object-fit: contain; filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4); }
+  .logo-tile .lt-name { font-family: 'Panorama', 'Cairo', serif; font-size: 15px; color: var(--ink); line-height: 1.1; }
+
+  /* Expand rectangle — RTL: text on the left, video on the right (mirror of EN).
+     Logo top-LEFT corner in RTL (trailing edge stays visually consistent). */
+  .expand-rect {
+    margin-top: 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px var(--paper), 0 8px 24px rgba(0,0,0,.18);
+    overflow: hidden;
+    display: none;
+    position: relative;
   }
-  .project-head .project-name {
-    font-family: 'Panorama', 'Cairo', serif;
-    font-size: 19px;
-    color: var(--stamp);
-    line-height: 1;
+  .expand-rect.open { display: block; animation: erOpen .25s ease-out; }
+  @keyframes erOpen { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .er-body {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    flex-direction: row-reverse; /* RTL: visual order = video right, text left */
   }
-  .project-head .project-role {
-    font-size: 11px;
-    color: var(--ink-soft);
-    margin-top: 3px;
-    font-weight: 600;
-  }
-  .project-video {
-    width: 100%;
-    aspect-ratio: 16/9;
+  .er-video-wrap {
+    flex: 0 0 38%;
+    aspect-ratio: 9 / 16;          /* vertical video */
     background: #1a1510;
-    display: block;
+    border: 1.5px solid var(--ink);
+    overflow: hidden;
+    position: relative;
   }
-  .project-story {
-    padding: 14px 16px 16px;
+  .er-video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .er-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding-left: 50px;             /* space for the corner logo (RTL: top-left) */
+    position: relative;
+  }
+  .er-title {
+    font-family: 'Panorama', 'Cairo', serif;
+    font-size: 20px;
+    color: var(--stamp);
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .er-role {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .er-story {
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 1.75;
     color: var(--ink);
     font-family: 'Panorama', 'Cairo', serif;
   }
-  .project-link {
+  .er-corner-logo {
+    position: absolute;
+    top: 14px;
+    left: 14px;                     /* RTL: corner logo top-LEFT */
+    width: 36px; height: 36px;
+    object-fit: contain;
+    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
+    z-index: 2;
+  }
+  .er-close {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: 28px; height: 28px;
+    border: 1px solid var(--ink);
+    background: var(--paper2);
+    color: var(--ink);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    z-index: 3;
+  }
+  .er-link {
     display: inline-block;
-    margin: 0 16px 14px;
+    margin-top: 10px;
     font-size: 12px;
     color: var(--stamp);
     text-decoration: none;
     border-bottom: 1px solid var(--stamp);
     padding-bottom: 1px;
     font-weight: 600;
+  }
+  .expand-rect.no-video .er-video-wrap { display: none; }
+  .expand-rect.no-video .er-text { padding-left: 50px; }
+
+  /* Narrow phones: stack video on top, text below. */
+  @media (max-width: 479px) {
+    .er-body { flex-direction: column; gap: 12px; }
+    .er-video-wrap { flex: 0 0 auto; width: 60%; max-width: 220px; align-self: flex-start; }
+    .er-text { padding-left: 0; }
+    .er-corner-logo { top: 12px; left: 12px; width: 32px; height: 32px; }
   }
 
   /* Skills grid */
@@ -325,72 +397,44 @@
 <section class="section">
   <h2>الْخِبْرَة</h2>
 
-  <div class="project">
-    <div class="project-head">
+  <div class="logo-grid" id="expGrid">
+    <button class="logo-tile" data-key="alx" type="button">
       <img src="/test/assets/logos/alx.png" alt="ALX Arabia">
-      <div>
-        <div class="project-name">ALX Arabia</div>
-        <div class="project-role">صانع محتوى</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/alx.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">في ALX كنتُ Content Creator أُمسك بالعملية كاملةً: أُصوّر بالمعدّات، وأكتب السكربت، وأُولّد الأفكار ثم أنتقي أنسبها. إنتاج كامل: مونتاج، موشن، تدرّج لوني، تصميم صوتي، وترجمة. تسليم خلال أربعة إلى خمسة أيام مع توظيف الذكاء الاصطناعي لرفع الجودة.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
+      <span class="lt-name">ALX Arabia</span>
+    </button>
+    <button class="logo-tile" data-key="enactus" type="button">
       <img src="/test/assets/logos/enactus.png" alt="Enactus">
-      <div>
-        <div class="project-name">Enactus</div>
-        <div class="project-role">محرّر فيديو وتصميم موشن</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/enactus.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">كانت Enactus عملًا جماعيًا بالكامل؛ اشتغلتُ مع الفريق ومع المصوّرين عن قرب. أكثر من خمسة فيديوهات قصيرة ترويجيّة لحملات طلابيّة، تسليم تحت مواعيد ضيّقة، وموشن جرافيك قائم على الإنفوجرافيك لتبسيط الرسائل.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
-      <img src="/test/assets/logos/jade.png" alt="Jade Textile · Optara">
-      <div>
-        <div class="project-name">Jade · Optara</div>
-        <div class="project-role">صانع واجهة وتجربة المستخدم</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/jade.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">في Jade Textile بدأتُ من أرض المصنع، لا من الشاشة؛ جلستُ مع العمّال والمهندسين حتى فهمتُ ما يحتاجونه فعلًا. ثم بنيتُ Optara: منصّة واحدة تربط الأقسام وتُجدوِل الإنتاج. بناء التطبيق كاملًا منفردًا في نحو شهرين بمسار مدعوم بالذكاء الاصطناعي.</p>
-  </div>
-
-  <div class="project">
-    <div class="project-head">
+      <span class="lt-name">Enactus</span>
+    </button>
+    <button class="logo-tile" data-key="jade" type="button">
+      <img src="/test/assets/logos/jade.png" alt="Jade · Optara">
+      <span class="lt-name">Jade · Optara</span>
+    </button>
+    <button class="logo-tile" data-key="jad" type="button">
       <img src="/test/assets/logos/jad.png" alt="JAD">
-      <div>
-        <div class="project-name">JAD</div>
-        <div class="project-role">محرّر فيديو</div>
-      </div>
-    </div>
-    <video class="project-video" controls preload="metadata" playsinline>
-      <source src="/assets/videos/jad.mp4" type="video/mp4">
-    </video>
-    <p class="project-story">JAD علامة يصنعها فريق شاب متخصّص في صناعة البراويز. صمّمتُ لهم حملة فيديوهات إعلانية، نزلتُ معهم إلى موقع التصوير وأدرتُ زوايا الكاميرا. اخترتُ أسلوبًا هادئًا مشوّقًا لا يشرح كل شيء، يترك المشاهد متشوّقًا لمعرفة ما يُقدَّم.</p>
+      <span class="lt-name">JAD</span>
+    </button>
+    <button class="logo-tile" data-key="depi" type="button">
+      <img src="/test/assets/logos/depi.png" alt="DEPI">
+      <span class="lt-name">DEPI</span>
+    </button>
   </div>
 
-  <div class="project">
-    <div class="project-head">
-      <img src="/test/assets/logos/depi.png" alt="DEPI">
-      <div>
-        <div class="project-name">DEPI</div>
-        <div class="project-role">دبلومة — مبادرة رواد مصر الرقمية</div>
+  <!-- Expand rectangle: appears when a logo is tapped. RTL: text on left, video on right, logo top-left. -->
+  <div class="expand-rect" id="expRect" aria-hidden="true">
+    <img class="er-corner-logo" id="erLogo" src="" alt="">
+    <div class="er-body">
+      <div class="er-video-wrap" id="erVideoWrap">
+        <video id="erVideo" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+      <div class="er-text">
+        <div class="er-title" id="erTitle"></div>
+        <div class="er-role" id="erRole"></div>
+        <div class="er-story" id="erStory"></div>
+        <a class="er-link" id="erLink" href="#" target="_blank" rel="noopener" style="display:none">اعرض ←</a>
       </div>
     </div>
-    <p class="project-story">دبلومة DEPI نقلت فهمي للأنيميشن إلى مستوى أعمق. عملتُ ضمن فريق نُنسّق فيه معًا حتى أدقّ التفاصيل، وكنتُ المسؤول عن التحريك والحركة في مشروع التخرّج. تجربةٌ مميّزة جمعت بين التعلّم والعمل الجماعي والتنفيذ.</p>
-    <a class="project-link" href="https://depi.gov.eg/content/home" target="_blank" rel="noopener">← اعرض DEPI</a>
+    <button class="er-close" id="erClose" type="button" aria-label="إغلاق">✕</button>
   </div>
 </section>
 
@@ -434,9 +478,113 @@
   <a href="/test/index-h-1.html">← افتح الإصدار الكامل (سطح المكتب)</a>
 </footer>
 
-<audio id="ybAudio" preload="none"></audio>
+<!-- Two audio elements for crossfade. -->
+<audio id="ybAudioA" preload="none" crossorigin="anonymous"></audio>
+<audio id="ybAudioB" preload="none" crossorigin="anonymous"></audio>
 
 <script>
+/* ========================================================================
+   EXPERIENCE — logo grid → expand rectangle (AR)
+   ======================================================================== */
+(function() {
+  const PROJECTS = {
+    alx: {
+      title: 'ALX Arabia',
+      role:  'صانع محتوى',
+      logo:  '/test/assets/logos/alx.png',
+      video: '/assets/videos/alx.mp4',
+      link:  null,
+      story: 'في ALX كنتُ Content Creator أُمسك بالعملية كاملةً: أُصوّر بالمعدّات، وأكتب السكربت، وأُولّد الأفكار ثم أنتقي أنسبها. إنتاج كامل: مونتاج، موشن، تدرّج لوني، تصميم صوتي، وترجمة. تسليم خلال أربعة إلى خمسة أيام مع توظيف الذكاء الاصطناعي لرفع الجودة.'
+    },
+    enactus: {
+      title: 'Enactus',
+      role:  'محرّر فيديو وتصميم موشن',
+      logo:  '/test/assets/logos/enactus.png',
+      video: '/assets/videos/enactus.mp4',
+      link:  null,
+      story: 'كانت Enactus عملًا جماعيًا بالكامل؛ اشتغلتُ مع الفريق ومع المصوّرين عن قرب. أكثر من خمسة فيديوهات قصيرة ترويجيّة، تسليم تحت مواعيد ضيّقة، وموشن جرافيك قائم على الإنفوجرافيك لتبسيط الرسائل.'
+    },
+    jade: {
+      title: 'Jade · Optara',
+      role:  'صانع واجهة وتجربة المستخدم',
+      logo:  '/test/assets/logos/jade.png',
+      video: '/assets/videos/jade.mp4',
+      link:  null,
+      story: 'في Jade Textile بدأتُ من أرض المصنع، لا من الشاشة؛ جلستُ مع العمّال والمهندسين حتى فهمتُ ما يحتاجونه فعلًا. ثم بنيتُ Optara: منصّة واحدة تربط الأقسام وتُجدوِل الإنتاج. بناء التطبيق كاملًا منفردًا في نحو شهرين بمسار مدعوم بالذكاء الاصطناعي.'
+    },
+    jad: {
+      title: 'JAD',
+      role:  'محرّر فيديو',
+      logo:  '/test/assets/logos/jad.png',
+      video: '/assets/videos/jad.mp4',
+      link:  null,
+      story: 'JAD علامة يصنعها فريق شاب متخصّص في صناعة البراويز. صمّمتُ لهم حملة فيديوهات إعلانية، نزلتُ معهم إلى موقع التصوير وأدرتُ زوايا الكاميرا. أسلوبٌ هادئٌ مشوّق يترك المشاهد متشوّقًا لمعرفة ما يُقدَّم.'
+    },
+    depi: {
+      title: 'DEPI',
+      role:  'دبلومة — مبادرة رواد مصر الرقمية',
+      logo:  '/test/assets/logos/depi.png',
+      video: null,
+      link:  'https://depi.gov.eg/content/home',
+      story: 'دبلومة DEPI نقلت فهمي للأنيميشن إلى مستوى أعمق. عملتُ ضمن فريق نُنسّق فيه معًا حتى أدقّ التفاصيل، وكنتُ المسؤول عن التحريك والحركة في مشروع التخرّج. تجربةٌ مميّزة جمعت بين التعلّم والعمل الجماعي والتنفيذ.'
+    }
+  };
+
+  const grid    = document.getElementById('expGrid');
+  const rect    = document.getElementById('expRect');
+  const erLogo  = document.getElementById('erLogo');
+  const erTitle = document.getElementById('erTitle');
+  const erRole  = document.getElementById('erRole');
+  const erStory = document.getElementById('erStory');
+  const erLink  = document.getElementById('erLink');
+  const erVid   = document.getElementById('erVideo');
+  const erClose = document.getElementById('erClose');
+  let openKey = null;
+
+  function openProject(key) {
+    const p = PROJECTS[key]; if (!p) return;
+    erLogo.src = p.logo; erLogo.alt = p.title;
+    erTitle.textContent = p.title;
+    erRole.textContent  = p.role;
+    erStory.textContent = p.story;
+    if (p.link) {
+      erLink.href = p.link; erLink.style.display = '';
+      erLink.textContent = 'اعرض ' + p.title + ' ←';
+    } else { erLink.style.display = 'none'; }
+    if (p.video) {
+      rect.classList.remove('no-video');
+      erVid.src = p.video; erVid.load();
+      erVid.play().catch(()=>{});
+    } else {
+      rect.classList.add('no-video');
+      erVid.removeAttribute('src'); erVid.load();
+    }
+    rect.classList.add('open');
+    rect.setAttribute('aria-hidden', 'false');
+    grid.querySelectorAll('.logo-tile').forEach(t => t.classList.toggle('active', t.dataset.key === key));
+    openKey = key;
+    setTimeout(() => rect.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+  function closeProject() {
+    rect.classList.remove('open');
+    rect.setAttribute('aria-hidden', 'true');
+    try { erVid.pause(); } catch(e){}
+    erVid.removeAttribute('src'); erVid.load();
+    grid.querySelectorAll('.logo-tile').forEach(t => t.classList.remove('active'));
+    openKey = null;
+  }
+  grid.addEventListener('click', (e) => {
+    const tile = e.target.closest('.logo-tile');
+    if (!tile) return;
+    const key = tile.dataset.key;
+    if (openKey === key) closeProject(); else openProject(key);
+  });
+  erClose.addEventListener('click', closeProject);
+})();
+
+/* ========================================================================
+   MUSIC — radio-from-another-room (lowpass) + crossfade auto-advance (AR)
+   ======================================================================== */
 (function() {
   const TRACKS = [
     '/assets/music/radio-omkalthoum.mp3',
@@ -445,37 +593,100 @@
     '/assets/music/music-ar-1.mp3',
     '/assets/music/music-ar-2.mp3'
   ];
-  const audio  = document.getElementById('ybAudio');
+  const FADE_SECONDS = 3;
+  const TARGET_GAIN  = 0.65;
+  const FILTER_HZ    = 1400;
+
+  const audioA = document.getElementById('ybAudioA');
+  const audioB = document.getElementById('ybAudioB');
   const toggle = document.getElementById('ybMusicToggle');
   const sw     = document.getElementById('ybMusicSwitch');
-  if (!audio || !toggle || !sw) return;
-  let idx = 0;
-  let userPaused = true;
-  audio.src = TRACKS[idx];
-  audio.loop = true;
-  audio.volume = 0.55;
+  if (!audioA || !audioB || !toggle || !sw) return;
+  [audioA, audioB].forEach(a => { a.preload = 'metadata'; });
+
+  let curIdx = 0;
+  let cur = audioA, nxt = audioB;
+  let userWantsPlay = false;
+  let actx = null, gA = null, gB = null, curGain, nxtGain;
+  let crossfading = false;
+
+  function ensureCtx() {
+    if (actx) return true;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return false;
+      actx = new Ctx();
+      const filter = actx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = FILTER_HZ;
+      filter.Q.value = 0.7;
+      const srcA = actx.createMediaElementSource(audioA);
+      const srcB = actx.createMediaElementSource(audioB);
+      gA = actx.createGain(); gA.gain.value = TARGET_GAIN;
+      gB = actx.createGain(); gB.gain.value = 0;
+      srcA.connect(gA).connect(filter);
+      srcB.connect(gB).connect(filter);
+      filter.connect(actx.destination);
+      curGain = gA; nxtGain = gB;
+      return true;
+    } catch (e) { actx = null; return false; }
+  }
   function setPlay(p) {
     toggle.classList.toggle('playing', p);
     toggle.setAttribute('aria-label', p ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى');
   }
-  toggle.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play().then(() => { userPaused = false; setPlay(true); }).catch(()=>{});
+  function swapRoles() {
+    const tA = cur; cur = nxt; nxt = tA;
+    const tG = curGain; curGain = nxtGain; nxtGain = tG;
+  }
+  function crossfadeToNext() {
+    if (crossfading) return;
+    crossfading = true;
+    const nextIdx = (curIdx + 1) % TRACKS.length;
+    ensureCtx();
+    nxt.src = TRACKS[nextIdx]; nxt.loop = false;
+    nxt.play().catch(()=>{});
+    const now = actx.currentTime;
+    curGain.gain.cancelScheduledValues(now);
+    nxtGain.gain.cancelScheduledValues(now);
+    curGain.gain.setValueAtTime(curGain.gain.value, now);
+    nxtGain.gain.setValueAtTime(0, now);
+    curGain.gain.linearRampToValueAtTime(0, now + FADE_SECONDS);
+    nxtGain.gain.linearRampToValueAtTime(TARGET_GAIN, now + FADE_SECONDS);
+    setTimeout(() => {
+      try { cur.pause(); cur.currentTime = 0; } catch(e){}
+      curIdx = nextIdx; swapRoles();
+      crossfading = false;
+    }, FADE_SECONDS * 1000);
+  }
+  function onTimeUpdate() {
+    if (!cur.duration || isNaN(cur.duration)) return;
+    if (crossfading) return;
+    if (cur.duration - cur.currentTime <= FADE_SECONDS + 0.2 && !cur.paused) crossfadeToNext();
+  }
+  audioA.addEventListener('timeupdate', () => { if (cur === audioA) onTimeUpdate(); });
+  audioB.addEventListener('timeupdate', () => { if (cur === audioB) onTimeUpdate(); });
+  audioA.addEventListener('ended', () => { if (cur === audioA && !crossfading) crossfadeToNext(); });
+  audioB.addEventListener('ended', () => { if (cur === audioB && !crossfading) crossfadeToNext(); });
+
+  toggle.addEventListener('click', async () => {
+    ensureCtx();
+    if (actx && actx.state === 'suspended') { try { await actx.resume(); } catch(e){} }
+    if (cur.paused) {
+      if (!cur.src) cur.src = TRACKS[curIdx];
+      cur.play().then(() => { userWantsPlay = true; setPlay(true); }).catch(()=>{});
     } else {
-      audio.pause();
-      userPaused = true;
-      setPlay(false);
+      cur.pause(); userWantsPlay = false; setPlay(false);
     }
   });
   sw.addEventListener('click', () => {
-    idx = (idx + 1) % TRACKS.length;
-    const wasPlaying = !audio.paused;
-    audio.src = TRACKS[idx];
-    audio.loop = true;
-    if (wasPlaying || !userPaused) audio.play().then(() => setPlay(true)).catch(()=>{});
+    if (!cur.paused || userWantsPlay) crossfadeToNext();
+    else { curIdx = (curIdx + 1) % TRACKS.length; cur.src = TRACKS[curIdx]; }
   });
-  audio.addEventListener('play',  () => setPlay(true));
-  audio.addEventListener('pause', () => setPlay(false));
+  audioA.addEventListener('play',  () => { if (cur === audioA) setPlay(true); });
+  audioB.addEventListener('play',  () => { if (cur === audioB) setPlay(true); });
+  audioA.addEventListener('pause', () => { if (cur === audioA && !crossfading) setPlay(false); });
+  audioB.addEventListener('pause', () => { if (cur === audioB && !crossfading) setPlay(false); });
 })();
 </script>
 
