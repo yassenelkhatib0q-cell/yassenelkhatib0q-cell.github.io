@@ -423,25 +423,8 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='120' height='120'><filter id='tvg'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23tvg)' opacity='0.55'/></svg>");
     background-size: 4.688cqw 4.688cqw; }
 
-  /* ===== ported from Figma: real mobile layout (vertical stack) ===== */
-  @media(max-width:767px){
-    #stage{ position:static; height:auto; overflow:visible; }
-    #reel{ flex-direction:column; height:auto; transform:none !important; }
-    .panel{ width:100% !important; max-width:100% !important; height:auto; min-height:auto;
-      padding:54px 24px; border-left:none; border-bottom:2px solid var(--ink); }
-    .poster{ flex-direction:column; gap:28px; padding:90px 24px 54px; }
-    .poster-right{ max-width:100%; }
-    .filmstrip{ flex-direction:row; }
-    .leader{ flex:0 0 auto; width:100%; height:64px; border-left:none; border-bottom:2px solid var(--ink); }
-    .leader .inner{ flex-direction:row; gap:12px; }
-    .leader span{ writing-mode:horizontal-tb; font-size:38px; letter-spacing:0; }
-    .leader .n{ margin-bottom:0; }
-    .card-num{ top:18px; left:18px; }
-    #hint{ display:none; }
-    #topbar .links{ display:none; }
-    #modal .box{ grid-template-columns:1fr; }
-    #modal .m-right{ border-left:none; border-top:3px solid var(--ink); min-height:160px; }
-  }
+  /* TV variant: the Figma mobile-vertical block was removed — fixed-canvas always
+     applies, this file is only ever inside the 3D site's CRT iframe. */
 </style>
 <style></style><style></style><style></style><style></style><style></style><style></style><style></style><style>
   /* WCAG: visible skip link for keyboard users */

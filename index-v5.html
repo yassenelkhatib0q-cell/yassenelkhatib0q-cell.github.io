@@ -329,7 +329,7 @@
     letter-spacing: 0.02em;
   }
   .landscape-mobile .hint[dir="ltr"] {
-    font-size: 8px;
+    font-size: 9px;
     letter-spacing: 0.08em;
   }
   .landscape-mobile .hint::after {
@@ -339,9 +339,22 @@
   }
   .landscape-mobile #hint-tv-screen,
   .landscape-mobile #hint-tv-screen[dir="ltr"] {
-    font-size: 7px;
+    font-size: 9px;
     padding: 2px 4px;
     letter-spacing: 0.04em;
+  }
+  /* TV-button hint (hint-lang) on mobile-3d: sit to the RIGHT of the TV button
+     instead of floating above it. Default transform centers horizontally on the
+     projected screen point; we override to extend rightward + vertically center,
+     and hide the downward arrow (it would point at nothing). */
+  .landscape-mobile #hint-lang {
+    transform: translate(0, -50%) scale(1);
+    animation: hint-pulse-side 2.4s ease-in-out infinite;
+  }
+  .landscape-mobile #hint-lang::after { display: none; }
+  @keyframes hint-pulse-side {
+    0%, 100% { transform: translate(0, -50%) scale(1);    box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+    50%      { transform: translate(0, -50%) scale(1.06); box-shadow: 0 3px 10px rgba(0,0,0,.5); }
   }
 
   #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
@@ -3372,7 +3385,14 @@ function updateHints() {
     el.style.top = (p.y + dy) + 'px';
     el.style.opacity = '1';
   };
-  _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
+  // Mobile-3d: shift hint-lang to the RIGHT of the TV button (cramped landscape
+  // phone canvas — above-the-button placement overlaps the TV itself).
+  const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
+  if (_isLandscapeMobile) {
+    _set(hintLang, tvButton, 0, false, 70);                          // right of TV button (dx=+70, no vertical offset)
+  } else {
+    _set(hintLang, tvButton, -110, false, 0);                        // language hint above the TV (close to button so the arrow connects visually)
+  }
   _set(hintRadio, radioButton, -180, _radioSeen, 90);                // radio hint shifted right 90px to sit over the actual visible knob
   _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
 }
