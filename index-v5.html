@@ -364,9 +364,10 @@
   /* "Let's build something together" hero overlay — desktop already at 67% of
      original, but on a landscape phone (typical 844×390) it still occupies
      half the screen. Shrink hard for mobile-3d only. */
-  .landscape-mobile #phase1-overlay h1      { font-size: clamp(16px, 2vw, 26px) !important; max-width: 280px !important; }
-  .landscape-mobile #phase1-overlay .sub    { font-size: clamp(7px, 0.5vw, 9px) !important; max-width: 180px !important; margin-top: 6px !important; }
-  .landscape-mobile #phase1-overlay .tagline{ font-size: clamp(5px, 0.4vw, 7px) !important; margin-top: 7px !important; }
+  /* All three values multiplied x2 per Yassen. */
+  .landscape-mobile #phase1-overlay h1      { font-size: clamp(32px, 4vw, 52px) !important; max-width: 560px !important; }
+  .landscape-mobile #phase1-overlay .sub    { font-size: clamp(14px, 1vw, 18px) !important; max-width: 360px !important; margin-top: 12px !important; }
+  .landscape-mobile #phase1-overlay .tagline{ font-size: clamp(10px, 0.8vw, 14px) !important; margin-top: 14px !important; }
 
   #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
   #cursor svg { width:100%; height:100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
