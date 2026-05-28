@@ -318,6 +318,8 @@
   #hint-tv-screen::after { display: none; }
   /* English variant: keep the same minimal styling, just inherit the italic */
   #hint-tv-screen[dir="ltr"] { font-size: 14px; letter-spacing: 0.08em; }
+  /* Two-line hint — override the .hint nowrap so <br> renders as a real break. */
+  #hint-tv-screen { white-space: normal; line-height: 1.25; text-align: center; }
 
   /* ============================================================================
      MOBILE-3D scoped tweaks. Hint pills SHRUNK (font + padding only, no transform
@@ -669,7 +671,7 @@
 <div class="hint" id="hint-radio">اضغط لتشغيل الموسيقى</div>
 <!-- TV-screen hint: tells users they can click the screen to enter the portfolio
      without scrolling (helps slow-hardware visitors). -->
-<div class="hint" id="hint-tv-screen">Click here to see the portfolio</div>
+<div class="hint" id="hint-tv-screen">Click on the screen<br>to see the portfolio</div>
 
 <canvas id="gl"></canvas>
 
@@ -3409,13 +3411,13 @@ function refreshRadioHintText() {
 }
 function refreshTvScreenHintText() {
   if (!hintTvScreen) return;
-  // Written in the current site language — the user already chose it.
+  // Two-line hint — innerHTML so the <br> renders as a real line break.
   if (currentLang === 'ar') {
-    hintTvScreen.textContent = 'اضغط لرؤية الأعمال';
+    hintTvScreen.innerHTML = 'اضغط على الشاشة<br>لرؤية الأعمال';
     hintTvScreen.setAttribute('dir', 'rtl');
     hintTvScreen.setAttribute('lang', 'ar');
   } else {
-    hintTvScreen.textContent = 'Click here to see the portfolio';
+    hintTvScreen.innerHTML = 'Click on the screen<br>to see the portfolio';
     hintTvScreen.setAttribute('dir', 'ltr');
     hintTvScreen.setAttribute('lang', 'en');
   }
