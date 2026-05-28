@@ -37,26 +37,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Cinema bars top + bottom — matches the rest of the site */
-  .cinema-bar {
-    position: fixed; left: 0; right: 0;
-    height: clamp(48px, 9vh, 110px);
-    background: #0a0710;
-    z-index: 60;
-    pointer-events: none;
-    box-shadow: 0 0 30px rgba(0,0,0,.4);
-  }
-  .cinema-bar.top    { top: 0; }
-  .cinema-bar.bottom { bottom: 0; }
-
-  /* Warm radial glow backdrop */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 1; pointer-events: none;
-    background:
-      radial-gradient(circle at 50% 50%, rgba(255,180,80,.10) 0%, transparent 55%),
-      radial-gradient(circle at 30% 30%, rgba(70,30,20,.30) 0%, transparent 65%);
-  }
+  /* No cinema bars, no radial gradient — uniform dark background only. */
 
   /* The rotate prompt — centered, retro-cinematic */
   .rotate-prompt {
