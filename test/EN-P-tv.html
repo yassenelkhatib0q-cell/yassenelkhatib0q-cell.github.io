@@ -471,6 +471,10 @@
   body.mobile3d .tv-nav-arrow.left  { left: 8px; }
   body.mobile3d .tv-nav-arrow.right { right: 8px; }
   body.mobile3d .tv-nav-arrow:active { background: #e8dcc4; transform: translateY(-50%) scale(0.9); }
+  /* Mobile-3d: kill ALL touch-driven scrolling. Arrows are the only nav.
+     touch-action:none disables pan/pinch but lets taps + programmatic
+     scrollBy() (used by the arrow handlers) keep working. */
+  body.mobile3d, body.mobile3d html { touch-action: none !important; overscroll-behavior: none !important; }
   /* Mobile-3d modal description text — was clamp(22px,2cqw,30px) for li and
      clamp(36px,3.5cqw,56px) for h3. Rendered through fixed-canvas scale (~0.36
      on landscape phone) those were too big in the cramped popup. */
