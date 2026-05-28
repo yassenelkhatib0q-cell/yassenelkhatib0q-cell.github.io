@@ -320,10 +320,31 @@
   #hint-tv-screen[dir="ltr"] { font-size: 14px; letter-spacing: 0.08em; }
 
   /* ============================================================================
-     MOBILE-3D scoped tweaks. Hint pill resize + reposition REMOVED per Yassen
-     ('put them back') — hints now render at original desktop size + position on
-     mobile too. Cinema bars hide + hero overlay shrink kept.
+     MOBILE-3D scoped tweaks. Hint pills SHRUNK (font + padding only, no transform
+     change so anchor position stays identical to desktop). Cinema bars hide +
+     hero overlay shrink kept.
      ============================================================================ */
+  .landscape-mobile .hint {
+    font-size: 11px;
+    padding: 5px 12px;
+    letter-spacing: 0.02em;
+    border-width: 1px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+  .landscape-mobile .hint[dir="ltr"] {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .landscape-mobile .hint::after {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 7px;
+  }
+  .landscape-mobile #hint-tv-screen,
+  .landscape-mobile #hint-tv-screen[dir="ltr"] {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
   /* Cinema bars (12vh top/bottom) eat almost all the screen on a landscape phone
      and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
   .landscape-mobile .cinema-bar { display: none !important; }
@@ -3451,7 +3472,8 @@ function updateHints() {
   // the pill onto the TV screen — so on mobile-3d, drop the X offset and the
   // Y lift so the pill sits directly over the projected radio position.
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
-  _set(hintRadio, radioButton, _isLM ? -60 : -180, _radioSeen, _isLM ? 0 : 90);
+  // Mobile-3d radio: dy=-90 (was -60, raised 30px per Yassen). Desktop -180.
+  _set(hintRadio, radioButton, _isLM ? -90 : -180, _radioSeen, _isLM ? 0 : 90);
   _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
 }
 
