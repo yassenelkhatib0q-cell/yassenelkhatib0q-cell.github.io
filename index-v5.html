@@ -994,10 +994,10 @@ const canvas = document.getElementById('gl');
 // come out BLACK because the OS captures after the canvas has cleared. Costs a
 // small amount of GPU memory but matters more than a few % perf on a portfolio.
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
-// Mobile-3d: pin pixel ratio to 1 (was crashing phones with the unicorn tab-OOM
-// page on DPR-3 devices — 4× pixel work was too much). Desktop full quality.
+// Full quality on every device — Yassen reverted the perf cut again. Phone
+// may show the unicorn (tab-OOM) page; if it returns, we'll have to compromise.
 const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
-renderer.setPixelRatio(_isLandscapeMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1041,13 +1041,6 @@ const bloomPass = new UnrealBloomPass(
 );
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
-
-// Mobile-3d: bloom + outline are full-screen post passes. Disabling them on
-// phones is part of the OOM/crash fix. Desktop keeps them.
-if (_isLandscapeMobile) {
-  bloomPass.enabled = false;
-  outlinePass.enabled = false;
-}
 
 /* Software-WebGL detection + FPS-based fallback REMOVED per Yassen's request.
    They auto-disabled bloom+outline and lowered pixel ratio for visitors with
@@ -3436,7 +3429,12 @@ function updateHints() {
     el.style.opacity = '1';
   };
   _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
-  _set(hintRadio, radioButton, -180, _radioSeen, 90);                // radio hint shifted right 90px to sit over the actual visible knob
+  // Radio hint: on desktop +90px X nudge centers the pill over the visible
+  // radio knob. On a landscape phone the camera FOV shifts and that +90 pushes
+  // the pill onto the TV screen — so on mobile-3d, drop the X offset and the
+  // Y lift so the pill sits directly over the projected radio position.
+  const _isLM = document.documentElement.classList.contains('landscape-mobile');
+  _set(hintRadio, radioButton, _isLM ? -60 : -180, _radioSeen, _isLM ? 0 : 90);
   _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
 }
 
@@ -3549,15 +3547,7 @@ function animate() {
   }
   updateHoverGlow();
   renderInkTrail();
-  // On mobile-3d, bloom + outline are disabled, so the composer chain is just
-  // RenderPass + Output — identical to calling renderer.render() directly. The
-  // direct call is also more screenshot-friendly on iOS (composer's intermediate
-  // framebuffers don't always survive native screen capture).
-  if (_isLandscapeMobile) {
-    renderer.render(scene, camera);
-  } else {
-    composer.render();
-  }
+  composer.render();
 }
 animate();
 
