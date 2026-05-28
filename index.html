@@ -2848,11 +2848,19 @@ function updateCameraFromScroll() {
   // 4 viewport heights of scroll covers the full cinematic (camera + CRT transition)
   const camRange = window.innerHeight * 4.0;
   const target = clampN(window.scrollY / camRange, 0, 1);
-  // SMOOTHING KILLED: camera snaps directly to the scroll target every frame.
-  // Trade-off: no render tail (camera stops exactly when wheel events stop), but you may
-  // see camera jitter during trackpad scroll because each wheel event jumps scrollY 1-3px.
-  // To revert: restore the exponential lerp block (see git history before this commit).
-  _smoothScrollProgress = target;
+  // Adaptive smoothing: base rate cranked from 9→30/s so the camera catches up in ~50ms (3 frames)
+  // instead of ~270ms (16 frames). The old slower rate left the camera visibly trailing the user's
+  // scroll input — felt like "lag" even though the main thread was responsive. Keeps the trackpad
+  // jitter-smoothing benefit (still exponential lerp), just tighter response.
+  const gap = Math.abs(target - _smoothScrollProgress);
+  // PERF: trackpad uses faster base rate so the smoothing tail finishes sooner,
+  // reducing the number of frames the renderer must keep working after fingers lift.
+  const baseRate = window._isTrackpadInput ? 60 : 30;
+  const rate = baseRate + Math.min(gap * 200, 30); // mouse 30..60/s, trackpad 60..90/s
+  const factor = 1 - Math.exp(-rate * dt);
+  _smoothScrollProgress += (target - _smoothScrollProgress) * factor;
+  // Snap when very close (avoid endless tiny lerps)
+  if (Math.abs(target - _smoothScrollProgress) < 0.0005) _smoothScrollProgress = target;
   const raw = _smoothScrollProgress;
   scrollProgress = raw;
 
