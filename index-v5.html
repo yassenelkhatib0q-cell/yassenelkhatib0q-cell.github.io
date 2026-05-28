@@ -46,7 +46,10 @@
 </style>
 
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* -webkit-tap-highlight-color: transparent — kills the blue/grey flash that
+     mobile browsers paint over the WHOLE element when you tap it. Without this,
+     tapping anywhere on /mobile-3d/ flashes the entire scene blue for ~300ms. */
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { width:100%; min-height:100%; overflow-x:hidden; background:#0a0710; color:#f3eee8; font-family:'Inter',system-ui,sans-serif; }
   html { height:100%; }
   body { height:auto; }
@@ -2894,7 +2897,7 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260528c';
+const _PF_CACHE_BUST = 'v=20260528d';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
   return base + '?' + _PF_CACHE_BUST;
