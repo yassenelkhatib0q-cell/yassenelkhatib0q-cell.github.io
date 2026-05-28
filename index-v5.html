@@ -2847,7 +2847,14 @@ function attachScrollUpExit(frameElOpt) {
 // Pick the portfolio file matching the current language. Arabic -> index-h-1, English -> EN-P.
 // Dedicated -tv.html variants — no music controls, no back button, no cinema bars
 // (the 3D site has its own). Same content as the originals, just stripped chrome.
-function portfolioSrcForLang(lang) { return (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html'; }
+// Cache-bust the portfolio iframe so phones that previously visited (and cached
+// the old @media-mobile version that flipped the layout vertical) pick up the
+// new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
+const _PF_CACHE_BUST = 'v=20260528b';
+function portfolioSrcForLang(lang) {
+  const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
+  return base + '?' + _PF_CACHE_BUST;
+}
 // LAZY-LOAD PORTFOLIO IFRAMES: only the current-language iframe loads at boot. The other stays
 // empty (no src) until the user actually switches language — saves ~300 MB RAM and ~40% load time.
 // Tradeoff: the FIRST language switch will pause ~1-2s while the second iframe loads.
