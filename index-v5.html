@@ -3578,7 +3578,16 @@ function animate() {
   }
   updateHoverGlow();
   renderInkTrail();
-  composer.render();
+  // On mobile-3d, render DIRECTLY to the canvas (skip composer). Composer renders
+  // through intermediate framebuffers which iOS Safari refuses to capture in
+  // native screenshots — even with preserveDrawingBuffer:true. Bloom + outline
+  // are already disabled on mobile-3d, so the composer chain reduces to just
+  // RenderPass + Output anyway — same visual result, fixes screenshots.
+  if (_isLandscapeMobile) {
+    renderer.render(scene, camera);
+  } else {
+    composer.render();
+  }
 }
 animate();
 
