@@ -659,6 +659,36 @@
 })();
 </script>
 
+<script>
+/* ============================================================================
+   MOBILE-3D SWIPE — convert horizontal finger swipes into vertical page scroll.
+   On a landscape phone the natural cinematic gesture is LEFT/RIGHT (matching the
+   horizontal-reel layout inside the TV), not up/down. This intercepts touchmove,
+   blocks native scrolling, and maps deltaX 1:1 to window.scrollBy(0, deltaX).
+   Active ONLY when ?landscape=1 is in the URL (i.e. /mobile-3d/ entry). Desktop
+   and tablet visitors keep normal scroll.
+   ============================================================================ */
+(function () {
+  if (location.search.indexOf('landscape=1') === -1) return;
+  var lastX = null;
+  document.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { lastX = null; return; }
+    lastX = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches.length !== 1 || lastX == null) return;
+    var x = e.touches[0].clientX;
+    var dx = lastX - x;                       // finger moves LEFT → dx positive → scroll DOWN
+    lastX = x;
+    if (Math.abs(dx) > 0.5) {
+      e.preventDefault();                     // block native vertical scroll
+      window.scrollBy(0, dx);
+    }
+  }, { passive: false });
+  document.addEventListener('touchend', function () { lastX = null; }, { passive: true });
+})();
+</script>
+
 
 <div id="loader">
   <div class="brand">YASSEN</div>
@@ -2864,7 +2894,7 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260528b';
+const _PF_CACHE_BUST = 'v=20260528c';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
   return base + '?' + _PF_CACHE_BUST;

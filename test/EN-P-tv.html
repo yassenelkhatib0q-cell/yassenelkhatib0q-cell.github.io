@@ -636,6 +636,27 @@
   window.addEventListener('resize', layout);
   window.addEventListener('load', layout);
   layout();
+
+  /* MOBILE-3D SWIPE — convert horizontal finger swipes to vertical scroll, which
+     in this file drives the horizontal-reel via targetX = scrollY/scale. Net result:
+     swipe LEFT → reel moves LEFT (natural). Touch-only, so desktop mouse/wheel
+     keeps working unchanged. */
+  let _swipeLastX = null;
+  document.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { _swipeLastX = null; return; }
+    _swipeLastX = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches.length !== 1 || _swipeLastX == null) return;
+    const x = e.touches[0].clientX;
+    const dx = _swipeLastX - x;
+    _swipeLastX = x;
+    if (Math.abs(dx) > 0.5) {
+      e.preventDefault();
+      window.scrollBy(0, dx);
+    }
+  }, { passive: false });
+  document.addEventListener('touchend', function () { _swipeLastX = null; }, { passive: true });
 })();
 </script>
 
