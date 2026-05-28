@@ -1055,11 +1055,10 @@ const canvas = document.getElementById('gl');
 // come out BLACK because the OS captures after the canvas has cleared. Costs a
 // small amount of GPU memory but matters more than a few % perf on a portfolio.
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
-// Pixel ratio: full quality on desktop/tablet, but on mobile-3d (/landscape=1)
-// the phone GPU was overheating + frame rate tanked. Pin to 1.0 there to cut
-// pixel work to a quarter on a DPR-3 device.
+// Full quality on every device — Yassen reverted the mobile-3d perf cut.
+// Phone may overheat / drop frames; user accepted that trade.
 const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
-renderer.setPixelRatio(_isLandscapeMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1101,14 +1100,6 @@ const bloomPass = new UnrealBloomPass(
 );
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
-
-// Mobile-3d: bloom + outline are GPU-expensive full-screen post passes. Disable
-// them on phones — keeps the room scene cool and frame rate up. Quality loss is
-// minor (slight halo around moon/lamp); thermal/perf win is large.
-if (_isLandscapeMobile) {
-  bloomPass.enabled = false;
-  outlinePass.enabled = false;
-}
 
 /* Software-WebGL detection + FPS-based fallback REMOVED per Yassen's request.
    They auto-disabled bloom+outline and lowered pixel ratio for visitors with
@@ -3578,16 +3569,7 @@ function animate() {
   }
   updateHoverGlow();
   renderInkTrail();
-  // On mobile-3d, render DIRECTLY to the canvas (skip composer). Composer renders
-  // through intermediate framebuffers which iOS Safari refuses to capture in
-  // native screenshots — even with preserveDrawingBuffer:true. Bloom + outline
-  // are already disabled on mobile-3d, so the composer chain reduces to just
-  // RenderPass + Output anyway — same visual result, fixes screenshots.
-  if (_isLandscapeMobile) {
-    renderer.render(scene, camera);
-  } else {
-    composer.render();
-  }
+  composer.render();
 }
 animate();
 
