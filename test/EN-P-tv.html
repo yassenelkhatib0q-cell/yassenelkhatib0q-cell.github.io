@@ -480,6 +480,10 @@
      on landscape phone) those were too big in the cramped popup. */
   body.mobile3d #modal .m-desc h3 { font-size: clamp(20px, 2.2cqw, 32px) !important; margin-bottom: 1cqh !important; }
   body.mobile3d #modal .m-desc li { font-size: clamp(13px, 1.3cqw, 18px) !important; line-height: 1.45 !important; margin-bottom: 0.8cqh !important; }
+  /* THE ACTUAL description text — every project renders as <p class="m-story">,
+     not <li>. The earlier .m-desc li rule never fired. Target the paragraph too. */
+  body.mobile3d #modal .m-desc .m-story,
+  body.mobile3d #modal .m-desc p { font-size: clamp(13px, 1.3cqw, 18px) !important; line-height: 1.5 !important; }
 </style></head>
 <body>
 
