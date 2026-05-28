@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-baked="1"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Cache busting — deploys appear instantly. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>ياسين الخطيب — محرّر فيديو للأداء (الإصدار العربي)</title>
+<meta name="description" content="ياسين الخطيب — محرّر فيديو للأداء في المحتوى القصير، متخصّص في وسائل التواصل والإعلانات الرقمية. أنتجتُ أكثر من عشرين فيديو لأكثر من خمس علامات.">
+<meta name="author" content="Yassen Elkhatib">
+<meta name="theme-color" content="#EFE2C8">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32">
+<link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
+<link rel="canonical" href="/test/index-h-1.html">
+<link rel="alternate" hreflang="ar" href="/test/index-h-1.html">
+<link rel="alternate" hreflang="en" href="/test/EN-P.html">
+<link rel="alternate" hreflang="x-default" href="/test/EN-P.html">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="ياسين الخطيب — محرّر فيديو">
+<meta property="og:description" content="محرّر فيديو للأداء في المحتوى القصير.">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"ياسين الخطيب","alternateName":"Yassen Elkhatib","jobTitle":"محرّر فيديو","sameAs":["https://behance.net/Yassen-El-Khatib","https://linkedin.com/in/yassen-el-khatib"]}</script>
+<link href="/vendor/fonts/fonts-h1.css" rel="stylesheet">
+<script src="/vendor/gsap.min.js" defer></script>
+<style>
+  /* ─── Cinema bars + music controls (added for the selector-page entry path) ─── */
+  .yx-cinema-bar {
+    position: fixed; left: 0; right: 0;
+    height: clamp(48px, 9cqh, 110px);
+    background: #0a0710;
+    z-index: 50;
+    pointer-events: none;
+  }
+  .yx-cinema-bar.top    { top: 0;    box-shadow: 0 8px 22px rgba(0,0,0,.4); }
+  .yx-cinema-bar.bottom { bottom: 0; box-shadow: 0 -8px 22px rgba(0,0,0,.4); }
+  .yx-music-controls {
+    position: fixed;
+    top: clamp(48px, 9cqh, 110px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: clamp(8px, 1cqw, 14px);
+    z-index: 51;
+  }
+  .yx-music-controls button,
+  .yx-music-controls > a {
+    width:  clamp(42px, 4.2cqw, 60px);
+    height: clamp(42px, 4.2cqw, 60px);
+    border-radius: 50%;
+    border: 1.5px solid rgba(232,220,196,.4);
+    background: rgba(10,7,16,.92);
+    color: #e8dcc4;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .2s, border-color .2s, color .2s;
+    box-shadow: 0 6px 18px rgba(0,0,0,.55);
+    padding: 0;
+    text-decoration: none;
+  }
+  .yx-music-controls button:hover,
+  .yx-music-controls > a:hover {
+    background: #e8dcc4; color: #0a0710;
+    transform: translateY(-3px);
+    border-color: rgba(232,220,196,.7);
+  }
+  .yx-music-controls button:active,
+  .yx-music-controls > a:active { transform: translateY(-1px) scale(.96); }
+  .yx-music-controls svg { width: 52%; height: 52%; }
+  /* Small visual gap between the "go back" button and the music-control pair.
+     RTL: the back button is still the leftmost VISUAL position in the row;
+     since AR is RTL, give it the inverse margin so the layout still feels balanced. */
+  .yx-music-controls > a.yx-back-btn { margin-right: clamp(6px, 0.8cqw, 14px); }
+  [dir="rtl"] .yx-music-controls > a.yx-back-btn { margin-right: 0; margin-left: clamp(6px, 0.8cqw, 14px); }
+  .yx-music-controls button.playing .ic-play  { display: none; }
+  .yx-music-controls button:not(.playing) .ic-pause { display: none; }
+  /* Preview mode: hide everything that would imply interaction, freeze the page,
+     auto-scroll only. Triggered by ?preview=1 in URL (used by the selector iframes). */
+  html.yx-preview .yx-cinema-bar,
+  html.yx-preview .yx-music-controls { display: none !important; }
+  html.yx-preview, html.yx-preview body { pointer-events: none !important; }
+  /* In-TV mode — when the 3D site loads this portfolio inside the CRT iframe
+     with ?inTV=1, hide the back/music/switch controls AND the portfolio's own
+     cinema bars (the 3D site has its own; doubling them looks bad). */
+  html.yx-in-tv .yx-music-controls,
+  html.yx-in-tv .yx-cinema-bar { display: none !important; }
+  @font-face{ font-family: 'Panorama'; src: url('../assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display: swap; }
+  :root{
+    --paper: #e7dcc2; --paper2:#ddd0b2; --ink: #1a1510; --ink-soft: #3a3026;
+    --accent: #1f6f6b; --stamp: #9c3a2c; --line: rgba(26,21,16,.28);
+    --fs-body: 1.042cqw;
+  }
+  *{margin: 0;padding: 0;box-sizing: border-box;}
+  html{ scroll-behavior: smooth; }
+  html,body{ overflow-x: clip; }   /* clip (not hidden) so position:sticky keeps working */
+  body{ background: var(--paper); color: var(--ink); font-family: 'Amiri',serif; font-size: var(--fs-body); line-height: 1.8; }
+  body::before{ content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.10'/></svg>");
+    mix-blend-mode: multiply; opacity: .5; }
+  body::after{ content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: radial-gradient(var(--ink) .5px, transparent .6px); background-size: 0.208cqw 0.208cqw; opacity: .05; }
+  .rough{ filter: url(#inkrough); }
+
+  /* ===== horizontal reel driven by vertical scroll (Figma-style smooth motion) ===== */
+  #track{ position: relative; }                       /* tall spacer; height set by JS */
+  #stage{ position: sticky; top: 0; height: 100vh; overflow: hidden; z-index: 1; }
+  #reel{ display: flex; flex-direction: row; height: 100%; direction: ltr; will-change: transform; }
+  /* ===== FIXED-CANVAS (desktop only) — Option A. See EN portfolio for full notes. ===== */
+  @media (min-width: 769px) {
+    html, body { background: #0a0710 !important; }
+    body { overflow-x: hidden; }
+    #stage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 1920px;
+      height: 1080px;
+      transform: translate(-50%, -50%) scale(var(--yx-scale, 1));
+      transform-origin: center center;
+      container-type: size;
+      container-name: yxstage;
+    }
+    #reel { height: 1080px; }
+  }
+  /* scrollbar hidden (scrolling still works) */
+  html,body{ scrollbar-width: none; -ms-overflow-style: none; }
+  ::-webkit-scrollbar{ width: 0; height: 0; display: none; }
+  .panel{ flex: 0 0 auto; height: 100cqh; padding: 3.646cqw 2.917cqw; display: flex; flex-direction: column; justify-content: center;
+          direction: rtl; position: relative; overflow: hidden;   /* clip layers/images to the panel — no bleeding past the page */
+          background: #d8cdb2 url('assets/poster-bg.jpg') center / cover no-repeat; }   /* each panel its own copy */
+
+  /* vertical "film leader" section title */
+  .leader{ flex: 0 0 6.771cqw; background: var(--ink); color: var(--paper); display: flex; align-items: center; justify-content: center; }
+  .leader span{ writing-mode: vertical-rl; font-family: 'Panorama',serif; font-size: clamp(35px, 3.333cqw, 86px); letter-spacing: .04em; }
+  .leader .n{ writing-mode: horizontal-tb; font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.729cqw, 18px); color: var(--accent); border: 2px solid var(--accent); border-radius: 50%; width: 1.979cqw; height: 3.519cqh; display: flex; align-items: center; justify-content: center; margin-bottom: 1.296cqh; }
+  .leader .inner{ display: flex; flex-direction: column; align-items: center; gap: 0.729cqw; }
+
+  /* ===== poster panel (landscape) ===== */
+  .poster{ width: 100.000cqw; max-width: 100.000cqw; flex-direction: row; align-items: center; gap: 2.604cqw; border-left: none; padding: 3.646cqw 6cqw; }
+  .panel::before{ content: ""; position: absolute; inset: 0.833cqw; border: 2px solid var(--ink); box-shadow: inset 0 0 0 1px var(--paper), inset 0 0 0 4px var(--ink); pointer-events: none; opacity: .85; z-index: 1; }
+  .filmstrip{ display: flex; flex-direction: row; gap: 0; border: 3px solid var(--ink); background: var(--ink); transform: rotate(-1.2deg); box-shadow: 0.312cqw 0.417cqw 0 rgba(26,21,16,.25); }
+  .filmstrip .col{ display: flex; flex-direction: column; }
+  .perfs-v{ display: flex; flex-direction: column; justify-content: space-between; padding: 0.417cqw 0.208cqw; gap: 0.521cqw; }
+  .perfs-v span{ width: 0.365cqw; height: 1.019cqh; background: var(--paper); border-radius: 1px; }
+  .frame{ display: block; width: 11.979cqw; aspect-ratio: 16/10; position: relative; border: 2px solid var(--paper); overflow: hidden; background: var(--paper2); }
+  .frame img{ width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.45) contrast(1.15) brightness(.92); }
+  .frame::after{ content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--ink) 30%, transparent 31%); background-size: 0.156cqw 0.156cqw; mix-blend-mode: multiply; opacity: .35; }
+  .frame .cap{ position: absolute; bottom: 0; right: 0; left: 0; background: rgba(26,21,16,.82); color: var(--paper); font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.625cqw, 16px); padding: 0.208cqw 0.417cqw; }
+  .frame.placeholder{ display: flex; align-items: center; justify-content: center; color: var(--ink-soft); font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); }
+
+  .poster-right{ text-align: right; max-width: 92%; }
+  .credits{ font-size: clamp(11px, 1.042cqw, 27px); line-height: 1.6; color: var(--ink-soft); border-right: 3px solid var(--ink); padding-right: 0.729cqw; margin-bottom: 2.037cqh; }
+  .credits b{ color: var(--ink); }
+  .role-tag{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); letter-spacing: 0.104cqw; color: var(--accent); display: block; margin-bottom: 0.370cqh; }
+  .hero-name{ display: flex; flex-wrap: wrap; gap: .3em; align-items: flex-end; }   /* container: two word-boxes */
+  .hero-word{ font-family: 'Panorama',serif; font-size: clamp(70px,9cqw,150px); line-height: 1.3; padding-bottom: .18em; white-space: nowrap; font-feature-settings: "swsh" 1,"calt" 1,"dlig" 1,"liga" 1;
+    /* strong black ink + sparse WHITE grain speckles (printed look) */
+    filter: url(#inkrough);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='150' height='150'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='discrete' tableValues='0 0 0 0 0 0 0 1'/><feFuncG type='discrete' tableValues='0 0 0 0 0 0 0 1'/><feFuncB type='discrete' tableValues='0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>"), linear-gradient(var(--ink),var(--ink));
+    background-size: 7.812cqw 7.812cqw, 100% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    background-blend-mode: screen; }
+  .hero-role{ font-family: 'Panorama','Reem Kufi',sans-serif; font-weight: 700; font-size: clamp(22px,2.6cqw,34px); margin-top: 0.741cqh; }
+  .hero-sub{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.729cqw, 18px); letter-spacing: 0.104cqw; color: var(--ink-soft); margin-top: 0.370cqh; }
+  .tagline{ font-style: italic; font-size: clamp(22px,2.6cqw,30px); margin-top: 1.667cqh; max-width: 24ch; border-top: 1px solid var(--line); padding-top: 1.296cqh; }
+  /* unify the whole poster on NT Panorama Naskh (one font); kill letter-spacing so Arabic stays joined */
+  .poster .role-tag, .poster .credits, .poster .credits b, .poster .hero-sub, .poster .tagline{
+    font-family: 'Panorama', serif;
+    letter-spacing: normal;
+  }
+  .poster .role-tag{ font-size: clamp(8px, 0.781cqw, 20px); }
+  .poster .hero-sub{ font-size: clamp(9px, 0.885cqw, 22px); }
+  .stamp{ position: absolute; top: 4.815cqh; left: 6cqw; width: 7.604cqw; height: 13.519cqh; border-radius: 50%; border: 2px solid var(--paper); background: var(--stamp); color: var(--paper); display: flex; align-items: center; justify-content: center; text-align: center; font-family: 'Cairo',sans-serif; transform: rotate(-8deg); opacity: 1; box-shadow: 0 0 0 3px var(--stamp), 4px 5px 0 rgba(26,21,16,.28); z-index: 4; }
+  .stamp::before{ content: "●"; position: absolute; top: 1.296cqh; font-size: clamp(8px, 0.469cqw, 12px); color: var(--paper); opacity: .85; }   /* tiny "live" dot */
+  .stamp b{ font-size: clamp(11px, 1.094cqw, 28px); font-weight: 900; display: block; line-height: 1.15; }
+  .stamp small{ font-size: clamp(8px, 0.573cqw, 14px); opacity: .92; }
+
+  /* ===== content panels ===== */
+  .panel h2.t{ font-family: 'Panorama',serif; font-size: clamp(46px,6cqw,86px); line-height: 1; margin-bottom: 2.222cqh; }
+  .about{ width: min(42.708cqw,92cqw); }
+  .about p{ font-size: clamp(22px,2.2cqw,30px); line-height: 1.75; }
+  .stats{ display: flex; flex-wrap: wrap; gap: 1.771cqw; margin-top: 2.778cqh; }
+  .stats div{ border-top: 3px solid var(--ink); padding-top: 0.741cqh; }
+  .stats b{ font-family: 'Panorama',serif; font-size: clamp(25px, 2.396cqw, 62px); display: block; line-height: 1; }
+  .stats span{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.729cqw, 18px); color: var(--ink-soft); }
+
+  .card{ width: 19.792cqw; justify-content: center; }
+  .card .meta{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); letter-spacing: 1px; color: var(--accent); margin-bottom: 0.556cqh; }
+  .card h3{ font-family: 'Reem Kufi',sans-serif; font-weight: 700; font-size: clamp(15px, 1.458cqw, 37px); margin-bottom: 0.556cqh; }
+  .card .when{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); color: var(--ink-soft); margin-bottom: 1.296cqh; }
+  .card ul{ list-style: none; }
+  .card li{ font-size: clamp(11px, 1.042cqw, 27px); line-height: 1.7; padding-right: 1.042cqw; position: relative; margin-bottom: 0.926cqh; color: var(--ink-soft); }
+  .card li::before{ content: "◾"; position: absolute; right: 0; color: var(--accent); font-size: clamp(8px, 0.521cqw, 13px); top: 0.926cqh; }
+
+  .pcard{ width: 20.833cqw; justify-content: center; text-decoration: none; color: var(--ink); }
+  .pcard .ph{ aspect-ratio: 16/9; position: relative; overflow: hidden; background: var(--ink); border: 2px solid var(--ink); box-shadow: 0.260cqw 0.312cqw 0 rgba(26,21,16,.18); }
+  .pcard .ph img{ width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.45) contrast(1.15) brightness(.92); }
+  .pcard .ph::after{ content: ""; position: absolute; inset: 0; background-image: radial-gradient(var(--ink) 30%, transparent 31%); background-size: 0.156cqw 0.156cqw; mix-blend-mode: multiply; opacity: .32; }
+  .pcard .ph.placeholder{ display: flex; align-items: center; justify-content: center; color: var(--paper2); font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.781cqw, 20px); }
+  .pcard .play{ position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .pcard .play span{ width: 3.021cqw; height: 5.370cqh; border-radius: 50%; background: rgba(231,220,194,.92); display: flex; align-items: center; justify-content: center; font-size: clamp(12px, 1.146cqw, 29px); padding-right: 0.208cqw; }
+  .pcard .meta{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); color: var(--accent); letter-spacing: 1px; margin-top: 1.296cqh; }
+  .pcard h3{ font-family: 'Reem Kufi',sans-serif; font-size: clamp(14px, 1.354cqw, 35px); margin: 0.260cqw 0 0.417cqw; }
+  .pcard p{ font-size: clamp(10px, 0.990cqw, 25px); line-height: 1.7; color: var(--ink-soft); }
+
+  .skills{ width: min(39.583cqw,92cqw); }
+  .skill-row{ margin-bottom: 2.037cqh; }
+  .skill-row h4{ font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.729cqw, 18px); letter-spacing: 0.104cqw; color: var(--accent); border-bottom: 2px solid var(--ink); padding-bottom: 0.556cqh; margin-bottom: 0.741cqh; }
+  .skill-row p{ font-size: clamp(12px, 1.146cqw, 29px); line-height: 1.8; }
+
+  .contact{ width: 100.000cqw; max-width: 100.000cqw; align-items: center; text-align: center; }
+  /* RESPONSIVE: margin/padding/font-size now scale linearly with viewport (1920 baseline).
+     At 1024 the rows used to look more spread because fixed px sizes took a bigger viewport
+     proportion. Now everything scales together with the design. */
+  .contact .big{ font-family: 'Panorama',serif; font-size: clamp(48px,8cqw,110px); margin-bottom: 2.037cqh; }
+  .contact .rows{ width: min(31.250cqw,90cqw); font-family: 'Cairo',sans-serif; font-size: clamp(11px, 19px, 28px); font-weight: 700; }   /* all contact rows bold */
+  .contact .r{ display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 0.521cqw 0.208cqw; }
+  .contact .r span:first-child{ color: var(--ink-soft); }
+  .contact a{ color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); }
+
+  /* fixed UI */
+  #topbar{ position: fixed; top: 0; right: 0; left: 0; z-index: 30; display: flex; justify-content: space-between; align-items: center;
+    padding: 0.833cqw 1.875cqw; background: rgba(231,220,194,.78); border-bottom: 1px solid rgba(26,21,16,.22); backdrop-filter: blur(0.417cqw); -webkit-backdrop-filter: blur(0.417cqw); }
+  #topbar .brand{ font-family: 'Panorama',serif; font-size: clamp(16px, 1.562cqw, 40px); line-height: 1; }
+  #topbar .links{ display: flex; gap: 1.562cqw; font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.833cqw, 21px); font-weight: 600; }
+  #topbar a{ color: var(--ink); text-decoration: none; cursor: pointer; position: relative; padding-bottom: 0.463cqh; transition: color .25s; }
+  #topbar a::after{ content: ""; position: absolute; right: 0; bottom: 0; height: 0.185cqh; width: 0; background: var(--stamp); transition: width .3s ease; }
+  #topbar a:hover{ color: var(--stamp); }
+  #topbar a:hover::after{ width: 100%; }
+  #hint{ position: fixed; bottom: 1.667cqh; right: 1.458cqw; z-index: 30; font-family: 'Cairo',sans-serif; font-size: clamp(8px, 0.677cqw, 17px); letter-spacing: 0.104cqw; color: var(--ink-soft); background: rgba(231,220,194,.8); padding: 0.312cqw 0.625cqw; border: 1px solid var(--line); animation: bob 2s ease-in-out infinite; }
+  @keyframes bob{ 0%,100%{transform: translateX(0);opacity: .7;} 50%{transform: translateX(-0.312cqw);opacity: 1;} }
+  #prog{ position: fixed; bottom: 0; right: 0; height: 0.370cqh; background: var(--accent); z-index: 31; width: 0; }
+
+  /* ===== first panel: your paper image behind the text ===== */
+  .poster{
+    background: #d8cdb2 url('assets/poster-bg.jpg') center / cover no-repeat;
+  }
+  /* TEST: finer, even paper grain on the first panel (to match notch) */
+  .poster::after{ content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='120' height='120'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23p)' opacity='0.5'/></svg>");
+    background-size: 6.250cqw 6.250cqw; mix-blend-mode: multiply; opacity: .4; }
+  .poster .poster-right, .poster .filmstrip, .poster .stamp{ position: relative; z-index: 2; }  /* text/film stay above the paper */
+
+  /* ===== NT Panorama Naskh for the Arabic CONTENT inside الخبرة / الأعمال / المهارات / التواصل ===== */
+  /* (section titles already use Panorama; Latin labels/links keep their font on purpose) */
+  .card h3, .card li, .card .meta, .card .when,
+  .pcard h3, .pcard p, .pcard .meta,
+  .skill-row p, .skill-row h4,
+  .contact .rows .r span:first-child{
+    font-family: 'Panorama', serif;
+    letter-spacing: normal;          /* labels had letter-spacing — kills Arabic letter-joining */
+  }
+  .card .meta, .pcard .meta, .skill-row h4{ font-size: clamp(8px, 0.781cqw, 20px); }   /* labels a touch bigger in Panorama */
+  .card li, .pcard p, .skill-row p{ line-height: 1.85; }          /* a touch more leading for Panorama */
+
+  /* ===== ported from Figma: global aged texture (foxing + fold), behind all content ===== */
+  .textures{ position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .textures .foxing{ position: absolute; inset: 0; mix-blend-mode: multiply; opacity: .45;
+    background: radial-gradient(circle at 12% 18%, rgba(154,128,89,.18), transparent 22%),
+      radial-gradient(circle at 85% 80%, rgba(154,128,89,.20), transparent 26%),
+      radial-gradient(circle at 50% 50%, transparent 60%, rgba(154,128,89,.16) 100%); }
+  .textures .fold{ position: absolute; top: 50%; left: 0; width: 100%; height: 0.185cqh;
+    background: linear-gradient(to bottom, rgba(255,255,255,.18), rgba(0,0,0,.10)); }
+
+  /* ===== ported from Figma: skills as chips (font/colour unchanged) ===== */
+  .skill-row .chips{ list-style: none; display: flex; flex-wrap: wrap; gap: 0.521cqw; margin-top: 0.370cqh; }
+  .skill-row .chips li{ font-family: 'Panorama',serif; font-size: clamp(9px, 0.938cqw, 24px); color: var(--ink);
+    padding: 0.312cqw 0.729cqw; border: 1.5px solid var(--ink); background: var(--paper);
+    box-shadow: 3px 3px 0 var(--ink); }
+
+  /* ===== ported from Figma: numbered badge on experience cards ===== */
+  .card-num{ position: absolute; top: 2.407cqh; left: 1.354cqw; width: 2.083cqw; height: 3.704cqh; border: 2px solid var(--ink);
+    border-radius: 50%; background: var(--paper); display: flex; align-items: center; justify-content: center;
+    font-family: 'Panorama',serif; font-size: clamp(11px, 1.042cqw, 27px); color: var(--ink); z-index: 2; }
+
+  /* ===== sections: title on TOP (Figma layout), content below ===== */
+  .panel.sec{ justify-content: flex-start; padding-top: 11.111cqh; align-items: stretch; }
+  .panel.sec > *{ width: 100%; max-width: 61.458cqw; margin-inline: auto; }   /* center text content within the full-screen panel */
+  /* RESPONSIVE FIX: at wider viewports (2K, 4K) the logos panels need to span wider than the 1180px
+     text cap above, otherwise flex shrinks the logos and they overlap. Let .logos scale with viewport. */
+  .panel.exp > .logos, .panel.skills > .logos { max-width: 61.458cqw; }
+  .panel.about, .panel.exp, .panel.skills{ width: 100.000cqw; max-width: 100.000cqw; }   /* each section fills the screen */
+
+  /* ===== logo grid (الخبرة + المهارات) =====
+     RESPONSIVE: all sizes wrapped in calc() with min(1, 100cqw/1920) so they shrink linearly
+     with viewport down to the design baseline. At 1920 = full size; at 1366 = ~71%; capped at 1
+     so 4K screens keep design size. Without this, logos stayed at design width while their
+     inline translate offsets scaled — making them overlap on smaller screens. */
+  .logos{ display: flex; flex-wrap: wrap; gap: 2.292cqw; align-items: center; }
+  /* الخبرة: all logos in ONE horizontal row */
+  #work .logos{ flex-wrap: nowrap; gap: 0.833cqw; justify-content: center; }
+  #work .logo-tile{ width: 10.677cqw; height: 14.352cqh; }
+  /* NO box — just the logo, big, printed into the paper (multiply blend over the paper texture) */
+  .logo-tile{ position: relative; width: 11.198cqw; height: 15.278cqh; background: transparent; border: none; padding: 0; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform .25s ease;
+    mix-blend-mode: multiply; }   /* blend on the tile (not the img) so the hover transform doesn't change the backdrop -> no colour shift */
+  .logo-tile img{ width: 86%; height: 86%; object-fit: contain;   /* prints onto the paper */
+    filter: grayscale(1) sepia(.55) brightness(.62) contrast(1.05); opacity: .9; }      /* one ink tone — no bright brand colors */
+  .logo-tile .logo-fallback{ font-family: 'Panorama',serif; font-size: clamp(13px, 1.250cqw, 32px); color: var(--ink); text-align: center; padding: 0 0.521cqw; line-height: 1.2; }
+  .logo-tile.hasimg .logo-fallback{ display: none; }                       /* real logo loaded -> hide the text label */
+  .logo-tile:not(.hasimg){ border: 1px dashed rgba(26,21,16,.3); }         /* faint outline only for empty placeholders */
+  .logo-tile:hover{ transform: scale(1.16) translateY(-0.417cqw); }  /* grow + lift, but DON'T jump above the grain (no z-index bump) */
+  .baked-layer{ pointer-events: none; contain: paint; will-change: auto; }
+  html.tv-transitioning .baked-layer{ mix-blend-mode: normal !important; opacity: 0 !important; }
+  .logos.big .logo-tile{ width: 13.021cqw; height: 17.593cqh; }
+
+  /* ===== section head: number badge + big title (matches first index, clear & large) ===== */
+  .sec-head{ display: flex; align-items: center; gap: 0.938cqw; margin-bottom: 2.778cqh; }
+  .sec-head .t{ margin: 0; }
+  .panel.sec > .sec-head{ margin-bottom: 3.148cqh; }
+
+  /* ===== experience modal — full-screen, animated (GSAP) ===== */
+  #modal{ position: fixed; inset: 0; z-index: 60; display: none; }
+  #modal.open{ display: block; }
+  #modal .backdrop{ position: absolute; inset: 0; background: rgba(26,21,16,.6); opacity: 0; }
+  #modal .box{ position: absolute; inset: 0; z-index: 1; direction: ltr; background: var(--paper);
+    display: grid; grid-template-columns: 1fr 1fr; opacity: 0; font-family: 'Panorama',serif; }
+  #modal .box, #modal .box *{ font-family: 'Panorama',serif !important; }   /* all outer-panel text = Panorama */
+  #modal .close{ position: fixed; bottom: 12.037cqh; left: 50%; transform: translateX(-50%); z-index: 70; opacity: 1; padding: 0.625cqw 2.083cqw; border: 2px solid var(--ink); border-radius: 52.031cqw;
+    background: var(--paper); font-family: 'Panorama',serif; font-size: clamp(13px, 1.250cqw, 32px); line-height: 1; cursor: pointer; color: var(--ink); white-space: nowrap; transition: background .2s,color .2s; box-shadow: 0 0.312cqw 1.562cqw rgba(0,0,0,.35); }
+  #modal .close:hover{ background: var(--ink); color: var(--paper); }
+  #modal .m-left{ direction: rtl; padding: 5.000cqw 3.125cqw 3.125cqw; text-align: right; display: flex; flex-direction: column; gap: 1.354cqw; overflow: auto; }
+  #modal #m-logoslot{ width: 9.375cqw; height: 12.500cqh; flex: 0 0 auto; transform: translateY(2.083cqw); }   /* the clicked logo flies & lands here; nudged down (translate = no reflow) */
+  #modal .m-desc h3{ font-family: 'Panorama',serif; font-size: clamp(40px,4cqw,60px); color: var(--ink); margin-bottom: 2.037cqh; line-height: 1.1; }
+  #modal .m-desc ul{ list-style: none; }
+  #modal .m-desc li{ font-family: 'Panorama',serif; font-size: clamp(24px,2.2cqw,32px); line-height: 1.8; color: var(--ink); position: relative; padding-right: 1.458cqw; margin-bottom: 1.481cqh; }
+  #modal .m-desc li::before{ content: "◾"; position: absolute; right: 0; top: 1.389cqh; font-size: clamp(8px, 0.625cqw, 16px); color: var(--accent); }
+  #modal .m-story{ font-family: 'Panorama',serif; font-size: clamp(22px,2.1cqw,30px); line-height: 2; color: var(--ink); word-spacing: 0.22em; }   /* more line + word spacing */
+  #modal.lay-jade .m-story{ font-size: clamp(17px,1.85cqw,24px); line-height: 1.6; max-width: min(48.958cqw,92%); margin-inline: auto; word-spacing: 0.28em; }   /* bigger story text + wide box + looser word spacing */
+  #modal .m-right{ border-left: 3px solid var(--ink); background: var(--paper); position: relative; }   /* media box — same paper as the text side */
+  #modal .m-right::after{ content: ""; position: absolute; inset: 2.500cqw; border: 0.104cqw dashed rgba(26,21,16,.18); }   /* intentional placeholder frame */ /* empty box for media (you'll fill it) */
+  #modal .m-right.has-video::after{ display: none; }   /* hide the dashed placeholder once a video is in */
+  #modal .m-video{ position: absolute; inset: 0; overflow: hidden; }
+  #modal .m-video video{ width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.9) saturate(1.35) brightness(.8) contrast(1.18); }   /* brown vintage tint (all videos) */
+  #modal .m-video .m-grain{ position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='160' height='160'><filter id='mg'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23mg)' opacity='0.55'/></svg>"), radial-gradient(var(--ink) .5px, transparent .6px);
+    background-size: 6.250cqw 6.250cqw, 0.156cqw 0.156cqw; mix-blend-mode: multiply; opacity: .92; }   /* heavy grain over the video (all) */
+  /* ===== ALL video logos: video LEFT, text + logo RIGHT, brown wash ===== */
+  #modal.vleft .box{ direction: rtl; }                                  /* swap: text+logo -> right, video -> left */
+  #modal .m-video::after{ content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #4a2f17; mix-blend-mode: multiply; opacity: .5; }   /* brown wash (all) */
+  /* ===== ALX: video fills the LEFT half, text on the right (back-button stays bottom-centre, default) ===== */
+  /* ===== JADE: video fills the TOP half, logo + text centred below, back-button UNDER the text ===== */
+  #modal.lay-jade .box{ grid-template-columns: 1fr; grid-template-rows: 0.95fr 1.05fr; direction: rtl; }   /* video box a bit taller (extends down); content keeps the rest */
+  #modal.lay-jade .m-right{ grid-row: 1; grid-column: 1; border-left: none; border-bottom: 3px solid var(--ink); background: #1a1510; }   /* dark bars around the fitted video */
+  #modal.lay-jade .m-video video{ object-fit: cover; }   /* FILL the top half (cropped to fit) */
+  #modal.lay-jade .m-left{ grid-row: 2; grid-column: 1; text-align: center; align-items: center; justify-content: center; gap: 0.417cqw; padding: 0.625cqw 2.604cqw 4.583cqw; overflow: hidden; }   /* fit, NO scroll, clear the button */
+  #modal.lay-jade #m-logoslot{ width: 8.333cqw; height: 11.111cqh; transform: none; }       /* bigger logo; Jade keeps logo at its place (no nudge) */
+  #modal.lay-jade .m-desc{ text-align: center; }
+  #modal.lay-jade .m-desc h3{ font-size: clamp(16px,1.9cqw,24px); margin-bottom: 0.556cqh; }   /* smaller title */
+  #modal.lay-jade .m-desc ul{ display: inline-block; text-align: right; }
+  #modal.lay-jade .m-desc li{ font-size: clamp(14px,1.5cqw,18px); line-height: 1.4; margin-bottom: 0.556cqh; padding-right: 1.146cqw; }   /* smaller bullets */
+  #modal.lay-jade .m-desc li::before{ top: 0.833cqh; }
+  #modal.lay-jade .close{ top: 50%; bottom: auto; left: 50%; transform: translate(-50%,-50%); }   /* Jade: button centred on the page */
+
+  /* ===== old-TV "back to the start" button (fixed; grain sits ON TOP of it) ===== */
+  #tv-home{ position: fixed; bottom: 2.407cqh; left: 1.354cqw; z-index: 40; width: 3.229cqw; height: 5.741cqh; display: grid; place-items: center;
+    background: var(--paper); color: var(--ink); border: 2px solid var(--ink); border-radius: 0.729cqw; cursor: pointer; overflow: hidden;
+    box-shadow: 0 0.312cqw 1.146cqw rgba(0,0,0,.3); transition: transform .25s ease, background .2s, color .2s; }
+  #tv-home:hover{ transform: translateY(-0.208cqw) scale(1.06); background: var(--ink); color: var(--paper); }
+  #tv-home svg{ position: relative; z-index: 1; }
+  #tv-home::after{ content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: multiply; opacity: .5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http: //www.w3.org/2000/svg' width='120' height='120'><filter id='tvg'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23tvg)' opacity='0.55'/></svg>");
+    background-size: 4.688cqw 4.688cqw; }
+
+  /* ===== ported from Figma: real mobile layout (vertical stack) ===== */
+  @media(max-width:767px){
+    #stage{ position:static; height:auto; overflow:visible; }
+    #reel{ flex-direction:column; height:auto; transform:none !important; }
+    .panel{ width:100% !important; max-width:100% !important; height:auto; min-height:auto;
+      padding:54px 24px; border-left:none; border-bottom:2px solid var(--ink); }
+    .poster{ flex-direction:column; gap:28px; padding:90px 24px 54px; }
+    .poster-right{ max-width:100%; }
+    .filmstrip{ flex-direction:row; }
+    .leader{ flex:0 0 auto; width:100%; height:64px; border-left:none; border-bottom:2px solid var(--ink); }
+    .leader .inner{ flex-direction:row; gap:12px; }
+    .leader span{ writing-mode:horizontal-tb; font-size:38px; letter-spacing:0; }
+    .leader .n{ margin-bottom:0; }
+    .card-num{ top:18px; left:18px; }
+    #hint{ display:none; }
+    #topbar .links{ display:none; }
+    #modal .box{ grid-template-columns:1fr; }
+    #modal .m-right{ border-left:none; border-top:3px solid var(--ink); min-height:160px; }
+  }
+</style>
+<style></style><style></style><style></style><style></style><style></style><style>
+  /* WCAG: visible skip link for keyboard users */
+  .skip-link{position: absolute;left: -520.781cqw;top: 0;background: var(--ink,#5A3520);color: var(--paper,#fff);padding: 0.521cqw 0.938cqw;z-index: 10000;border-radius: 0 0 0.312cqw 0;text-decoration: none;font-family: system-ui,sans-serif;font-size: clamp(8px, 0.729cqw, 18px)}
+  .skip-link:focus{left: 0}
+  /* Mobile: give tap feedback when hover isn't available */
+  @media (hover:none){
+    .logo-tile:active{transform:scale(1.16) translateY(-4px);transition:transform .12s ease}
+  }
+
+  /* ============================================================================
+     MOBILE OVERRIDES (≤ 768px) — convert the horizontal-reel cinematic into a
+     clean vertical scroll. RTL is preserved — the page still reads right-to-left,
+     but layouts stack vertically (single column) so content actually fits the
+     phone width.
+     ============================================================================ */
+  @media (max-width: 768px) {
+    html, body {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100dvh !important;
+    }
+    #reel {
+      flex-direction: column !important;
+      height: auto !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+    #track {
+      height: auto !important;
+      overflow: visible !important;
+    }
+    .panel {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      padding: 70px 18px 36px !important;
+    }
+    .panel [style*="translate"],
+    .panel [style*="transform: scale"] {
+      translate: 0 !important;
+      transform: none !important;
+    }
+    .hero-word {
+      font-size: clamp(42px, 13cqw, 80px) !important;
+      white-space: normal !important;
+      line-height: 1.1 !important;
+      display: block !important;
+      text-align: center !important;
+      margin: 8px 0 !important;
+    }
+    .hero-role, .hero-sub, .tagline, .role-tag {
+      text-align: center !important;
+    }
+    .panel h2.t, .sec-head h2 {
+      font-size: clamp(32px, 10cqw, 56px) !important;
+      text-align: center !important;
+      line-height: 1.1 !important;
+    }
+    .leader { display: none !important; }
+    .frame {
+      width: 100% !important;
+      aspect-ratio: 16 / 9 !important;
+      margin: 0 0 14px !important;
+    }
+    .contact .rows {
+      width: 100% !important;
+      max-width: 100% !important;
+      font-size: 13px !important;
+    }
+    .contact .r {
+      flex-direction: column !important;
+      align-items: flex-end !important; /* RTL: align to right */
+      padding: 10px 0 !important;
+    }
+    .skill-row, .stats {
+      grid-template-columns: 1fr !important;
+      display: grid !important;
+      gap: 12px !important;
+    }
+    .yx-cinema-bar { height: 52px !important; }
+    .yx-music-controls { top: 52px !important; gap: 8px !important; }
+    .yx-music-controls button,
+    .yx-music-controls > a {
+      width: 38px !important;
+      height: 38px !important;
+    }
+    #topbar {
+      padding: 10px 14px !important;
+      flex-wrap: wrap !important;
+    }
+    .baked-layer {
+      display: none !important;
+    }
+    #modal .close {
+      bottom: auto !important;
+      top: 14px !important;
+      transform: translateX(-50%) !important;
+      padding: 8px 24px !important;
+    }
+  }
+</style></head>
+<body style="">
+
+<!-- TV variant: cinema bars + music controls removed because the 3D site (which
+     loads this file inside its CRT iframe) has its own cinema bars / radio. -->
+<audio id="yxAudio" preload="none" style="display:none"></audio>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<button id="tv-home" type="button" aria-label="ابدأ من البداية" title="ابدأ من البداية">
+  <svg viewBox="0 0 30 30" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M10 8 L6 3"></path><path d="M15 8 L19 3"></path>
+    <rect x="3" y="8" width="17" height="15" rx="2"></rect>
+    <rect x="6" y="11" width="11" height="9" rx="1"></rect>
+    <circle cx="23.5" cy="12.5" r="1.2"></circle><circle cx="23.5" cy="16.5" r="1.2"></circle>
+    <path d="M6 23 L4 27 M17 23 L19 27"></path>
+  </svg>
+</button>
+<svg width="0" height="0" style="position:absolute"><filter id="inkrough"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.014" numOctaves="2" result="n"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="3"></feDisplacementMap></filter></svg>
+
+<div class="textures"><div class="foxing"></div><div class="fold"></div></div>
+
+<!-- HO (topbar) — hidden for now -->
+<div id="topbar" style="display:none">
+  <span class="brand">ياسين</span>
+  <div class="links">
+    <a href="#about" data-go="about">عنّي</a><a href="#work" data-go="work">الخبرة</a><a href="#skills" data-go="skills">المهارات</a><a href="#contact" data-go="contact">تواصل</a>
+  </div>
+</div>
+<div id="hint" style="opacity: 0;" class="">← مرّر للتقدّم ←</div>
+<div id="prog" style="width: 26.0417%;"></div>
+
+<div id="track" style="height: 795.833cqh"><div id="stage"><div id="reel" style="position: relative;">
+
+  <!-- POSTER -->
+  <section class="panel poster id="main" style="">
+    <div class="stamp" data-edit="div · متاحللعمل الآن" data-edit-id="div-·-متاحللعمل-الآن" style="translate: -77.396cqw -6.852cqh; letter-spacing: -0.1em; font-size: clamp(12px, 1.198cqw, 31px); transform: rotate(-16deg); font-family: Panorama" contenteditable="false">هذا الموقع من تصميمي بالكامل</div>
+    <div class="poster-right">
+      <h1 class="hero-name">
+        <span class="hero-word" data-edit="اسم: ياسين" data-edit-id="اسم:-ياسين" style="opacity: 0.95; font-size: clamp(87px, 8.281cqw, 214px); translate: -20.625cqw -9.352cqh; transform: scale(1.45)">يَاسِين</span>
+        <span class="hero-word" data-edit="اسم: الخطيب" data-edit-id="اسم:-الخطيب" style="font-size: clamp(111px, 10.521cqw, 272px); translate: 11.667cqw 3.519cqh">الخَطِيب</span>
+      </h1>
+      <div class="hero-role" data-edit="Hero role" data-edit-id="hero-role" style="letter-spacing: 0.14em; font-size: clamp(17px, 1.667cqw, 43px); translate: -15.990cqw 6.111cqh; transform: scale(1.9)"></div>
+      <div class="hero-sub" data-edit="Hero sub" data-edit-id="hero-sub" style="translate: 18.073cqw -19.259cqh; transform: scale(0.2)"></div>
+      <p class="tagline" data-edit="Tagline" data-edit-id="tagline" style="translate: -24.062cqw -6.574cqh; transform: scale(0.2)"></p>
+    </div>
+  <img src="/assets/baked/layer-1.jpg" class="baked-layer" style="width: 100.000cqw; height: auto; left: 100.833cqw; top: -21.562cqw; opacity: 0.7; mix-blend-mode: multiply; z-index: 120; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 250; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div><img src="/assets/baked/layer-2.png" class="baked-layer" style="width: 12.500cqw; height: auto; left: 51.875cqw; top: 8.802cqw; opacity: 1; mix-blend-mode: multiply; transform: rotate(-25deg); z-index: 100; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"></section>
+
+  <!-- ABOUT -->
+  <section class="panel about sec" id="about" style="">
+    <div class="sec-head"><h2 class="t" data-edit="Title: About" data-edit-id="title:-about" style="font-size: clamp(86px, 8.229cqw, 213px); translate: -24.740cqw 2.685cqh">عَنِّي</h2></div>
+    <p data-edit="p · محرّر فيديو لل" data-edit-id="p-·-محرّر-فيديو-لل" style="font-family: Panorama; font-weight: 900; font-size: clamp(20px, 1.927cqw, 49px); line-height: 1.55; translate: -0.833cqw 2.963cqh" class="">أنا ياسين الخطيب — كما رأيتَ في الموقع. لم أُرِد أن يكون هذا مجرد موقع آخر مثل مئات المواقع، بل سعيتُ إلى أن أصنعَ لك تجربةً لا تُنسى. أن تستمتعَ بالتجربة — هذا ما أهدفُ إليه في تصميمي للفيديوهات، وفي انتقائي للصوت والألوان وكل عنصر يُضفي على الفيديو طابعًا احترافيًا ومميزًا. ومن خلال خبرتي المتواضعة مع العملاء، يظلُّ هدفي الأسمى هو راحة العميل وثقته. خُضتُ تجربةَ العمل بمفردي وضمن فريق، وقد أكسبَتْني هاتان التجربتان خبرةً في التعامل مع مختلف الأشخاص والعناصر، وفي إيصال أفضل ما يمكن تقديمه من فيديو. شكرًا لك.</p>
+  <img src="/assets/baked/layer-3.jpg" class="baked-layer" style="width: 34.844cqw; height: auto; left: 177.969cqw; top: -0.104cqw; opacity: 1; mix-blend-mode: darken; transform: scaleX(-1); z-index: 90; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 240; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- EXPERIENCE (logos; click a logo to open its work) -->
+  <section class="panel exp sec" id="work" style="">
+    <div class="sec-head"><h2 class="t" data-edit="Title: Experience" data-edit-id="title:-experience" style="font-size: clamp(86px, 8.229cqw, 213px); translate: -23.646cqw 3.519cqh">الْخِبْرَة</h2></div>
+    <div class="logos">
+      <button class="logo-tile hasimg" data-exp="alx" style="translate: -39.010cqw 4.259cqh"><img src="assets/logos/alx.png" alt="ALX Arabia" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: ALX Arabia" data-edit-id="logo:-alx-arabia" style="filter: grayscale(1) sepia(0.55) brightness(0.386) contrast(1.518); transform: scale(1.5);"><span class="logo-fallback">ALX&nbsp;Arabia</span></button>
+      <button class="logo-tile hasimg" data-exp="enactus" style="translate: 4.167cqw 4.167cqh"><img src="assets/logos/enactus.png" alt="Enactus" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Enactus" data-edit-id="logo:-enactus" style="filter: grayscale(1) sepia(0.55) brightness(0.323) contrast(1.644); transform: scale(1.4);"><span class="logo-fallback">Enactus</span></button>
+      <button class="logo-tile hasimg" data-exp="jade" style="translate: 1px 4.352cqh"><img src="assets/logos/jade.png" alt="Jade Textile" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Jade Textile" data-edit-id="logo:-jade-textile" style="filter: grayscale(1) sepia(0.55) brightness(0.332) contrast(1.626); transform: scale(1.65);"><span class="logo-fallback">Jade&nbsp;·&nbsp;Optara</span></button>
+      <button class="logo-tile hasimg" data-exp="jad" style="translate: 41.771cqw 4.259cqh"><img src="assets/logos/jad.png" alt="JAD" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: JAD" data-edit-id="logo:-jad" style="filter: grayscale(1) sepia(0.55) brightness(0.386) contrast(1.518); transform: scale(1.55);"><span class="logo-fallback">JAD</span></button>
+      <button class="logo-tile hasimg" data-exp="depi" style="translate: -7.969cqw 4.259cqh"><img src="assets/logos/depi.png" alt="DEPI" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: DEPI" data-edit-id="logo:-depi" style="filter: grayscale(1) sepia(0.55) brightness(0.332) contrast(1.626); transform: scale(1.45);"><span class="logo-fallback">DEPI</span></button>
+    </div>
+  <img src="/assets/baked/layer-4.jpg" class="baked-layer" style="width: 12.500cqw; height: auto; left: 39.271cqw; top: 1.771cqw; opacity: 0.6; mix-blend-mode: multiply; transform: rotate(-16deg); z-index: 80; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-5.jpg" class="baked-layer" style="width: 100.000cqw; height: auto; left: 1.250cqw; top: -34.427cqw; opacity: 0.4; mix-blend-mode: multiply; z-index: 60; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 230; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- SKILLS (logos) -->
+  <section class="panel skills sec" id="skills">
+    <div class="sec-head"><h2 class="t" data-edit="Title: Skills" data-edit-id="title:-skills" style="font-size: clamp(86px, 8.229cqw, 213px); translate: -17.917cqw 2.593cqh">الْمَــهَـــارَات</h2></div>
+    <div class="logos big">
+      <div class="logo-tile hasimg"><img src="assets/logos/ae.svg" alt="After Effects" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: After Effects" data-edit-id="logo:-after-effects"><span class="logo-fallback">After&nbsp;Effects</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/pr.svg" alt="Premiere" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Premiere" data-edit-id="logo:-premiere"><span class="logo-fallback">Premiere</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/ps.svg" alt="Photoshop" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Photoshop" data-edit-id="logo:-photoshop"><span class="logo-fallback">Photoshop</span></div>
+      <div class="logo-tile hasimg"><img src="assets/logos/ai.svg" alt="Illustrator" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Illustrator" data-edit-id="logo:-illustrator"><span class="logo-fallback">Illustrator</span></div>
+      <div class="logo-tile hasimg" style="translate: -6.823cqw 0.278cqh"><img src="assets/logos/blender.svg" alt="Blender" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Blender" data-edit-id="logo:-blender"><span class="logo-fallback">Blender</span></div>
+      <div class="logo-tile hasimg" style="translate: -6.875cqw 0.278cqh"><img src="assets/logos/capcut.png" alt="CapCut" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: CapCut" data-edit-id="logo:-capcut"><span class="logo-fallback">CapCut</span></div>
+      <div class="logo-tile hasimg" style="translate: -7.344cqw 0.556cqh"><img src="assets/logos/canva.svg" alt="Canva" onload="this.closest('.logo-tile').classList.add('hasimg')" onerror="this.remove()" data-edit="Logo: Canva" data-edit-id="logo:-canva"><span class="logo-fallback">Canva</span></div>
+    </div>
+  <img src="/assets/baked/layer-6.jpg" class="baked-layer" style="width: 12.500cqw; height: auto; left: 32.969cqw; top: 3.177cqw; opacity: 0.55; mix-blend-mode: multiply; transform: rotate(-19deg); z-index: 50; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-7.jpg" class="baked-layer" style="width: 100.000cqw; height: auto; left: 0px; top: -85.364cqw; opacity: 0.55; mix-blend-mode: multiply; z-index: 40; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 220; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+  <!-- CONTACT -->
+  <section class="panel contact" id="contact" style="">
+    <div class="big" data-edit="Contact heading" data-edit-id="contact-heading" style="font-family: Panorama;">هيّا نبني شيئًا معًا</div>
+    <div class="rows">
+      <div class="r"><span data-edit="span · البريد" data-edit-id="span-·-البريد">البريد</span><a href="mailto:yassenelkhatib0q@gmail.com" data-edit="a · yassenelkhatib" data-edit-id="a-·-yassenelkhatib" style="translate: -0.260cqw">yassenelkhatib0q@gmail.com</a></div>
+      <div class="r"><span>الهاتف</span><a href="tel:+201101951744" dir="ltr" data-edit="a · +20 110 195" data-edit-id="a-·-+20-110-195-17" style="translate: -0.260cqw">+20 110 195 1744</a></div>
+      <div class="r"><span>Behance</span><a href="https://behance.net/Yassen-El-Khatib" target="_blank" rel="noopener" data-edit="a · behance.net/ya" data-edit-id="a-·-behance.net/ya" style="translate: -0.260cqw">behance.net/Yassen-El-Khatib</a></div>
+      <div class="r"><span>LinkedIn</span><a href="https://linkedin.com/in/yassen-el-khatib" target="_blank" rel="noopener" data-edit="a · linkedin.com/i" data-edit-id="a-·-linkedin.com/i" style="translate: -0.260cqw">linkedin.com/in/yassen-el-khatib</a></div>
+    </div>
+  <div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 110; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div><img src="/assets/baked/layer-8.jpg" class="baked-layer" style="width: 97.448cqw; height: auto; left: 34.531cqw; top: -14.062cqw; opacity: 0.75; mix-blend-mode: multiply; z-index: 30; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-9.png" class="baked-layer" style="width: 37.396cqw; height: auto; left: 3.854cqw; top: 8.958cqw; opacity: 0.85; mix-blend-mode: multiply; z-index: 20; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><div class="baked-layer" style="background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'&gt;&lt;filter id='n'&gt;&lt;feTurbulence type='fractalNoise' baseFrequency='2.05' numOctaves='2' stitchTiles='stitch'/&gt;&lt;feColorMatrix type='saturate' values='0'/&gt;&lt;/filter&gt;&lt;rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/&gt;&lt;/svg&gt;&quot;); background-size: 140px 140px; width: 100%; height: 100%; left: 0px; top: 0px; opacity: 0.9; mix-blend-mode: screen; z-index: 210; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px;"></div></section>
+
+<img src="/assets/baked/layer-10.jpg" class="baked-layer" style="width: 46.354cqw; height: auto; left: 26.562cqw; top: -4.479cqw; opacity: 0.2; mix-blend-mode: darken; z-index: 10; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-11.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 86.875cqw; top: -2.448cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(3deg); z-index: 200; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-12.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 175.729cqw; top: -0.625cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 190; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-13.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 284.479cqw; top: -1.406cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 160; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-14.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 374.115cqw; top: -1.927cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 150; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-15.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 87.188cqw; top: -1.823cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 140; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-16.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 85.938cqw; top: -1.093cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(3deg); z-index: 180; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-17.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 174.792cqw; top: -0.989cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(-6deg) scaleX(-1); z-index: 170; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-18.jpg" class="baked-layer" style="width: 38.229cqw; height: auto; left: 283.594cqw; top: -1.614cqw; opacity: 1; mix-blend-mode: darken; transform: rotate(6deg); z-index: 130; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"><img src="/assets/baked/layer-19.jpg" class="baked-layer" style="width: 100.000cqw; height: auto; left: 98.854cqw; top: -17.552cqw; opacity: 0.45; mix-blend-mode: multiply; z-index: 70; pointer-events: none; position: absolute; max-width: none; min-width: 0px; margin: 0px" alt="" role="presentation"></div></div></div>
+
+<!-- experience detail modal -->
+<div id="modal" aria-hidden="true">
+  <div class="backdrop" data-close=""></div>
+  <div class="box">
+    <div class="m-left">
+      <div id="m-logoslot"></div>
+      <div class="m-desc"><h3 id="m-title"></h3><ul id="m-list"></ul></div>
+    </div>
+    <div class="m-right"><!-- empty box — media goes here later --></div>
+  </div>
+  <button class="close" data-close="" aria-label="إغلاق">الرجوع للخلف</button>
+</div>
+
+<script>
+(function(){
+  const track = document.getElementById('track');
+  const reel  = document.getElementById('reel');
+  const prog  = document.getElementById('prog');
+  const hint  = document.getElementById('hint');
+  let maxX = 0, targetX = 0, curX = 0, raf = null;
+  const isMobile = () => window.innerWidth < 768;
+  // Fixed-canvas design dimensions. Match #stage CSS above. Used so maxX and
+  // track height calculate in design coords (cqw/cqh measure to 1920×1080).
+  const DESIGN_W = 1920, DESIGN_H = 1080;
+  let currentScale = 1; // updated by applyCanvasScale, read by onScroll
+
+  function applyCanvasScale() {
+    if (isMobile()) {
+      document.documentElement.style.setProperty('--yx-scale', '1');
+      currentScale = 1;
+      return 1;
+    }
+    const s = Math.min(window.innerWidth / DESIGN_W, window.innerHeight / DESIGN_H);
+    document.documentElement.style.setProperty('--yx-scale', s);
+    currentScale = s;
+    return s;
+  }
+
+  function layout(){
+    if (isMobile()){ track.style.height = ''; reel.style.transform = ''; applyCanvasScale(); return; }
+    const scale = applyCanvasScale();
+    // reel.scrollWidth is in design coords (cqw-based). maxX = horizontal travel in design pixels.
+    maxX = Math.max(0, reel.scrollWidth - DESIGN_W);
+    // Vertical scroll distance maps maxX design pixels to maxX*scale screen pixels of scroll.
+    track.style.height = (maxX * scale + window.innerHeight) + 'px';
+    onScroll();
+  }
+  function onScroll(){
+    if (isMobile()) return;
+    // window.scrollY is in screen pixels; maxX is in design pixels. Divide by
+    // currentScale so the design-coord target follows the screen-coord scroll.
+    targetX = Math.min(Math.max(window.scrollY / currentScale, 0), maxX);
+    if (!raf) raf = requestAnimationFrame(tick);
+    const p = maxX > 0 ? targetX / maxX : 0;
+    if (prog) prog.style.width = (p * 100) + '%';
+    if (hint) hint.style.opacity = window.scrollY > 80 ? '0' : '1';
+  }
+  function tick(){
+    curX += (targetX - curX) * 0.12;          // spring-ish smoothing (Figma feel)
+    if (Math.abs(targetX - curX) < 0.4) curX = targetX;
+    reel.style.transform = 'translateX(' + (-curX) + 'px)';
+    raf = (curX !== targetX) ? requestAnimationFrame(tick) : null;
+  }
+  // nav -> jump to the vertical position that brings a panel to the left edge
+  document.querySelectorAll('#topbar a[data-go]').forEach(a => {
+    a.addEventListener('click', () => {
+      const el = document.getElementById(a.dataset.go);
+      if (!el) return;
+      if (isMobile()) { el.scrollIntoView({ behavior:'smooth' }); return; }
+      window.scrollTo({ top: Math.min(el.offsetLeft, maxX), behavior:'smooth' });
+    });
+  });
+  // old-TV button -> smoothly return to the first panel (top of the page)
+  const tvHome = document.getElementById('tv-home');
+  if (tvHome) tvHome.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  // keyboard arrows nudge the page scroll
+  window.addEventListener('keydown', (e) => {
+    if (isMobile()) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') window.scrollBy({ top: 360, behavior:'smooth' });
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   window.scrollBy({ top:-360, behavior:'smooth' });
+  });
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', layout);
+  window.addEventListener('load', layout);
+  layout();
+})();
+</script>
+
+<script>
+(function(){
+  const EXP = {
+    alx:{ title:'صانع محتوى — ALX Arabia', story:'في ALX كنتُ Content Creator أُمسك بالعملية كاملةً: أُصوّر بالمعدّات، وأكتب السكربت، وأُولّد الأفكار ثم أنتقي أنسبها. كنتُ أرسم تصوّراتي أولًا لتلائم هويّة كل علامة، ثم أُنفّذها فيديوهاتٍ إعلانية. عملتُ ضمن فريق يضمّ كُتّاب سكربت ومصوّرين ومصمّمي جرافيك، وتعلّمتُ من كلٍّ منهم الكثير. كانت تجربةً ممتعة أكّدت لي أنّ العمل الجماعي جميلٌ حقًّا.', items:['إنتاج كامل: مونتاج، موشن، تدرّج لوني، تصميم صوتي، وترجمة.','فيديوهات ونصوص لحملات تسويقيّة بتسليم خلال أربعة إلى خمسة أيام.','توظيف أدوات الذكاء الاصطناعي لتسريع الإنتاج ورفع الجودة.'] },
+    enactus:{ title:'محرّر فيديو وتصميم موشن — Enactus', story:'كانت Enactus عملًا جماعيًا بالكامل؛ اشتغلتُ مع الفريق ومع المصوّرين عن قرب. كانوا يبتكرون منتجًا، وكان دوري أن أفهم كيف يظهر على الشاشة: اخترنا الأسلوب والصوت والإيقاع الذي يتناسب مع المشاهد ومع كل لقطة، وابتكرنا زوايا تصوير كثيرة. كنتُ ضمن الفريق المسؤول عن حملة رمضان التي تجمع الفِرق في مسابقة وفعاليات تحت ضغط الوقت، وتوليتُ الموشن. خرجتُ بخبرة كبيرة وتعلّمتُ من الفريق الكثير.', items:['أكثر من خمسة فيديوهات قصيرة ترويجيّة لحملات طلابيّة.','تسليم تحت مواعيد ضيّقة ضمن فريق سريع الإيقاع.','موشن جرافيك قائم على الإنفوجرافيك لتبسيط الرسائل.'] },
+    jade:{ title:'صانع واجهة وتجربة المستخدم — Optara', story:'في Jade Textile بدأتُ من أرض المصنع، لا من الشاشة؛ جلستُ مع العمّال والمهندسين حتى فهمتُ ما يحتاجونه فعلًا. ثم بنيتُ Optara: منصّة واحدة تربط الأقسام وتُجدوِل الإنتاج، يستخدمها أكثر من شخص بعقليّات مختلفة على البيانات الحيّة نفسها. كان التحدّي أن تبقى الواجهة بسيطة للجميع، فصمّمتُها نسخةً بعد نسخة حتى صارت أنعم وأوضح، ثم أضفتُ حركةً من After Effects — نظامٌ متكامل وُلد من فهم الناس قبل الكود.', items:['تصميم وبناء واجهة Optara لجدولة الإنتاج في مصنع ملابس.','واجهة واحدة تخدم ثلاثة مستخدمين من البيانات الحيّة نفسها.','بناء التطبيق كاملًا منفردًا في نحو شهرين بمسار مدعوم بالذكاء الاصطناعي.'] },
+    jad:{ title:'محرّر فيديو — JAD', story:'JAD علامة يصنعها فريق شاب متخصّص في صناعة البراويز. صمّمتُ لهم حملة فيديوهات إعلانية، ولم يكن دوري المونتاج وحده: نزلتُ معهم إلى موقع التصوير وأدرتُ زوايا الكاميرا جنبًا إلى جنب مع المصوّر، لأضمن لقطاتٍ تخدم الرؤية التي في رأسي للمونتاج. اخترتُ أسلوبًا هادئًا مشوّقًا لا يشرح كل شيء، يترك المشاهد متشوّقًا لمعرفة ما يُقدَّم. وطوّعتُ الإيقاع لكل منتج: حماسةٌ لِما يحتاجها وهدوءٌ لِما يناسبه، ليخدم الإحساسُ السلعة.', items:['إعلانات قصيرة لحملات وسائل التواصل.','مونتاج موجَّه للأداء مطابق لاتجاه العلامة.'] },
+    depi:{ title:'دبلومة — مبادرة رواد مصر الرقمية (DEPI)', story:'دبلومة DEPI نقلت فهمي للأنيميشن إلى مستوى أعمق. عملتُ ضمن فريق نُنسّق فيه معًا حتى أدقّ التفاصيل، وكنتُ المسؤول عن التحريك والحركة في مشروع التخرّج. تعلّمتُ كيف أُحرّك الشخصيات وأجعل فيديوهاتي أكثر ملاءمةً وإتقانًا، وخرجتُ بحصيلة رفعت مستواي بوضوح. تجربةٌ مميّزة جمعت بين التعلّم والعمل الجماعي والتنفيذ الحقيقي.', items:['مشروع موشن جرافيك جماعي بمسار إنتاج منظّم.','مشاركة في تطوير الفكرة والتنفيذ والتسليم النهائي.'] },
+  };
+  // second click on the logo inside the modal -> open the company site (new tab). JAD has no link yet.
+  const LINKS = {
+    alx:'https://www.alxafrica.com/',
+    enactus:'https://enactusegypt.org/',
+    jade:'https://jade-textile.com/',
+    depi:'https://depi.gov.eg/content/home',
+  };
+  // each project's showreel clip (DEPI has none -> keeps the placeholder)
+  const VIDS = {
+    alx:'/assets/videos/alx.mp4',
+    enactus:'/assets/videos/enactus.mp4',
+    jad:'/assets/videos/jad.mp4',
+    jade:'/assets/videos/jade.mp4',
+  };
+  const modal = document.getElementById('modal');
+  const mt = document.getElementById('m-title'), ml = document.getElementById('m-list');
+  const slot = document.getElementById('m-logoslot');
+  const mRight = modal.querySelector('.m-right');
+  let clone = null, srcTile = null, busy = false, cloneScale = 1;
+
+  function fill(d){ mt.textContent = d.title; ml.innerHTML = d.story ? ('<p class="m-story">' + d.story + '</p>') : d.items.map(i => '<li>'+i+'</li>').join(''); }
+  function makeVid(v){
+    const vid = document.createElement('video');
+    vid.src = v; vid.muted = true; vid.loop = true; vid.autoplay = true; vid.setAttribute('playsinline',''); vid.setAttribute('preload','auto');
+    return vid;
+  }
+  function fillMedia(k){
+    clearMedia();
+    const v = VIDS[k];
+    if (!v) { mRight.classList.remove('has-video'); return; }   // no clip -> keep placeholder
+    mRight.classList.add('has-video');
+    if (k === 'jade') { modal.classList.add('lay-jade'); }      // jade: video on TOP, content centred below
+    else { modal.classList.add('vleft'); if (k === 'alx') modal.classList.add('lay-alx'); }   // alx & rest: video on the LEFT
+    const wrap = document.createElement('div'); wrap.className = 'm-video ' + k;
+    const vid = makeVid(v);
+    const grain = document.createElement('span'); grain.className = 'm-grain';
+    wrap.appendChild(vid); wrap.appendChild(grain); mRight.appendChild(wrap);
+    if (vid.play) { const p = vid.play(); if (p && p.catch) p.catch(()=>{}); }
+  }
+  function clearMedia(){
+    modal.classList.remove('vleft', 'lay-alx', 'lay-jade');
+    mRight.classList.remove('has-video');
+    const w = mRight.querySelector('.m-video');
+    if (w) { const vd = w.querySelector('video'); if (vd) { try { vd.pause(); } catch(e){} vd.removeAttribute('src'); if (vd.load) vd.load(); } w.remove(); }
+  }
+
+  function openExp(tile, k){
+    const d = EXP[k]; if (!d || busy) return; busy = true;
+    // Defensive: kill any orphan clone from a previous open that didn't finish cleanup.
+    if (clone) { try { clone.remove(); } catch(e){} clone = null; }
+    if (srcTile) { try { srcTile.style.visibility = ''; } catch(e){} srcTile = null; }
+    fill(d);
+    fillMedia(k);            // load this project's video (with grain) into the media box
+    const r = tile.getBoundingClientRect();
+    clone = tile.cloneNode(true);
+    clone.style.translate = '';                                                   // the position offset lives on the button — drop it so the clone flies cleanly into the slot
+    var cimg = clone.querySelector('img');                                        // KEEP the per-logo zoom so we can animate it (smooth shrink-in / grow-out)
+    var sm = cimg ? (cimg.style.transform || '').match(/scale\(([\d.]+)\)/) : null;
+    cloneScale = sm ? parseFloat(sm[1]) : 1;                                       // remember the logo's real zoom for the close animation
+    Object.assign(clone.style, { position:'fixed', margin:'0', left:r.left+'px', top:r.top+'px', width:r.width+'px', height:r.height+'px', zIndex:'90' });
+    document.body.appendChild(clone);
+    var link = LINKS[k];
+    if (link){ clone.style.cursor='pointer'; clone.title='زيارة الموقع ↗'; clone.addEventListener('click', function(){ window.open(link, '_blank', 'noopener'); }); }
+    tile.style.visibility = 'hidden'; srcTile = tile;
+    modal.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';   // lock page scroll while the panel is open
+    const sr = slot.getBoundingClientRect();
+    const back = modal.querySelector('.backdrop'), box = modal.querySelector('.box');
+    if (!window.gsap) {                                  // GSAP failed to load -> show everything, no animation
+      back.style.opacity = '1'; box.style.opacity = '1';
+      if (cimg) cimg.style.transform = 'scale(1)';       // fit the slot
+      Object.assign(clone.style, { left:sr.left+'px', top:sr.top+'px', width:sr.width+'px', height:sr.height+'px' });
+      busy = false; return;
+    }
+    var tlo = gsap.timeline({ onComplete:()=>{ busy=false; } });
+    tlo.fromTo('#modal .backdrop', { opacity:0 }, { opacity:1, duration:.35 }, 0)
+      .fromTo('#modal .box', { opacity:0 }, { opacity:1, duration:.5, ease:'power2.out' }, 0)
+      .to(clone, { left:sr.left, top:sr.top, width:sr.width, height:sr.height, duration:.6, ease:'power3.inOut' }, 0)
+      .fromTo('#modal .m-desc', { opacity:0, y:26 }, { opacity:1, y:0, duration:.45, ease:'power2.out' }, 0.3)   // explicit end -> never gets stuck at 0
+      .fromTo('#modal .m-right', { opacity:0 }, { opacity:1, duration:.45 }, 0.3);
+    if (cimg) tlo.to(cimg, { scale:1, duration:.6, ease:'power3.inOut' }, 0);   // smooth SHRINK as it flies into the slot
+    // The back button is NOT animated and lives OUTSIDE .box (so the box's scale can't shrink/hide it).
+    // It is visible by default via CSS. Safety net below only un-sticks the box/text if the
+    // GSAP ticker stalls (rAF throttled in a hidden/iframe tab, heavy page) -> rAF-INDEPENDENT timer.
+    setTimeout(() => {
+      if (!modal.classList.contains('open')) return;
+      box.style.transform = 'none'; box.style.opacity = '1';
+      modal.querySelectorAll('.m-desc, .m-right').forEach(e => { e.style.opacity = '1'; e.style.transform = 'none'; });
+    }, 1100);
+  }
+  function close(){
+    if (busy || !modal.classList.contains('open')) return; busy = true;
+    const finish = () => { clearMedia(); if(clone){clone.remove(); clone=null;} if(srcTile)srcTile.style.visibility=''; modal.classList.remove('open'); document.documentElement.style.overflow = ''; if(window.gsap) gsap.set(['#modal .box','#modal .backdrop','#modal .m-desc','#modal .m-right','#modal .close'],{clearProps:'all'}); busy=false; };
+    // Null-safe: if close() is called when no openExp() succeeded, just reset and bail.
+    if (!srcTile || !window.gsap) { finish(); return; }
+    const r = srcTile.getBoundingClientRect();
+    const cimg = clone ? clone.querySelector('img') : null;
+    var tlc = gsap.timeline({ onComplete:finish });
+    tlc.to(['#modal .m-desc', '#modal .m-right', '#modal .close'], { opacity:0, duration:.2 }, 0)
+      .to(clone, { left:r.left, top:r.top, width:r.width, height:r.height, duration:.5, ease:'power3.inOut' }, 0)
+      .to('#modal .box', { opacity:0, duration:.3 }, .2)
+      .to('#modal .backdrop', { opacity:0, duration:.3 }, .2)
+      .call(() => { if (srcTile) srcTile.style.visibility = ''; }, null, .5)   // reveal the real logo (which sits UNDER the grain) behind the copy
+      .to(clone, { opacity:0, duration:.28, ease:'power2.out' }, .5);          // fade the copy out -> the grain fades IN over the logo (no sudden snap)
+    if (cimg) tlc.to(cimg, { scale:cloneScale, duration:.5, ease:'power3.inOut' }, 0);   // smooth GROW back to the real logo's size
+  }
+  document.querySelectorAll('.logo-tile[data-exp]').forEach(t => t.addEventListener('click', () => openExp(t, t.dataset.exp)));
+  modal.querySelectorAll('[data-close]').forEach(e => e.addEventListener('click', close));
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+// PERF: parent TV signals us during scroll-into / scroll-out so we can drop expensive paint work.
+window.addEventListener('message', function(e){
+  if (!e || !e.data || typeof e.data !== 'object') return;
+  if (e.origin && e.origin !== window.location.origin) return;   // ignore cross-origin senders
+  if (e.data.type === 'yassen:tv-transition-start' || e.data.type === 'yassen:tv-exit-start') document.documentElement.classList.add('tv-transitioning');
+  else if (e.data.type === 'yassen:tv-transition-end' || e.data.type === 'yassen:tv-exit-end') document.documentElement.classList.remove('tv-transitioning');
+});
+</script>
+
+<!-- EDITOR-SLOT -->
+
+
+
+<!-- editor permanently disabled on this page; all saved overrides are already baked into inline styles -->
+<!-- BAKED-ASPECT-FIX-START — option 3: JS adjusts .baked-layer top/bottom per viewport aspect ratio.
+     If this causes issues, user says "x-delete" and the block between these markers gets removed. -->
+<script>
+(function () {
+  var DESIGN_ASPECT = 16 / 9;
+  var stored = new WeakMap();
+  function apply() {
+    var ratio = window.innerWidth / window.innerHeight;
+    var mult = DESIGN_ASPECT / ratio;   // 1 at 16:9, >1 on narrower (4:3), <1 on wider (21:9)
+    document.querySelectorAll(".baked-layer").forEach(function (el) {
+      if (!stored.has(el)) stored.set(el, el.getAttribute("style") || "");
+      var orig = stored.get(el);
+      var adjusted = orig.replace(/(top|bottom):\s*(-?[\d.]+)vw/g, function (_, prop, val) {
+        return prop + ": " + (parseFloat(val) * mult).toFixed(3) + "vw";
+      });
+      el.setAttribute("style", adjusted);
+    });
+  }
+  apply();
+  var resizeT;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(apply, 60);
+  });
+})();
+</script>
+<!-- BAKED-ASPECT-FIX-END -->
+
+<!-- Music control + preview-mode logic (added for the selector entry path) -->
+<script>
+(function() {
+  // ── IN-TV MODE (loaded inside the 3D site's CRT iframe) ─────────────────
+  // The 3D site appends ?inTV=1 to the iframe src. That signals: hide the
+  // back/music/switch controls + the portfolio's own cinema bars (since the
+  // 3D site already has its own). Just the content shows, nothing else.
+  if (location.search.indexOf('inTV=1') !== -1) {
+    document.documentElement.classList.add('yx-in-tv');
+  }
+
+  // ── PREVIEW MODE (selector iframe) ──────────────────────────────────────
+  // When loaded as /test/index-h-1.html?preview=1 inside the landing selector's iframe:
+  //   - Disable all interactions
+  //   - Hide cinema bars + music controls
+  //   - Auto-scroll the page in a slow ping-pong loop so the iframe looks "alive"
+  if (location.search.indexOf('preview=') !== -1) {
+    document.documentElement.classList.add('yx-preview');
+    // PREVIEW MODES (used by the selector page iframes):
+    //   ?preview=top    → fix the page at the TOP (first section visible). Used for the EN tile.
+    //   ?preview=bottom → fix the page at the BOTTOM (last section visible). Used for the AR tile.
+    //   ?preview=1      → legacy smooth-journey loop, kept for back-compat.
+    const m = (location.search.match(/preview=([^&]+)/) || [])[1] || '1';
+
+    if (m === 'top' || m === 'bottom') {
+      function _snap() {
+        const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        window.scrollTo(0, m === 'bottom' ? max : 0);
+      }
+      _snap();
+      setTimeout(_snap, 200);
+      setTimeout(_snap, 800);
+      setTimeout(_snap, 2000);
+      setTimeout(_snap, 4000);
+      return;
+    }
+
+    // Legacy ?preview=1
+    const JOURNEY_MS = 14000;
+    const HOLD_END_MS = 1500;
+    let startT = performance.now();
+    let phase  = 'journey';
+    function _previewStep(now) {
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const elapsed = now - startT;
+      if (phase === 'journey') {
+        if (elapsed < JOURNEY_MS) {
+          const t = elapsed / JOURNEY_MS;
+          const eased = 0.5 - 0.5 * Math.cos(t * Math.PI);
+          window.scrollTo(0, eased * max);
+        } else { window.scrollTo(0, max); phase = 'hold'; startT = now; }
+      } else if (phase === 'hold') {
+        if (elapsed > HOLD_END_MS) { window.scrollTo(0, 0); phase = 'journey'; startT = now; }
+      }
+      requestAnimationFrame(_previewStep);
+    }
+    requestAnimationFrame(_previewStep);
+    return;
+  }
+
+  // ── MUSIC CONTROLS (real visitor on AR portfolio) ───────────────────────
+  // Arabic-flavored track list — classic Egyptian radio + ambient + modern.
+  const TRACKS = [
+    '/assets/music/radio-omkalthoum.mp3',
+    '/assets/music/radio-abdelhalim.mp3',
+    '/assets/music/radio-farid.mp3',
+    '/assets/music/music-ar-1.mp3',
+    '/assets/music/music-ar-2.mp3'
+  ];
+  const audio  = document.getElementById('yxAudio');
+  const toggle = document.getElementById('yxMusicToggle');
+  const sw     = document.getElementById('yxMusicSwitch');
+  if (!audio || !toggle || !sw) return;
+  let idx = 0;
+  let userPaused = true;
+  audio.src = TRACKS[idx];
+  audio.loop = true;
+  audio.volume = 0.55;
+
+  function _setPlayingClass(playing) {
+    toggle.classList.toggle('playing', playing);
+    toggle.setAttribute('aria-label', playing ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى');
+  }
+
+  toggle.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => { userPaused = false; _setPlayingClass(true); }).catch(()=>{});
+    } else {
+      audio.pause();
+      userPaused = true;
+      _setPlayingClass(false);
+    }
+  });
+
+  sw.addEventListener('click', () => {
+    idx = (idx + 1) % TRACKS.length;
+    const wasPlaying = !audio.paused;
+    audio.src = TRACKS[idx];
+    audio.loop = true;
+    if (wasPlaying || !userPaused) {
+      audio.play().then(() => _setPlayingClass(true)).catch(()=>{});
+    }
+  });
+
+  audio.addEventListener('play',  () => _setPlayingClass(true));
+  audio.addEventListener('pause', () => _setPlayingClass(false));
+})();
+</script>
+</body></html>
