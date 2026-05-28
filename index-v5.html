@@ -326,7 +326,8 @@
   #phase1-overlay h1 {
     font-family:'Berkshire Pro Loops', serif;
     font-style:normal;
-    font-size:clamp(56px,7vw,104px);
+    /* Reduced from clamp(56px,7vw,104px) — each value × 0.67 (Yassen request) */
+    font-size:clamp(38px,4.7vw,70px);
     line-height:1.0;
     font-weight:400;
     letter-spacing:-.005em;
@@ -341,18 +342,16 @@
     max-width:560px;
   }
   #phase1-overlay h1 span.accent { color:#F5E8C8; }
-  #phase1-overlay .sub { font-family:'Cazon Uno', serif; font-size:clamp(13px,1.2vw,18px); line-height:1.5; color:rgba(243,238,232,.85); margin-top:clamp(18px,1.8vw,28px); max-width:clamp(280px,26vw,380px); }
-  #phase1-overlay .tagline { font-family:'Cazon Uno', serif; font-size:clamp(10px,0.95vw,14px); letter-spacing:clamp(2px,0.2vw,3px); color:rgba(243,238,232,.65); margin-top:clamp(20px,2.1vw,32px); text-transform:uppercase; }
+  /* .sub font-size reduced from clamp(13px,1.2vw,18px) by 0.67 */
+  #phase1-overlay .sub { font-family:'Cazon Uno', serif; font-size:clamp(9px,0.8vw,12px); line-height:1.5; color:rgba(243,238,232,.85); margin-top:clamp(12px,1.2vw,19px); max-width:clamp(280px,26vw,380px); }
+  /* .tagline font-size + letter-spacing reduced by 0.67 */
+  #phase1-overlay .tagline { font-family:'Cazon Uno', serif; font-size:clamp(7px,0.64vw,9px); letter-spacing:clamp(1.3px,0.13vw,2px); color:rgba(243,238,232,.65); margin-top:clamp(13px,1.4vw,21px); text-transform:uppercase; }
   #phase1-overlay .scroll-hint { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:4px; color:rgba(243,238,232,.4); text-transform:uppercase; animation: pulse 2s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity:.4; transform:translate(-50%,0); } 50% { opacity:1; transform:translate(-50%,6px); } }
   html[dir="rtl"] body { font-family:'Cairo','Tajawal',sans-serif; }
   html[dir="rtl"] #phase1-overlay h1 { font-family:'Panorama Naskh', 'Cairo', sans-serif; font-style:normal; font-weight:400; font-feature-settings:"swsh" 1, "calt" 1, "liga" 1, "dlig" 1; }
   html[dir="rtl"] #phase1-overlay { direction:ltr; }
   html[dir="rtl"] #phase1-overlay > * { direction:rtl; text-align:right; }
-  /* Yassen request: shrink the whole "Let's build something together" group to 67%.
-     Anchored to the left edge (right edge for RTL) so the text stays in its left lane. */
-  #phase1-overlay > div { transform: scale(0.67); transform-origin: left center; }
-  html[dir="rtl"] #phase1-overlay > div { transform-origin: right center; }
 
   /* Portfolio reveals after the CRT transition. Pinned to the viewport
      bottom of the cinematic, fading in via the JS handoff. */
