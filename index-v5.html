@@ -55,6 +55,16 @@
   html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
   /* Disable scroll-anchoring so the cinematic doesn't get hijacked */
   body { overflow-anchor: none; }
+  /* PERF: stop trackpad-rubber-band scroll chaining from triggering work
+     outside this document. Doesn't kill momentum itself but caps stray events. */
+  html, body { overscroll-behavior: contain; }
+  /* PERF: while actively scrolling, drop expensive drop-shadow filters on the
+     hint pills and the music button so the compositor isn't re-blurring them
+     every frame. Class toggled by the JS scroll listener (~250ms after settle). */
+  .scroll-perf-mode .hint,
+  .scroll-perf-mode #music-cta,
+  .scroll-perf-mode #hint-lang,
+  .scroll-perf-mode #hint-radio { filter: none !important; }
 
   /* ============================================================ */
   /* CINEMA LOOK — letterbox bars + film grain + vignette          */
@@ -3306,6 +3316,8 @@ function updatePulse() {
 let _winVidPausedByScroll = false;
 let _winVidResumeTimer = null;
 function _pauseWindowVideoForScroll() {
+  // Mark body as "actively scrolling" so CSS can drop expensive filters on hint pills.
+  document.body.classList.add('scroll-perf-mode');
   if (_winVidPausedByScroll) return;
   if (window._pfLocked) return; // already paused inside TV — don't touch
   if (!videoWindowSlot || !videoWindowSlot.video) return;
@@ -3314,6 +3326,7 @@ function _pauseWindowVideoForScroll() {
   try { videoWindowSlot.video.pause(); } catch (e) {}
 }
 function _resumeWindowVideoAfterScroll() {
+  document.body.classList.remove('scroll-perf-mode');
   if (!_winVidPausedByScroll) return;
   _winVidPausedByScroll = false;
   if (window._pfLocked) return; // user entered TV — let the TV-lock logic own it
