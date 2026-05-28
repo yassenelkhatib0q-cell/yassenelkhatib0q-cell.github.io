@@ -1028,10 +1028,10 @@ const canvas = document.getElementById('gl');
 // come out BLACK because the OS captures after the canvas has cleared. Costs a
 // small amount of GPU memory but matters more than a few % perf on a portfolio.
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
-// Full quality on every device — Yassen reverted the mobile-3d perf cut.
-// Phone may overheat / drop frames; user accepted that trade.
+// Mobile-3d: pin pixel ratio to 1 (was crashing phones with the unicorn tab-OOM
+// page on DPR-3 devices — 4× pixel work was too much). Desktop full quality.
 const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(_isLandscapeMobile ? 1 : Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1073,6 +1073,13 @@ const bloomPass = new UnrealBloomPass(
 );
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
+
+// Mobile-3d: bloom + outline are full-screen post passes. Disabling them on
+// phones is part of the OOM/crash fix. Desktop keeps them.
+if (_isLandscapeMobile) {
+  bloomPass.enabled = false;
+  outlinePass.enabled = false;
+}
 
 /* Software-WebGL detection + FPS-based fallback REMOVED per Yassen's request.
    They auto-disabled bloom+outline and lowered pixel ratio for visitors with
@@ -3545,7 +3552,15 @@ function animate() {
   }
   updateHoverGlow();
   renderInkTrail();
-  composer.render();
+  // On mobile-3d, bloom + outline are disabled, so the composer chain is just
+  // RenderPass + Output — identical to calling renderer.render() directly. The
+  // direct call is also more screenshot-friendly on iOS (composer's intermediate
+  // framebuffers don't always survive native screen capture).
+  if (_isLandscapeMobile) {
+    renderer.render(scene, camera);
+  } else {
+    composer.render();
+  }
 }
 animate();
 
