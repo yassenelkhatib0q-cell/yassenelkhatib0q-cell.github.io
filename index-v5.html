@@ -386,10 +386,11 @@
   }
   #pf-frame{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#0a0710; display:block; }
   #pf-back{ position:fixed; top:18px; left:18px; z-index:60; width:48px; height:48px; border-radius:999px; border:2px solid rgba(232,220,196,.5); background:rgba(10,7,16,.85); color:#e8dcc4; font-size:22px; line-height:1; cursor:pointer; }
-  /* Fullscreen toggle — hidden by default, only visible on mobile-3d after the
-     portfolio iframe is visible. Positioned top-right, mirroring pf-back. */
-  #pf-fullscreen{ display:none; position:fixed; top:18px; right:18px; z-index:60; width:40px; height:40px; border-radius:999px; border:1.5px solid rgba(232,220,196,.5); background:rgba(10,7,16,.85); color:#e8dcc4; font-size:18px; line-height:1; cursor:pointer; -webkit-tap-highlight-color: transparent; padding:0; }
-  html.landscape-mobile.pf-active #pf-fullscreen { display: flex; align-items: center; justify-content: center; }
+  /* Fullscreen toggle — hidden by default, visible on every mobile-3d view
+     (including the 3D room before entering the TV). Top-right corner. Sits at
+     z-index 70 to stay above cinema bars (50) and portfolio shell (3). */
+  #pf-fullscreen{ display:none; position:fixed; top:14px; right:14px; z-index:70; width:36px; height:36px; border-radius:999px; border:1.5px solid rgba(232,220,196,.5); background:rgba(10,7,16,.85); color:#e8dcc4; font-size:16px; line-height:1; cursor:pointer; -webkit-tap-highlight-color: transparent; padding:0; box-shadow: 0 2px 8px rgba(0,0,0,.5); }
+  html.landscape-mobile #pf-fullscreen { display: flex; align-items: center; justify-content: center; }
   #pf-fullscreen:active { transform: scale(0.92); }
   #pf-back:hover{ background:#e8dcc4; color:#0a0710; }
   #portfolio-nav { position:sticky; top:0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:24px 5vw; background:rgba(10,7,16,.95); border-bottom:1px solid rgba(232,220,196,.08); }
@@ -680,6 +681,11 @@
   </svg>
 </div>
 
+<!-- Fullscreen toggle — mobile-3d only. Lives at the body root (NOT inside
+     #portfolio-shell) so it's visible in the 3D room before entering the TV,
+     not just after. Top-right corner. -->
+<button id="pf-fullscreen" type="button" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+
 <div id="phase1-overlay">
   <div>
     <h1 data-i18n="headline-html">Let's build<br>something<br><span class="accent">together</span></h1>
@@ -694,9 +700,6 @@
   <iframe id="pf-frame" title="Portfolio" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms"></iframe>
   <iframe id="pf-frame-alt" title="Portfolio (alt language)" referrerpolicy="no-referrer" allowfullscreen allow="fullscreen" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#0a0710;display:block;opacity:0;pointer-events:none"></iframe>
   <button id="pf-back" type="button" aria-label="back" title="back">↩</button>
-  <!-- Fullscreen button — mobile-3d only. Tap to expand the portfolio to the
-       full screen (hides browser chrome). Toggles back when fullscreen is exited. -->
-  <button id="pf-fullscreen" type="button" aria-label="Fullscreen" title="Fullscreen">⛶</button>
   <div class="portfolio-old" style="display:none">
   <nav id="portfolio-nav">
     <div class="brand-mark" data-i18n="brand">YASSEN / SIGNAL STUDIO</div>
@@ -2948,19 +2951,8 @@ async function _toggleFs() {
 if (pfFs) pfFs.addEventListener('click', _toggleFs);
 document.addEventListener('fullscreenchange', _setFsIcon);
 document.addEventListener('webkitfullscreenchange', _setFsIcon);
-// Toggle .pf-active on <html> when the portfolio overlay is visibly active —
-// so the fullscreen button only shows once the user is "in the TV".
-(function watchPfActive() {
-  const html = document.documentElement;
-  const pf = document.getElementById('portfolio-shell');
-  if (!pf) return;
-  // 250ms poll — getComputedStyle on every frame forces style recomputation,
-  // wasted work for a class that changes at most once per scroll session.
-  setInterval(() => {
-    const visible = parseFloat(getComputedStyle(pf).opacity) > 0.4;
-    html.classList.toggle('pf-active', visible);
-  }, 250);
-})();
+// Fullscreen button now shows on every mobile-3d view (controlled purely by
+// the .landscape-mobile class) — no portfolio-active watcher needed.
 const portfolioNavEl = document.getElementById('portfolio-nav');
 
 // Math helpers
