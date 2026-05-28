@@ -438,12 +438,55 @@
   /* TV variant: no mobile/vertical fallback. This file is ONLY ever loaded inside
      the 3D site's CRT iframe — fixed-canvas Option A handles every resolution
      by scaling the 1920×1080 design uniformly. */
+
+  /* ============================================================================
+     MOBILE-3D arrow nav + smaller modal text. Only active when the parent
+     (index-v5.html) passes ?mobile3d=1 in the iframe URL (which it does whenever
+     the document has the .landscape-mobile class). Desktop visitors who enter
+     the TV iframe never see these — same look as before for them.
+     ============================================================================ */
+  .tv-nav-arrow { display: none; }
+  body.mobile3d .tv-nav-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    background: rgba(232,220,196,.85);
+    color: #1a1510;
+    border: 1.5px solid rgba(26,21,16,.6);
+    border-radius: 50%;
+    z-index: 9999;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
+    -webkit-tap-highlight-color: transparent;
+    font-size: 18px;
+    font-family: 'Fraunces', serif;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  body.mobile3d .tv-nav-arrow.left  { left: 8px; }
+  body.mobile3d .tv-nav-arrow.right { right: 8px; }
+  body.mobile3d .tv-nav-arrow:active { background: #e8dcc4; transform: translateY(-50%) scale(0.9); }
+  /* Mobile-3d modal description text — was clamp(22px,2cqw,30px) for li and
+     clamp(36px,3.5cqw,56px) for h3. Rendered through fixed-canvas scale (~0.36
+     on landscape phone) those were too big in the cramped popup. */
+  body.mobile3d #modal .m-desc h3 { font-size: clamp(20px, 2.2cqw, 32px) !important; margin-bottom: 1cqh !important; }
+  body.mobile3d #modal .m-desc li { font-size: clamp(13px, 1.3cqw, 18px) !important; line-height: 1.45 !important; margin-bottom: 0.8cqh !important; }
 </style></head>
 <body>
 
 <!-- TV variant: cinema bars + music controls removed because the 3D site (which
      loads this file inside its CRT iframe) has its own cinema bars / radio. -->
 <audio id="yxAudio" preload="none" style="display:none"></audio>
+
+<!-- Mobile-3d navigation arrows. CSS hides them unless body.mobile3d is set
+     (which the script below does when the URL contains ?mobile3d=1). -->
+<button class="tv-nav-arrow left"  id="tvNavLeft"  type="button" aria-label="Previous panel">‹</button>
+<button class="tv-nav-arrow right" id="tvNavRight" type="button" aria-label="Next panel">›</button>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -637,26 +680,26 @@
   window.addEventListener('load', layout);
   layout();
 
-  /* MOBILE-3D SWIPE — convert horizontal finger swipes to vertical scroll, which
-     in this file drives the horizontal-reel via targetX = scrollY/scale. Net result:
-     swipe LEFT → reel moves LEFT (natural). Touch-only, so desktop mouse/wheel
-     keeps working unchanged. */
-  let _swipeLastX = null;
-  document.addEventListener('touchstart', function (e) {
-    if (e.touches.length !== 1) { _swipeLastX = null; return; }
-    _swipeLastX = e.touches[0].clientX;
-  }, { passive: true });
-  document.addEventListener('touchmove', function (e) {
-    if (e.touches.length !== 1 || _swipeLastX == null) return;
-    const x = e.touches[0].clientX;
-    const dx = _swipeLastX - x;
-    _swipeLastX = x;
-    if (Math.abs(dx) > 0.5) {
-      e.preventDefault();
-      window.scrollBy(0, dx * 3.5);           // 3.5× multiplier — matches the parent index-v5 swipe feel
+  /* SWIPE handler removed — navigation is now via the floating LEFT/RIGHT arrow
+     buttons below. Native vertical scroll restored. */
+
+  /* MOBILE-3D arrows — tap right to advance one panel, tap left to go back.
+     Activated only when the parent iframe URL contains ?mobile3d=1 (set by
+     index-v5.html's portfolioSrcForLang when document.documentElement has
+     .landscape-mobile). Otherwise the buttons stay hidden via CSS. */
+  if (location.search.indexOf('mobile3d=1') !== -1) {
+    document.body.classList.add('mobile3d');
+    const navLeft  = document.getElementById('tvNavLeft');
+    const navRight = document.getElementById('tvNavRight');
+    // One panel of forward motion = DESIGN_W of design-coord travel = DESIGN_W *
+    // currentScale screen pixels of vertical scroll (since targetX = scrollY/scale).
+    function jumpPanel(dir) {
+      const dyScreen = DESIGN_W * (currentScale || 1) * dir;
+      window.scrollBy({ top: dyScreen, behavior: 'smooth' });
     }
-  }, { passive: false });
-  document.addEventListener('touchend', function () { _swipeLastX = null; }, { passive: true });
+    if (navLeft)  navLeft.addEventListener('click',  () => jumpPanel(-1));
+    if (navRight) navRight.addEventListener('click', () => jumpPanel( 1));
+  }
 })();
 </script>
 

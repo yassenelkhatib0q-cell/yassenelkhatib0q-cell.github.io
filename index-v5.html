@@ -668,35 +668,8 @@
 })();
 </script>
 
-<script>
-/* ============================================================================
-   MOBILE-3D SWIPE — convert horizontal finger swipes into vertical page scroll.
-   On a landscape phone the natural cinematic gesture is LEFT/RIGHT (matching the
-   horizontal-reel layout inside the TV), not up/down. This intercepts touchmove,
-   blocks native scrolling, and maps deltaX 1:1 to window.scrollBy(0, deltaX).
-   Active ONLY when ?landscape=1 is in the URL (i.e. /mobile-3d/ entry). Desktop
-   and tablet visitors keep normal scroll.
-   ============================================================================ */
-(function () {
-  if (location.search.indexOf('landscape=1') === -1) return;
-  var lastX = null;
-  document.addEventListener('touchstart', function (e) {
-    if (e.touches.length !== 1) { lastX = null; return; }
-    lastX = e.touches[0].clientX;
-  }, { passive: true });
-  document.addEventListener('touchmove', function (e) {
-    if (e.touches.length !== 1 || lastX == null) return;
-    var x = e.touches[0].clientX;
-    var dx = lastX - x;                       // finger moves LEFT → dx positive → scroll DOWN
-    lastX = x;
-    if (Math.abs(dx) > 0.5) {
-      e.preventDefault();                     // block native vertical scroll
-      window.scrollBy(0, dx * 3.5);           // 1:1 felt sluggish — 3.5× makes the swipe feel snappy
-    }
-  }, { passive: false });
-  document.addEventListener('touchend', function () { lastX = null; }, { passive: true });
-})();
-</script>
+<!-- MOBILE-3D SWIPE handler removed — Yassen wants arrow buttons instead of
+     swipes for portfolio navigation. Native up/down scroll returns. -->
 
 
 <div id="loader">
@@ -2906,10 +2879,13 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260528f';
+const _PF_CACHE_BUST = 'v=20260528g';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
-  return base + '?' + _PF_CACHE_BUST;
+  // Pass &mobile3d=1 when the parent is in landscape-mobile mode so the iframe
+  // can scope arrow buttons + smaller modal text to phone visitors only.
+  const flag = document.documentElement.classList.contains('landscape-mobile') ? '&mobile3d=1' : '';
+  return base + '?' + _PF_CACHE_BUST + flag;
 }
 // LAZY-LOAD PORTFOLIO IFRAMES: only the current-language iframe loads at boot. The other stays
 // empty (no src) until the user actually switches language — saves ~300 MB RAM and ~40% load time.
