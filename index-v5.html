@@ -316,6 +316,34 @@
   /* English variant: keep the same minimal styling, just inherit the italic */
   #hint-tv-screen[dir="ltr"] { font-size: 14px; letter-spacing: 0.08em; }
 
+  /* ============================================================================
+     MOBILE-3D ONLY — phone screens are tiny, the pill hints dwarf the TV/radio.
+     Activated by /mobile-3d/ via ?landscape=1 (see gate script below). Desktop
+     and tablet visitors keep the full-size hints.
+     ============================================================================ */
+  .landscape-mobile .hint {
+    padding: 4px 10px;
+    font-size: 9px;
+    border-width: 1px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
+    letter-spacing: 0.02em;
+  }
+  .landscape-mobile .hint[dir="ltr"] {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+  .landscape-mobile .hint::after {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 7px;
+  }
+  .landscape-mobile #hint-tv-screen,
+  .landscape-mobile #hint-tv-screen[dir="ltr"] {
+    font-size: 7px;
+    padding: 2px 4px;
+    letter-spacing: 0.04em;
+  }
+
   #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
   #cursor svg { width:100%; height:100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
   canvas#cursor-trail { position:fixed; inset:0; pointer-events:none; z-index:998; }
@@ -576,7 +604,11 @@
 (function () {
   // BYPASS: ?landscape=1 in the URL (used by /mobile-3d/ when the visitor rotates
   // their phone) tells the gate to skip — let landscape mobile visitors through.
-  if (location.search.indexOf('landscape=1') !== -1) return;
+  // Also tag the document so CSS can shrink hints / UI for the cramped phone canvas.
+  if (location.search.indexOf('landscape=1') !== -1) {
+    document.documentElement.classList.add('landscape-mobile');
+    return;
+  }
 
   var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   var touchUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(navigator.userAgent);
