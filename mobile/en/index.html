@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Yassen Elkhatib — Portfolio (English, mobile)</title>
+<meta name="theme-color" content="#0a0710">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<style>
+  @font-face {
+    font-family: 'Vintage Town';
+    src: url('/assets/fonts/VintageTown.otf') format('opentype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Berkshire Pro Loops';
+    src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Wanlaners';
+    src: url('/assets/fonts/Wanlaners.otf') format('opentype');
+    font-display: swap;
+  }
+</style>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --paper: #e7dcc2;
+    --paper2: #ddd0b2;
+    --ink: #1a1510;
+    --ink-soft: #3a3026;
+    --accent: #9c3a2c;
+    --line: rgba(26,21,16,.28);
+  }
+
+  html, body {
+    width: 100%; min-height: 100dvh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cairo', 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* paper-texture subtle background */
+  body {
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(120,80,40,.07) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(80,40,20,.06) 0%, transparent 50%);
+  }
+
+  /* Top bar — slim, contains music + back controls. Anchored top, full width. */
+  .topbar {
+    position: sticky;
+    top: 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 50;
+    box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  }
+  .topbar .brand {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+  .topbar .ctrls { display: flex; gap: 8px; }
+  .topbar .ctrls button,
+  .topbar .ctrls > a {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,220,196,.3);
+    background: rgba(232,220,196,.08);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+    transition: background .15s, transform .15s;
+  }
+  .topbar .ctrls button:active,
+  .topbar .ctrls > a:active {
+    background: var(--paper);
+    color: var(--ink);
+    transform: scale(.95);
+  }
+  .topbar svg { width: 50%; height: 50%; }
+  .topbar button.playing .ic-play { display: none; }
+  .topbar button:not(.playing) .ic-pause { display: none; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 38px 22px 28px;
+  }
+  .hero .name {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: clamp(42px, 13vw, 78px);
+    color: var(--accent);
+    line-height: 1.05;
+    margin-bottom: 4px;
+    letter-spacing: -1px;
+  }
+  .hero .name2 {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: clamp(42px, 13vw, 78px);
+    color: var(--accent);
+    line-height: 1.05;
+    letter-spacing: -1px;
+  }
+  .hero .role {
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+  .hero .tag {
+    margin-top: 6px;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 28ch;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.4;
+  }
+
+  /* Section card */
+  .section {
+    margin: 18px;
+    padding: 22px 20px;
+    background: var(--paper2);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px var(--paper), 0 4px 14px rgba(0,0,0,.08);
+  }
+  .section h2 {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: clamp(28px, 9vw, 44px);
+    color: var(--accent);
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .section p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  /* Contact list */
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .contact-list .r {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .contact-list .r:last-child { border-bottom: none; }
+  .contact-list .r span:first-child {
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+  }
+  .contact-list .r a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 1px;
+  }
+  .contact-list .r a:active { color: var(--accent); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 16px 24px;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+  .footer a {
+    color: var(--ink-soft);
+    text-decoration: underline;
+  }
+
+  audio { display: none; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Yassen Elkhatib</div>
+  <div class="ctrls">
+    <a href="/mobile/" id="ybBack" title="Back" aria-label="Back to selector">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-5v-7H10v7H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+    </a>
+    <button id="ybMusicToggle" type="button" title="Play / pause" aria-label="Play or pause music">
+      <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 5h18v14H3V5zm2 2v10h2V7H5zm4 0v6h2V7H9zm4 0v10h2V7h-2zm4 0v6h2V7h-2z"/>
+      </svg>
+      <svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/>
+      </svg>
+    </button>
+    <button id="ybMusicSwitch" type="button" title="Switch track" aria-label="Switch music track">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M17 1l4 4-4 4"></path>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+        <path d="M7 23l-4-4 4-4"></path>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="name">Yassen</div>
+  <div class="name2">Elkhatib</div>
+  <div class="role">PERFORMANCE-DRIVEN VIDEO EDITOR</div>
+  <div class="tag">Short-form &amp; long-form content. Reels, TikTok, social media ads.</div>
+</section>
+
+<section class="section">
+  <h2>About me</h2>
+  <p>I'm Yassen Elkhatib — as you saw on this site. I didn't want this to be just another website like a hundred others — I set out to build you an experience worth remembering. For you to actually enjoy it — that's what I aim for in every video I design, in the sound and colors I pick, and in every element that lifts a video from ordinary into something professional and distinctive.</p>
+  <p style="margin-top:12px">Through my modest experience with clients, my highest goal stays the same: their comfort and their trust. I've worked solo and on teams, and both taught me how to deal with different people and different elements, and how to deliver the best video possible. Thank you.</p>
+</section>
+
+<section class="section">
+  <h2>Let's build something together</h2>
+  <div class="contact-list">
+    <div class="r">
+      <span>Email</span>
+      <a href="mailto:yassenelkhatib0q@gmail.com">yassenelkhatib0q@gmail.com</a>
+    </div>
+    <div class="r">
+      <span>Phone</span>
+      <a href="tel:+201101951744">+20 110 195 1744</a>
+    </div>
+    <div class="r">
+      <span>Behance</span>
+      <a href="https://behance.net/Yassen-El-Khatib" target="_blank" rel="noopener">behance.net/Yassen-El-Khatib</a>
+    </div>
+    <div class="r">
+      <span>LinkedIn</span>
+      <a href="https://linkedin.com/in/yassen-el-khatib" target="_blank" rel="noopener">linkedin.com/in/yassen-el-khatib</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  Entirely designed by Yassen Elkhatib<br>
+  <a href="/test/EN-P.html">→ open the full desktop version</a>
+</footer>
+
+<audio id="ybAudio" preload="none"></audio>
+
+<script>
+(function() {
+  const TRACKS = [
+    '/assets/music/radio-inkspots-en.mp3',
+    '/assets/music/radio-shadow-en.mp3',
+    '/assets/music/radio-sunset-en.mp3',
+    '/assets/music/music-en-1.mp3',
+    '/assets/music/music-en-2.mp3'
+  ];
+  const audio  = document.getElementById('ybAudio');
+  const toggle = document.getElementById('ybMusicToggle');
+  const sw     = document.getElementById('ybMusicSwitch');
+  if (!audio || !toggle || !sw) return;
+  let idx = 0;
+  let userPaused = true;
+  audio.src = TRACKS[idx];
+  audio.loop = true;
+  audio.volume = 0.55;
+  function setPlay(p) {
+    toggle.classList.toggle('playing', p);
+    toggle.setAttribute('aria-label', p ? 'Pause music' : 'Play music');
+  }
+  toggle.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => { userPaused = false; setPlay(true); }).catch(()=>{});
+    } else {
+      audio.pause();
+      userPaused = true;
+      setPlay(false);
+    }
+  });
+  sw.addEventListener('click', () => {
+    idx = (idx + 1) % TRACKS.length;
+    const wasPlaying = !audio.paused;
+    audio.src = TRACKS[idx];
+    audio.loop = true;
+    if (wasPlaying || !userPaused) audio.play().then(() => setPlay(true)).catch(()=>{});
+  });
+  audio.addEventListener('play',  () => setPlay(true));
+  audio.addEventListener('pause', () => setPlay(false));
+})();
+</script>
+
+</body>
+</html>
