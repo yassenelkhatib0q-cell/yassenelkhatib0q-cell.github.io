@@ -1453,10 +1453,10 @@ gltfLoader.load('assets/room.glb', (gltf) => {
   if (crtTargetMesh) {
     crtTargetMesh.geometry.computeBoundingBox();
     const bb = crtTargetMesh.geometry.boundingBox;
-    // Click-zone 1.7 x 1.7 of the CRT bounds per Yassen — overshoots the CRT
-    // face so the outline halo extends past the TV edges.
-    const w = (bb.max.x - bb.min.x) * 1.7;
-    const h = (bb.max.y - bb.min.y) * 1.7;
+    // Click-zone 1.5 x 1.5 of the CRT bounds per Yassen — overshoots the CRT
+    // face by 50% so the outline halo extends past the TV edges.
+    const w = (bb.max.x - bb.min.x) * 1.5;
+    const h = (bb.max.y - bb.min.y) * 1.5;
     const tvClick = new THREE.Mesh(
       new THREE.PlaneGeometry(w, h),
       // Transparent (invisible to the eye) but NOT material.visible:false — the
@@ -3472,13 +3472,13 @@ function updateHints() {
     el.style.opacity = '1';
   };
   // Mobile-3d hint positions (per Yassen):
-  //   hint-lang (TV button):     dy = -50  (was -110 desktop)
-  //   hint-tv-screen (CRT):      dy = -70  (was -160 desktop; raised back 30px from -40)
-  //   hint-radio:                dy = -90, dx = +70 (was +100, pulled back 30px)
+  //   hint-lang (TV button):     dy = -50   (was -110 desktop)
+  //   hint-tv-screen (CRT):      dy = -100  (raised another 30px from -70)
+  //   hint-radio:                dy = -90,  dx = 0 (back over the radio — +70 was off-screen)
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
   _set(hintLang,     tvButton,        _isLM ? -50  : -110, false,        0);
-  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _radioSeen,   _isLM ? 70 : 90);
-  _set(hintTvScreen, window._crtMesh, _isLM ? -70  : -160, _scrollHide,  0);
+  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _radioSeen,   _isLM ? 0  : 90);
+  _set(hintTvScreen, window._crtMesh, _isLM ? -100 : -160, _scrollHide,  0);
 }
 
 // ===== Full-body emissive pulse on the TV and radio so users SEE they are clickable from the start =====
