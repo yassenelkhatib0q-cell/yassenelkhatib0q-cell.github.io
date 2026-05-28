@@ -108,23 +108,22 @@
   #track{ position: relative; }                       /* tall spacer; height set by JS */
   #stage{ position: sticky; top: 0; height: 100vh; overflow: hidden; z-index: 1; }
   #reel{ display: flex; flex-direction: row; height: 100%; direction: ltr; will-change: transform; }
-  /* ===== FIXED-CANVAS (desktop only) — Option A. See EN portfolio for full notes. ===== */
-  @media (min-width: 769px) {
-    html, body { background: #0a0710 !important; }
-    body { overflow-x: hidden; }
-    #stage {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 1920px;
-      height: 1080px;
-      transform: translate(-50%, -50%) scale(var(--yx-scale, 1));
-      transform-origin: center center;
-      container-type: size;
-      container-name: yxstage;
-    }
-    #reel { height: 1080px; }
+  /* TV variant: fixed-canvas ALWAYS applies (this file is only ever loaded inside
+     the 3D site's TV iframe — no mobile responsive fallback needed). */
+  html, body { background: #0a0710 !important; }
+  body { overflow-x: hidden; }
+  #stage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 1920px;
+    height: 1080px;
+    transform: translate(-50%, -50%) scale(var(--yx-scale, 1));
+    transform-origin: center center;
+    container-type: size;
+    container-name: yxstage;
   }
+  #reel { height: 1080px; }
   /* scrollbar hidden (scrolling still works) */
   html,body{ scrollbar-width: none; -ms-overflow-style: none; }
   ::-webkit-scrollbar{ width: 0; height: 0; display: none; }
@@ -395,99 +394,9 @@
     .logo-tile:active{transform:scale(1.16) translateY(-4px);transition:transform .12s ease}
   }
 
-  /* ============================================================================
-     MOBILE OVERRIDES (≤ 768px) — convert the horizontal-reel cinematic into a
-     clean vertical scroll. RTL is preserved — the page still reads right-to-left,
-     but layouts stack vertically (single column) so content actually fits the
-     phone width.
-     ============================================================================ */
-  @media (max-width: 768px) {
-    html, body {
-      overflow-x: hidden !important;
-      overflow-y: auto !important;
-      height: auto !important;
-      min-height: 100dvh !important;
-    }
-    #reel {
-      flex-direction: column !important;
-      height: auto !important;
-      width: 100% !important;
-      transform: none !important;
-    }
-    #track {
-      height: auto !important;
-      overflow: visible !important;
-    }
-    .panel {
-      flex: 0 0 auto !important;
-      width: 100% !important;
-      height: auto !important;
-      min-height: auto !important;
-      padding: 70px 18px 36px !important;
-    }
-    .panel [style*="translate"],
-    .panel [style*="transform: scale"] {
-      translate: 0 !important;
-      transform: none !important;
-    }
-    .hero-word {
-      font-size: clamp(42px, 13cqw, 80px) !important;
-      white-space: normal !important;
-      line-height: 1.1 !important;
-      display: block !important;
-      text-align: center !important;
-      margin: 8px 0 !important;
-    }
-    .hero-role, .hero-sub, .tagline, .role-tag {
-      text-align: center !important;
-    }
-    .panel h2.t, .sec-head h2 {
-      font-size: clamp(32px, 10cqw, 56px) !important;
-      text-align: center !important;
-      line-height: 1.1 !important;
-    }
-    .leader { display: none !important; }
-    .frame {
-      width: 100% !important;
-      aspect-ratio: 16 / 9 !important;
-      margin: 0 0 14px !important;
-    }
-    .contact .rows {
-      width: 100% !important;
-      max-width: 100% !important;
-      font-size: 13px !important;
-    }
-    .contact .r {
-      flex-direction: column !important;
-      align-items: flex-end !important; /* RTL: align to right */
-      padding: 10px 0 !important;
-    }
-    .skill-row, .stats {
-      grid-template-columns: 1fr !important;
-      display: grid !important;
-      gap: 12px !important;
-    }
-    .yx-cinema-bar { height: 52px !important; }
-    .yx-music-controls { top: 52px !important; gap: 8px !important; }
-    .yx-music-controls button,
-    .yx-music-controls > a {
-      width: 38px !important;
-      height: 38px !important;
-    }
-    #topbar {
-      padding: 10px 14px !important;
-      flex-wrap: wrap !important;
-    }
-    .baked-layer {
-      display: none !important;
-    }
-    #modal .close {
-      bottom: auto !important;
-      top: 14px !important;
-      transform: translateX(-50%) !important;
-      padding: 8px 24px !important;
-    }
-  }
+  /* TV variant: no mobile/vertical fallback. This file is ONLY ever loaded inside
+     the 3D site's CRT iframe — fixed-canvas Option A handles every resolution
+     by scaling the 1920×1080 design uniformly. */
 </style></head>
 <body style="">
 
@@ -601,7 +510,9 @@
   const prog  = document.getElementById('prog');
   const hint  = document.getElementById('hint');
   let maxX = 0, targetX = 0, curX = 0, raf = null;
-  const isMobile = () => window.innerWidth < 768;
+  // TV variant: always treat as desktop (the iframe lives inside the 3D site's CRT,
+  // which always projects this file at full landscape regardless of the host device).
+  const isMobile = () => false;
   // Fixed-canvas design dimensions. Match #stage CSS above. Used so maxX and
   // track height calculate in design coords (cqw/cqh measure to 1920×1080).
   const DESIGN_W = 1920, DESIGN_H = 1080;
