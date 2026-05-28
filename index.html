@@ -264,7 +264,7 @@
       <span class="arrow">→</span>
     </div>
     <div class="media">
-      <video autoplay muted loop playsinline preload="metadata" poster="/assets/room-env.jpg">
+      <video id="yxTvVideo" autoplay muted loop playsinline preload="auto" disablepictureinpicture>
         <source src="/assets/video/selector-tv.mp4" type="video/mp4">
       </video>
     </div>
@@ -331,6 +331,22 @@
   setTimeout(() => {
     document.querySelectorAll('.preview-iframe').forEach(_fitPreview);
   }, 1500);
+
+  // Force the TV-experience video to keep looping. Browser autoplay policies and
+  // some Chromium tab-throttling edge cases can leave the video paused after first
+  // play. This re-kicks it on every pause/end and on visibility-resume.
+  const tvVid = document.getElementById('yxTvVideo');
+  if (tvVid) {
+    const _kick = () => { tvVid.play().catch(() => {}); };
+    tvVid.addEventListener('pause', () => { setTimeout(_kick, 30); });
+    tvVid.addEventListener('ended', _kick);
+    tvVid.addEventListener('canplay', _kick);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) _kick(); });
+    // Also try a few times at boot in case autoplay was blocked initially
+    _kick();
+    setTimeout(_kick, 500);
+    setTimeout(_kick, 2000);
+  }
 
   // RAM measurement on selector page (light, since no 3D here)
   setTimeout(() => {
