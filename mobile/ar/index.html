@@ -192,6 +192,91 @@
     text-decoration: underline;
   }
 
+  /* Experience / project cards */
+  .project {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .project-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .project-head img {
+    width: 44px; height: 44px;
+    object-fit: contain;
+    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
+  }
+  .project-head .project-name {
+    font-family: 'Panorama', 'Cairo', serif;
+    font-size: 19px;
+    color: var(--stamp);
+    line-height: 1;
+  }
+  .project-head .project-role {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    font-weight: 600;
+  }
+  .project-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #1a1510;
+    display: block;
+  }
+  .project-story {
+    padding: 14px 16px 16px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink);
+    font-family: 'Panorama', 'Cairo', serif;
+  }
+  .project-link {
+    display: inline-block;
+    margin: 0 16px 14px;
+    font-size: 12px;
+    color: var(--stamp);
+    text-decoration: none;
+    border-bottom: 1px solid var(--stamp);
+    padding-bottom: 1px;
+    font-weight: 600;
+  }
+
+  /* Skills grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .skill {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 8px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .skill img {
+    width: 36px; height: 36px;
+    object-fit: contain;
+  }
+  .skill span {
+    font-family: 'Panorama', 'Cairo', serif;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
   audio { display: none; }
 </style>
 </head>
@@ -235,6 +320,91 @@
   <h2>عَنِّي</h2>
   <p>أنا ياسين الخطيب — كما رأيتَ في الموقع. لم أُرِد أن يكون هذا مجرد موقع آخر مثل مئات المواقع، بل سعيتُ إلى أن أصنعَ لك تجربةً لا تُنسى. أن تستمتعَ بالتجربة — هذا ما أهدفُ إليه في تصميمي للفيديوهات، وفي انتقائي للصوت والألوان وكل عنصر يُضفي على الفيديو طابعًا احترافيًا ومميزًا.</p>
   <p style="margin-top:12px">ومن خلال خبرتي المتواضعة مع العملاء، يظلُّ هدفي الأسمى هو راحة العميل وثقته. خُضتُ تجربةَ العمل بمفردي وضمن فريق، وقد أكسبَتْني هاتان التجربتان خبرةً في التعامل مع مختلف الأشخاص والعناصر، وفي إيصال أفضل ما يمكن تقديمه من فيديو. شكرًا لك.</p>
+</section>
+
+<section class="section">
+  <h2>الْخِبْرَة</h2>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/alx.png" alt="ALX Arabia">
+      <div>
+        <div class="project-name">ALX Arabia</div>
+        <div class="project-role">صانع محتوى</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/alx.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">في ALX كنتُ Content Creator أُمسك بالعملية كاملةً: أُصوّر بالمعدّات، وأكتب السكربت، وأُولّد الأفكار ثم أنتقي أنسبها. إنتاج كامل: مونتاج، موشن، تدرّج لوني، تصميم صوتي، وترجمة. تسليم خلال أربعة إلى خمسة أيام مع توظيف الذكاء الاصطناعي لرفع الجودة.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/enactus.png" alt="Enactus">
+      <div>
+        <div class="project-name">Enactus</div>
+        <div class="project-role">محرّر فيديو وتصميم موشن</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/enactus.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">كانت Enactus عملًا جماعيًا بالكامل؛ اشتغلتُ مع الفريق ومع المصوّرين عن قرب. أكثر من خمسة فيديوهات قصيرة ترويجيّة لحملات طلابيّة، تسليم تحت مواعيد ضيّقة، وموشن جرافيك قائم على الإنفوجرافيك لتبسيط الرسائل.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/jade.png" alt="Jade Textile · Optara">
+      <div>
+        <div class="project-name">Jade · Optara</div>
+        <div class="project-role">صانع واجهة وتجربة المستخدم</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/jade.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">في Jade Textile بدأتُ من أرض المصنع، لا من الشاشة؛ جلستُ مع العمّال والمهندسين حتى فهمتُ ما يحتاجونه فعلًا. ثم بنيتُ Optara: منصّة واحدة تربط الأقسام وتُجدوِل الإنتاج. بناء التطبيق كاملًا منفردًا في نحو شهرين بمسار مدعوم بالذكاء الاصطناعي.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/jad.png" alt="JAD">
+      <div>
+        <div class="project-name">JAD</div>
+        <div class="project-role">محرّر فيديو</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/jad.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">JAD علامة يصنعها فريق شاب متخصّص في صناعة البراويز. صمّمتُ لهم حملة فيديوهات إعلانية، نزلتُ معهم إلى موقع التصوير وأدرتُ زوايا الكاميرا. اخترتُ أسلوبًا هادئًا مشوّقًا لا يشرح كل شيء، يترك المشاهد متشوّقًا لمعرفة ما يُقدَّم.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/depi.png" alt="DEPI">
+      <div>
+        <div class="project-name">DEPI</div>
+        <div class="project-role">دبلومة — مبادرة رواد مصر الرقمية</div>
+      </div>
+    </div>
+    <p class="project-story">دبلومة DEPI نقلت فهمي للأنيميشن إلى مستوى أعمق. عملتُ ضمن فريق نُنسّق فيه معًا حتى أدقّ التفاصيل، وكنتُ المسؤول عن التحريك والحركة في مشروع التخرّج. تجربةٌ مميّزة جمعت بين التعلّم والعمل الجماعي والتنفيذ.</p>
+    <a class="project-link" href="https://depi.gov.eg/content/home" target="_blank" rel="noopener">← اعرض DEPI</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>الْمَهَارَات</h2>
+  <div class="skills-grid">
+    <div class="skill"><img src="/test/assets/logos/ae.svg" alt="After Effects"><span>After Effects</span></div>
+    <div class="skill"><img src="/test/assets/logos/pr.svg" alt="Premiere"><span>Premiere</span></div>
+    <div class="skill"><img src="/test/assets/logos/ps.svg" alt="Photoshop"><span>Photoshop</span></div>
+    <div class="skill"><img src="/test/assets/logos/ai.svg" alt="Illustrator"><span>Illustrator</span></div>
+    <div class="skill"><img src="/test/assets/logos/blender.svg" alt="Blender"><span>Blender</span></div>
+    <div class="skill"><img src="/test/assets/logos/capcut.png" alt="CapCut"><span>CapCut</span></div>
+    <div class="skill"><img src="/test/assets/logos/canva.svg" alt="Canva"><span>Canva</span></div>
+  </div>
 </section>
 
 <section class="section">

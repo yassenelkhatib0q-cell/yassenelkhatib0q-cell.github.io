@@ -207,6 +207,94 @@
     text-decoration: underline;
   }
 
+  /* Experience / project cards */
+  .project {
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .project-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .project-head img {
+    width: 44px; height: 44px;
+    object-fit: contain;
+    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
+  }
+  .project-head .project-name {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: 19px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .project-head .project-role {
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    font-weight: 600;
+  }
+  .project-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #1a1510;
+    display: block;
+  }
+  .project-story {
+    padding: 14px 16px 16px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .project-link {
+    display: inline-block;
+    margin: 0 16px 14px;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1px;
+    font-weight: 600;
+  }
+
+  /* Skills grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .skill {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 8px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .skill img {
+    width: 36px; height: 36px;
+    object-fit: contain;
+  }
+  .skill span {
+    font-family: 'Vintage Town', 'Berkshire Pro Loops', serif;
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
   audio { display: none; }
 </style>
 </head>
@@ -250,6 +338,91 @@
   <h2>About me</h2>
   <p>I'm Yassen Elkhatib — as you saw on this site. I didn't want this to be just another website like a hundred others — I set out to build you an experience worth remembering. For you to actually enjoy it — that's what I aim for in every video I design, in the sound and colors I pick, and in every element that lifts a video from ordinary into something professional and distinctive.</p>
   <p style="margin-top:12px">Through my modest experience with clients, my highest goal stays the same: their comfort and their trust. I've worked solo and on teams, and both taught me how to deal with different people and different elements, and how to deliver the best video possible. Thank you.</p>
+</section>
+
+<section class="section">
+  <h2>Experience</h2>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/alx.png" alt="ALX Arabia">
+      <div>
+        <div class="project-name">ALX Arabia</div>
+        <div class="project-role">Content Creator</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/alx.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">At ALX I worked as a Content Creator running the whole pipeline — shooting with the gear, writing the scripts, generating the ideas and picking the strongest ones. End-to-end production: editing, motion, color, sound design and subtitling. Tight 4-5 day deliveries using AI tools to speed production and lift quality.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/enactus.png" alt="Enactus">
+      <div>
+        <div class="project-name">Enactus</div>
+        <div class="project-role">Video Editor &amp; Motion Designer</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/enactus.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">Fully collaborative effort. Worked closely with the team and photographers — they were building a product, my job was how it would come through on screen. 5+ short promo videos under tight deadlines. Infographic-driven motion design that simplifies the message.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/jade.png" alt="Jade Textile · Optara">
+      <div>
+        <div class="project-name">Jade · Optara</div>
+        <div class="project-role">UI/UX Designer</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/jade.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">Started on the factory floor, not on the screen — sat with the workers and engineers until I genuinely understood the need. Built Optara: one platform tying departments together and scheduling production, used by three user types on the same live data. Built solo in ~2 months with an AI-supported workflow.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/jad.png" alt="JAD">
+      <div>
+        <div class="project-name">JAD</div>
+        <div class="project-role">Video Editor</div>
+      </div>
+    </div>
+    <video class="project-video" controls preload="metadata" playsinline>
+      <source src="/assets/videos/jad.mp4" type="video/mp4">
+    </video>
+    <p class="project-story">JAD is a brand built by a young team specialised in making picture frames. I designed a campaign of ad videos for them — wasn't only the edit: I went on location and ran camera angles alongside the photographer to make sure every shot served the cut. Quiet, intriguing style that leaves the viewer curious.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-head">
+      <img src="/test/assets/logos/depi.png" alt="DEPI">
+      <div>
+        <div class="project-name">DEPI</div>
+        <div class="project-role">Diploma — Digital Egypt Pioneers Initiative</div>
+      </div>
+    </div>
+    <p class="project-story">The DEPI diploma took my understanding of animation to a deeper level. Worked inside a team where we coordinated down to the smallest detail, and I was responsible for animation and motion on the graduation project. A standout experience combining learning, teamwork and real delivery.</p>
+    <a class="project-link" href="https://depi.gov.eg/content/home" target="_blank" rel="noopener">View DEPI →</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Skills</h2>
+  <div class="skills-grid">
+    <div class="skill"><img src="/test/assets/logos/ae.svg" alt="After Effects"><span>After Effects</span></div>
+    <div class="skill"><img src="/test/assets/logos/pr.svg" alt="Premiere"><span>Premiere</span></div>
+    <div class="skill"><img src="/test/assets/logos/ps.svg" alt="Photoshop"><span>Photoshop</span></div>
+    <div class="skill"><img src="/test/assets/logos/ai.svg" alt="Illustrator"><span>Illustrator</span></div>
+    <div class="skill"><img src="/test/assets/logos/blender.svg" alt="Blender"><span>Blender</span></div>
+    <div class="skill"><img src="/test/assets/logos/capcut.png" alt="CapCut"><span>CapCut</span></div>
+    <div class="skill"><img src="/test/assets/logos/canva.svg" alt="Canva"><span>Canva</span></div>
+  </div>
 </section>
 
 <section class="section">
