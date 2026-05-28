@@ -370,6 +370,12 @@
      and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
   .landscape-mobile .cinema-bar { display: none !important; }
   .landscape-mobile #vignette { opacity: 0.4; }
+  /* "Let's build something together" hero overlay — desktop already at 67% of
+     original, but on a landscape phone (typical 844×390) it still occupies
+     half the screen. Shrink hard for mobile-3d only. */
+  .landscape-mobile #phase1-overlay h1      { font-size: clamp(16px, 2vw, 26px) !important; max-width: 280px !important; }
+  .landscape-mobile #phase1-overlay .sub    { font-size: clamp(7px, 0.5vw, 9px) !important; max-width: 180px !important; margin-top: 6px !important; }
+  .landscape-mobile #phase1-overlay .tagline{ font-size: clamp(5px, 0.4vw, 7px) !important; margin-top: 7px !important; }
 
   #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
   #cursor svg { width:100%; height:100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
@@ -685,7 +691,7 @@
     lastX = x;
     if (Math.abs(dx) > 0.5) {
       e.preventDefault();                     // block native vertical scroll
-      window.scrollBy(0, dx);
+      window.scrollBy(0, dx * 3.5);           // 1:1 felt sluggish — 3.5× makes the swipe feel snappy
     }
   }, { passive: false });
   document.addEventListener('touchend', function () { lastX = null; }, { passive: true });
@@ -1049,7 +1055,11 @@ const canvas = document.getElementById('gl');
 // come out BLACK because the OS captures after the canvas has cleared. Costs a
 // small amount of GPU memory but matters more than a few % perf on a portfolio.
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));  // Restored — full quality on hi-DPI/Retina screens.
+// Pixel ratio: full quality on desktop/tablet, but on mobile-3d (/landscape=1)
+// the phone GPU was overheating + frame rate tanked. Pin to 1.0 there to cut
+// pixel work to a quarter on a DPR-3 device.
+const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
+renderer.setPixelRatio(_isLandscapeMobile ? 1 : Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1091,6 +1101,14 @@ const bloomPass = new UnrealBloomPass(
 );
 composer.addPass(bloomPass);
 composer.addPass(new OutputPass());
+
+// Mobile-3d: bloom + outline are GPU-expensive full-screen post passes. Disable
+// them on phones — keeps the room scene cool and frame rate up. Quality loss is
+// minor (slight halo around moon/lamp); thermal/perf win is large.
+if (_isLandscapeMobile) {
+  bloomPass.enabled = false;
+  outlinePass.enabled = false;
+}
 
 /* Software-WebGL detection + FPS-based fallback REMOVED per Yassen's request.
    They auto-disabled bloom+outline and lowered pixel ratio for visitors with
@@ -2897,7 +2915,7 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260528d';
+const _PF_CACHE_BUST = 'v=20260528e';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
   return base + '?' + _PF_CACHE_BUST;

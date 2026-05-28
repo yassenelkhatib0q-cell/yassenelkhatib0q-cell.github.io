@@ -653,7 +653,7 @@
     _swipeLastX = x;
     if (Math.abs(dx) > 0.5) {
       e.preventDefault();
-      window.scrollBy(0, dx);
+      window.scrollBy(0, dx * 3.5);           // 3.5× multiplier — matches the parent index-v5 swipe feel
     }
   }, { passive: false });
   document.addEventListener('touchend', function () { _swipeLastX = null; }, { passive: true });
