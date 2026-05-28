@@ -183,11 +183,14 @@
   /* Hint under the experience logos — Panorama at a readable size. Pinned to
      bottom-center of the experience panel so it doesn't drift up beside the
      logos. */
+  /* Styled to match the AR "الْخِبْرَة" h2 — same Panorama font, same ink
+     color, no extra weight. Just smaller (about a third of the heading size). */
   .exp-hint{
-    font-family: 'Panorama','Cairo',serif;
-    font-weight: 700;
+    font-family: 'Panorama',serif;
+    font-weight: 400;
     color: var(--ink);
-    font-size: clamp(22px, 2.2cqw, 38px);
+    font-size: clamp(34px, 3.2cqw, 70px);
+    line-height: 1;
     text-align: center;
     letter-spacing: 0;
     opacity: 1;
@@ -198,7 +201,6 @@
     direction: rtl;
     white-space: nowrap;
     z-index: 300;
-    text-shadow: 0 1px 0 rgba(232,220,196,.4);
   }
   .about{ width: min(42.708cqw,92cqw); }
   .about p{ font-size: clamp(22px,2.2cqw,30px); line-height: 1.75; }

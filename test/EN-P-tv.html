@@ -193,14 +193,17 @@
   /* Hint under the experience logos — Fraunces (readable vintage serif) at a
      comfortable size. Pinned to bottom-center of the experience panel so it
      doesn't drift up beside individual logos. */
+  /* Styled to match the "Experience" h2 — same font, no italic, same accent
+     color — just smaller (about a third of the heading size). */
   .exp-hint{
-    font-family: 'Fraunces','Vintage Town',serif;
-    font-style: italic;
-    font-weight: 600;
+    font-family: 'Vintage Town','Fraunces',serif;
+    font-style: normal;
+    font-weight: 400;
     color: var(--accent);
-    font-size: clamp(22px, 2.2cqw, 38px);
+    font-size: clamp(32px, 3cqw, 64px);
+    line-height: 1;
     text-align: center;
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
     opacity: 1;
     position: absolute;
     left: 50%;
@@ -208,7 +211,6 @@
     transform: translateX(-50%);
     white-space: nowrap;
     z-index: 300;
-    text-shadow: 0 1px 0 rgba(232,220,196,.4);
   }
   .about{ width: min(42.708cqw,92cqw); }
   .about p{ font-family: 'Fraunces','EB Garamond',serif; font-weight: 500; font-size: clamp(22px,2.2cqw,30px); line-height: 1.55; color: var(--ink-soft);
