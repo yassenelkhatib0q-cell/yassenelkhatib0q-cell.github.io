@@ -218,90 +218,115 @@
   .logo-tile img { width: 54px; height: 54px; object-fit: contain; filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4); }
   .logo-tile .lt-name { font-family: 'Panorama', 'Cairo', serif; font-size: 15px; color: var(--ink); line-height: 1.1; }
 
-  /* Expand rectangle — RTL: text on the left, video on the right (mirror of EN).
-     Logo top-LEFT corner in RTL (trailing edge stays visually consistent). */
-  .expand-rect {
-    margin-top: 18px;
+  /* PROJECT POPUP — full-screen bottom-sheet overlay (mirror of EN, RTL-tuned). */
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10, 7, 16, 0.96);
+    display: none;
+    overflow: hidden;
+  }
+  .popup-overlay.open { display: block; }
+
+  .popup-card {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 95vh; height: 95dvh;
     background: var(--paper);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 30px rgba(0,0,0,.45);
+    transform: translateY(102%);
+    transition: transform .38s cubic-bezier(.2, .9, .25, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 56px 16px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .popup-overlay.open .popup-card { transform: translateY(0); }
+
+  .popup-close {
+    position: absolute;
+    top: 12px; left: 12px;     /* ✕ stays in TOP-LEFT physically, even in RTL */
+    z-index: 5;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    background: var(--paper2);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 17px;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,.18);
+  }
+  .popup-close:active { transform: scale(.93); }
+
+  .popup-video-wrap {
+    width: 75%;
+    max-width: 320px;
+    margin: 0 auto 22px;
+    aspect-ratio: 9 / 16;
+    background: #1a1510;
     border: 1.5px solid var(--ink);
     border-radius: 6px;
-    box-shadow: inset 0 0 0 1px var(--paper), 0 8px 24px rgba(0,0,0,.18);
     overflow: hidden;
-    display: none;
-    position: relative;
   }
-  .expand-rect.open { display: block; animation: erOpen .25s ease-out; }
-  @keyframes erOpen { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .popup-card.layout-landscape .popup-video-wrap {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+  .popup-video-wrap video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 
-  .er-body {
+  /* Info box — RTL: logo on the right side visually (natural for RTL reading) */
+  .popup-info {
     display: flex;
     gap: 14px;
     padding: 16px;
-    flex-direction: row-reverse; /* RTL: visual order = video right, text left */
-  }
-  .er-video-wrap {
-    flex: 0 0 38%;
-    aspect-ratio: 9 / 16;          /* vertical video */
-    background: #1a1510;
+    background: var(--paper2);
     border: 1.5px solid var(--ink);
-    overflow: hidden;
-    position: relative;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px var(--paper);
+    align-items: flex-start;
   }
-  .er-video-wrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .er-text {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    padding-left: 50px;             /* space for the corner logo (RTL: top-left) */
-    position: relative;
+  .popup-logo {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
   }
-  .er-title {
+  .popup-text { flex: 1; min-width: 0; }
+  .popup-title {
     font-family: 'Panorama', 'Cairo', serif;
-    font-size: 20px;
+    font-size: 24px;
     color: var(--stamp);
-    line-height: 1.15;
+    line-height: 1.05;
     margin-bottom: 4px;
   }
-  .er-role {
+  .popup-role {
     font-size: 11.5px;
     color: var(--ink-soft);
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
-  .er-story {
+  .popup-story {
     font-size: 14px;
     line-height: 1.75;
     color: var(--ink);
     font-family: 'Panorama', 'Cairo', serif;
   }
-  .er-corner-logo {
-    position: absolute;
-    top: 14px;
-    left: 14px;                     /* RTL: corner logo top-LEFT */
-    width: 36px; height: 36px;
-    object-fit: contain;
-    filter: grayscale(1) sepia(.5) brightness(.6) contrast(1.4);
-    z-index: 2;
-  }
-  .er-close {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    width: 28px; height: 28px;
-    border: 1px solid var(--ink);
-    background: var(--paper2);
-    color: var(--ink);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    z-index: 3;
-  }
-  .er-link {
+  .popup-link {
     display: inline-block;
-    margin-top: 10px;
+    margin-top: 12px;
     font-size: 12px;
     color: var(--stamp);
     text-decoration: none;
@@ -309,16 +334,10 @@
     padding-bottom: 1px;
     font-weight: 600;
   }
-  .expand-rect.no-video .er-video-wrap { display: none; }
-  .expand-rect.no-video .er-text { padding-left: 50px; }
+  .popup-card.no-video .popup-video-wrap { display: none; }
+  .popup-card.no-video { padding-top: 64px; }
 
-  /* Narrow phones: stack video on top, text below. */
-  @media (max-width: 479px) {
-    .er-body { flex-direction: column; gap: 12px; }
-    .er-video-wrap { flex: 0 0 auto; width: 60%; max-width: 220px; align-self: flex-start; }
-    .er-text { padding-left: 0; }
-    .er-corner-logo { top: 12px; left: 12px; width: 32px; height: 32px; }
-  }
+  html.popup-open, body.popup-open { overflow: hidden; }
 
   /* Skills grid */
   .skills-grid {
@@ -420,23 +439,27 @@
     </button>
   </div>
 
-  <!-- Expand rectangle: appears when a logo is tapped. RTL: text on left, video on right, logo top-left. -->
-  <div class="expand-rect" id="expRect" aria-hidden="true">
-    <img class="er-corner-logo" id="erLogo" src="" alt="">
-    <div class="er-body">
-      <div class="er-video-wrap" id="erVideoWrap">
-        <video id="erVideo" autoplay muted loop playsinline preload="metadata"></video>
-      </div>
-      <div class="er-text">
-        <div class="er-title" id="erTitle"></div>
-        <div class="er-role" id="erRole"></div>
-        <div class="er-story" id="erStory"></div>
-        <a class="er-link" id="erLink" href="#" target="_blank" rel="noopener" style="display:none">اعرض ←</a>
+
+</section>
+
+<!-- POPUP — full-overlay bottom-sheet shown when a logo is tapped (RTL). -->
+<div class="popup-overlay" id="popup" aria-hidden="true">
+  <div class="popup-card" id="popupCard">
+    <button class="popup-close" id="popupClose" type="button" aria-label="إغلاق">✕</button>
+    <div class="popup-video-wrap" id="popupVideoWrap">
+      <video id="popupVideo" autoplay muted loop playsinline preload="metadata"></video>
+    </div>
+    <div class="popup-info">
+      <img class="popup-logo" id="popupLogo" src="" alt="">
+      <div class="popup-text">
+        <div class="popup-title" id="popupTitle"></div>
+        <div class="popup-role"  id="popupRole"></div>
+        <div class="popup-story" id="popupStory"></div>
+        <a class="popup-link" id="popupLink" href="#" target="_blank" rel="noopener" style="display:none">اعرض ←</a>
       </div>
     </div>
-    <button class="er-close" id="erClose" type="button" aria-label="إغلاق">✕</button>
   </div>
-</section>
+</div>
 
 <section class="section">
   <h2>الْمَهَارَات</h2>
@@ -493,6 +516,7 @@
       role:  'صانع محتوى',
       logo:  '/test/assets/logos/alx.png',
       video: '/assets/videos/alx.mp4',
+      landscape: false,
       link:  null,
       story: 'في ALX كنتُ Content Creator أُمسك بالعملية كاملةً: أُصوّر بالمعدّات، وأكتب السكربت، وأُولّد الأفكار ثم أنتقي أنسبها. إنتاج كامل: مونتاج، موشن، تدرّج لوني، تصميم صوتي، وترجمة. تسليم خلال أربعة إلى خمسة أيام مع توظيف الذكاء الاصطناعي لرفع الجودة.'
     },
@@ -501,6 +525,7 @@
       role:  'محرّر فيديو وتصميم موشن',
       logo:  '/test/assets/logos/enactus.png',
       video: '/assets/videos/enactus.mp4',
+      landscape: false,
       link:  null,
       story: 'كانت Enactus عملًا جماعيًا بالكامل؛ اشتغلتُ مع الفريق ومع المصوّرين عن قرب. أكثر من خمسة فيديوهات قصيرة ترويجيّة، تسليم تحت مواعيد ضيّقة، وموشن جرافيك قائم على الإنفوجرافيك لتبسيط الرسائل.'
     },
@@ -509,6 +534,7 @@
       role:  'صانع واجهة وتجربة المستخدم',
       logo:  '/test/assets/logos/jade.png',
       video: '/assets/videos/jade.mp4',
+      landscape: true,   // Jade · Optara — تسجيل شاشة لموقع، نسبة 16:9 أفقي
       link:  null,
       story: 'في Jade Textile بدأتُ من أرض المصنع، لا من الشاشة؛ جلستُ مع العمّال والمهندسين حتى فهمتُ ما يحتاجونه فعلًا. ثم بنيتُ Optara: منصّة واحدة تربط الأقسام وتُجدوِل الإنتاج. بناء التطبيق كاملًا منفردًا في نحو شهرين بمسار مدعوم بالذكاء الاصطناعي.'
     },
@@ -517,6 +543,7 @@
       role:  'محرّر فيديو',
       logo:  '/test/assets/logos/jad.png',
       video: '/assets/videos/jad.mp4',
+      landscape: false,
       link:  null,
       story: 'JAD علامة يصنعها فريق شاب متخصّص في صناعة البراويز. صمّمتُ لهم حملة فيديوهات إعلانية، نزلتُ معهم إلى موقع التصوير وأدرتُ زوايا الكاميرا. أسلوبٌ هادئٌ مشوّق يترك المشاهد متشوّقًا لمعرفة ما يُقدَّم.'
     },
@@ -525,51 +552,58 @@
       role:  'دبلومة — مبادرة رواد مصر الرقمية',
       logo:  '/test/assets/logos/depi.png',
       video: null,
+      landscape: false,
       link:  'https://depi.gov.eg/content/home',
       story: 'دبلومة DEPI نقلت فهمي للأنيميشن إلى مستوى أعمق. عملتُ ضمن فريق نُنسّق فيه معًا حتى أدقّ التفاصيل، وكنتُ المسؤول عن التحريك والحركة في مشروع التخرّج. تجربةٌ مميّزة جمعت بين التعلّم والعمل الجماعي والتنفيذ.'
     }
   };
 
   const grid    = document.getElementById('expGrid');
-  const rect    = document.getElementById('expRect');
-  const erLogo  = document.getElementById('erLogo');
-  const erTitle = document.getElementById('erTitle');
-  const erRole  = document.getElementById('erRole');
-  const erStory = document.getElementById('erStory');
-  const erLink  = document.getElementById('erLink');
-  const erVid   = document.getElementById('erVideo');
-  const erClose = document.getElementById('erClose');
+  const popup   = document.getElementById('popup');
+  const card    = document.getElementById('popupCard');
+  const pLogo   = document.getElementById('popupLogo');
+  const pTitle  = document.getElementById('popupTitle');
+  const pRole   = document.getElementById('popupRole');
+  const pStory  = document.getElementById('popupStory');
+  const pLink   = document.getElementById('popupLink');
+  const pVideo  = document.getElementById('popupVideo');
+  const pClose  = document.getElementById('popupClose');
   let openKey = null;
 
   function openProject(key) {
     const p = PROJECTS[key]; if (!p) return;
-    erLogo.src = p.logo; erLogo.alt = p.title;
-    erTitle.textContent = p.title;
-    erRole.textContent  = p.role;
-    erStory.textContent = p.story;
+    pLogo.src = p.logo; pLogo.alt = p.title;
+    pTitle.textContent = p.title;
+    pRole.textContent  = p.role;
+    pStory.textContent = p.story;
     if (p.link) {
-      erLink.href = p.link; erLink.style.display = '';
-      erLink.textContent = 'اعرض ' + p.title + ' ←';
-    } else { erLink.style.display = 'none'; }
+      pLink.href = p.link; pLink.style.display = '';
+      pLink.textContent = 'اعرض ' + p.title + ' ←';
+    } else { pLink.style.display = 'none'; }
+    card.classList.toggle('layout-landscape', !!p.landscape);
     if (p.video) {
-      rect.classList.remove('no-video');
-      erVid.src = p.video; erVid.load();
-      erVid.play().catch(()=>{});
+      card.classList.remove('no-video');
+      pVideo.src = p.video; pVideo.load();
+      pVideo.play().catch(()=>{});
     } else {
-      rect.classList.add('no-video');
-      erVid.removeAttribute('src'); erVid.load();
+      card.classList.add('no-video');
+      pVideo.removeAttribute('src'); pVideo.load();
     }
-    rect.classList.add('open');
-    rect.setAttribute('aria-hidden', 'false');
+    popup.classList.add('open');
+    popup.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('popup-open');
+    document.body.classList.add('popup-open');
+    card.scrollTop = 0;
     grid.querySelectorAll('.logo-tile').forEach(t => t.classList.toggle('active', t.dataset.key === key));
     openKey = key;
-    setTimeout(() => rect.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
   }
   function closeProject() {
-    rect.classList.remove('open');
-    rect.setAttribute('aria-hidden', 'true');
-    try { erVid.pause(); } catch(e){}
-    erVid.removeAttribute('src'); erVid.load();
+    popup.classList.remove('open');
+    popup.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('popup-open');
+    document.body.classList.remove('popup-open');
+    try { pVideo.pause(); } catch(e){}
+    pVideo.removeAttribute('src'); pVideo.load();
     grid.querySelectorAll('.logo-tile').forEach(t => t.classList.remove('active'));
     openKey = null;
   }
@@ -579,7 +613,8 @@
     const key = tile.dataset.key;
     if (openKey === key) closeProject(); else openProject(key);
   });
-  erClose.addEventListener('click', closeProject);
+  pClose.addEventListener('click', closeProject);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && openKey) closeProject(); });
 })();
 
 /* ========================================================================

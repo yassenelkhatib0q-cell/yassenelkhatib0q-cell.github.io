@@ -12,6 +12,49 @@
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
 <style>
+  /* Loading screen — appears INSTANTLY so users don't think the site is broken
+     while iframes + video lazy-load behind. Fake counter 0→100 over ~5s. */
+  .boot-loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0a0710;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    transition: opacity .55s ease;
+  }
+  .boot-loader.fade-out { opacity: 0; pointer-events: none; }
+  .bl-brand {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif;
+    font-size: clamp(26px, 7vw, 36px);
+    color: #e8dcc4;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .bl-bar {
+    width: 60%; max-width: 240px;
+    height: 2px;
+    background: rgba(232,220,196,.18);
+    overflow: hidden;
+    border-radius: 1px;
+  }
+  .bl-fill {
+    width: 0%; height: 100%;
+    background: #e8dcc4;
+    transition: width .05s linear;
+  }
+  .bl-pct {
+    font: 11px/1 ui-monospace, Consolas, Menlo, monospace;
+    letter-spacing: 3px;
+    color: rgba(232,220,196,.55);
+  }
+  .bl-sub {
+    font-size: 9.5px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(232,220,196,.4);
+    margin-top: -6px;
+  }
+
   @font-face {
     font-family: 'Berkshire Pro Loops';
     src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype');
@@ -214,6 +257,16 @@
 </head>
 <body>
 
+<!-- Boot loader — instant appearance so users see "loading" feedback immediately.
+     Removed by the script at the bottom once the fake 0→100 countdown finishes AND
+     window.load has fired. Prevents the "site looks broken / blank" perception. -->
+<div class="boot-loader" id="bootLoader" aria-hidden="false">
+  <div class="bl-brand">Yassen Elkhatib</div>
+  <div class="bl-bar"><div class="bl-fill" id="blFill"></div></div>
+  <div class="bl-pct" id="blPct">0%</div>
+  <div class="bl-sub">loading experience…</div>
+</div>
+
 <div class="wrap">
 
   <header class="header">
@@ -268,6 +321,34 @@
 </div>
 
 <script>
+// BOOT LOADER — runs first, fake 0→100 over ~5s, removes itself when fake reaches 100 AND
+// the real window 'load' event has fired. Whichever takes longer wins.
+(function() {
+  const loader = document.getElementById('bootLoader');
+  const fill   = document.getElementById('blFill');
+  const pct    = document.getElementById('blPct');
+  if (!loader || !fill || !pct) return;
+  const DURATION_MS = 5000;
+  const startT = performance.now();
+  let pageLoaded = (document.readyState === 'complete');
+  window.addEventListener('load', () => { pageLoaded = true; });
+
+  function step(now) {
+    const t = Math.min(1, (now - startT) / DURATION_MS);
+    const eased = 1 - Math.pow(1 - t, 2); // ease-out quad — fast start, slow finish
+    const p = Math.round(eased * 100);
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    if (t >= 1 && pageLoaded) {
+      loader.classList.add('fade-out');
+      setTimeout(() => loader.remove(), 600);
+      return;
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+
 (function() {
   // Lazy-load iframe previews when each panel enters the viewport — saves data on mobile.
   // Once loaded, scale the iframe down so the 1280×720 internal content fits the panel.
