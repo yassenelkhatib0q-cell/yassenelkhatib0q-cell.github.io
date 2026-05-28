@@ -1022,10 +1022,12 @@ const outlinePass = new OutlinePass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
   scene, camera
 );
-outlinePass.edgeStrength = 4.0;
-outlinePass.edgeGlow = 0.6;
-outlinePass.edgeThickness = 1.5;
-outlinePass.pulsePeriod = 1.6; // gentle breathing
+// Outline dialed way down per Yassen — was reading as a big yellow rectangle
+// around the TV. Thin breathing line now, still visible but not dominant.
+outlinePass.edgeStrength = 1.5;
+outlinePass.edgeGlow = 0.15;
+outlinePass.edgeThickness = 0.6;
+outlinePass.pulsePeriod = 2.4;
 outlinePass.visibleEdgeColor.set('#ffd070');
 outlinePass.hiddenEdgeColor.set('#664020');
 composer.addPass(outlinePass);
@@ -3259,10 +3261,10 @@ function updateHoverGlow() {
       document.body.style.cursor = 'pointer';
       const fn = _tooltipText[hoveredName];
       if (fn) _tooltipEl.textContent = fn();
-      // Intensify outline strength on hover — buttons stay outlined regardless
+      // Intensify outline strength on hover — kept subtle to match the dialed-down baseline.
       if (window._outlinePass) {
-        window._outlinePass.edgeStrength = 8.0;  // boosted
-        window._outlinePass.edgeGlow = 1.0;
+        window._outlinePass.edgeStrength = 3.0;  // was 8.0
+        window._outlinePass.edgeGlow = 0.4;      // was 1.0
       }
     }
     // Position tooltip near the cursor (refresh each frame in case of move)
