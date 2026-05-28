@@ -88,33 +88,42 @@
     max-width: 1700px;
     margin: 0 auto;
     height: calc(100dvh - clamp(70px, 14vh, 140px));
-    align-items: stretch;
+    /* New layout: 1 big panel on top (TV experience), 2 small panels on the bottom row */
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1.7fr 1fr;
+    grid-template-areas:
+      "middle middle"
+      "left right";
   }
-  /* DESKTOP — 3 panels, middle slightly wider */
-  @media (min-width: 900px) {
+  .panel.middle { grid-area: middle; }
+  .panel.left   { grid-area: left; }
+  .panel.right  { grid-area: right; }
+
+  /* TABLET — keep the same big-top / 2-bottom shape, slightly tighter spacing */
+  @media (max-width: 899px) {
     .selector {
-      grid-template-columns: 1fr 1.45fr 1fr;
-      grid-template-rows: 1fr;
+      grid-template-rows: 1.5fr 1fr;
+      gap: clamp(10px, 2vw, 18px);
+      padding: clamp(8px, 1.5vh, 20px) clamp(10px, 3vw, 28px) clamp(14px, 3vh, 28px);
     }
   }
-  /* MOBILE / TABLET — 2 portrait panels stacked, no TV experience.
-     On phones in portrait, each panel is tall/vertical (portfolios look natural).
-     Page is allowed to scroll if both panels don't fit at once. */
-  @media (max-width: 899px) {
+  /* PHONE (<600px) — stack everything vertically. Big TV panel first, then EN, then AR.
+     Page is allowed to scroll if all three don't fit at once. */
+  @media (max-width: 599px) {
     html, body { overflow-y: auto; overflow-x: hidden; }
     .selector {
       height: auto;
       min-height: calc(100dvh - clamp(70px, 14vh, 140px));
       grid-template-columns: 1fr;
-      grid-auto-rows: minmax(0, auto);
-      gap: clamp(14px, 2.4vh, 24px);
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "middle"
+        "left"
+        "right";
+      gap: clamp(12px, 2.4vh, 20px);
     }
-    .panel { aspect-ratio: 3 / 4; }     /* portrait shape — taller than wide */
-    .panel.middle { display: none; }     /* full 3D experience is desktop-only */
-  }
-  /* Very tall narrow phones (<420px): even taller panels look fine */
-  @media (max-width: 420px) {
-    .panel { aspect-ratio: 4 / 5.5; }
+    .panel.middle { aspect-ratio: 16 / 9; }
+    .panel.left, .panel.right { aspect-ratio: 4 / 3; }
   }
 
   .panel {
