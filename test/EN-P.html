@@ -423,6 +423,114 @@
   @media (hover:none){
     .logo-tile:active{transform:scale(1.16) translateY(-4px);transition:transform .12s ease}
   }
+
+  /* ============================================================================
+     MOBILE OVERRIDES (≤ 768px) — convert the horizontal-reel cinematic into a
+     clean vertical scroll. The horizontal-reel JS already detects this width and
+     stops driving the reel; these CSS rules complete the conversion by making
+     panels stack and resetting offsets the desktop layout uses to position content.
+     ============================================================================ */
+  @media (max-width: 768px) {
+    html, body {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100dvh !important;
+    }
+    /* Reel becomes a vertical column */
+    #reel {
+      flex-direction: column !important;
+      height: auto !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+    #track {
+      height: auto !important;
+      overflow: visible !important;
+    }
+    /* Each panel: full width, auto height — no more 100vh-each horizontal scroll */
+    .panel {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      padding: 70px 18px 36px !important;
+    }
+    /* Inline translates (used for cinematic offsets on desktop) push content
+       off-screen on phone — reset them. */
+    .panel [style*="translate"],
+    .panel [style*="transform: scale"] {
+      translate: 0 !important;
+      transform: none !important;
+    }
+    /* Hero text fits phone width — large but readable */
+    .hero-word {
+      font-size: clamp(42px, 13vw, 80px) !important;
+      white-space: normal !important;
+      line-height: 1.1 !important;
+      display: block !important;
+      text-align: center !important;
+      margin: 8px 0 !important;
+    }
+    .hero-role, .hero-sub, .tagline, .role-tag {
+      text-align: center !important;
+    }
+    /* Section titles */
+    .panel h2.t, .sec-head h2 {
+      font-size: clamp(32px, 10vw, 56px) !important;
+      text-align: center !important;
+      line-height: 1.1 !important;
+    }
+    /* Decorative vertical leader (sidebar number/text) — hide on phone */
+    .leader { display: none !important; }
+    /* Frames: full width, 16:9, easy to tap */
+    .frame {
+      width: 100% !important;
+      aspect-ratio: 16 / 9 !important;
+      margin: 0 0 14px !important;
+    }
+    /* Contact rows: full width with comfortable text */
+    .contact .rows {
+      width: 100% !important;
+      max-width: 100% !important;
+      font-size: 13px !important;
+    }
+    .contact .r {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding: 10px 0 !important;
+    }
+    /* Skill rows / experience cards: single column */
+    .skill-row, .stats {
+      grid-template-columns: 1fr !important;
+      display: grid !important;
+      gap: 12px !important;
+    }
+    /* Cinema bars (added for selector entry) — smaller on phone */
+    .yx-cinema-bar { height: 52px !important; }
+    .yx-music-controls { top: 52px !important; gap: 8px !important; }
+    .yx-music-controls button,
+    .yx-music-controls > a {
+      width: 38px !important;
+      height: 38px !important;
+    }
+    /* Topbar — compact */
+    #topbar {
+      padding: 10px 14px !important;
+      flex-wrap: wrap !important;
+    }
+    /* Hide decorative film-strip layers that overflow on phone */
+    .baked-layer {
+      display: none !important;
+    }
+    /* Modal: smaller close button position */
+    #modal .close {
+      bottom: auto !important;
+      top: 14px !important;
+      transform: translateX(-50%) !important;
+      padding: 8px 24px !important;
+    }
+  }
 </style></head>
 <body>
 
