@@ -595,6 +595,9 @@
 
 <div class="hint" id="hint-lang">Switch to Arabic</div>
 <div class="hint" id="hint-radio">اضغط لتشغيل الموسيقى</div>
+<!-- TV-screen hint: tells users they can click the screen to enter the portfolio
+     without scrolling (helps slow-hardware visitors). -->
+<div class="hint" id="hint-tv-screen">Click here to see the portfolio</div>
 
 <canvas id="gl"></canvas>
 
@@ -926,6 +929,7 @@ function setLanguage(lang) {
   // Keep the floating pills (language toggle + radio hint) in the right language too.
   if (typeof refreshLangPillText === 'function') refreshLangPillText();
   if (typeof refreshRadioHintText === 'function') refreshRadioHintText();
+  if (typeof refreshTvScreenHintText === 'function') refreshTvScreenHintText();
   // Swap the in-TV portfolio to the matching language file.
   if (typeof syncIframeToLang === 'function') syncIframeToLang();
 }
@@ -1429,6 +1433,11 @@ gltfLoader.load('assets/room.glb', (gltf) => {
   }
   if (radioButton) {
     clickables.push({ object: radioButton, name: 'Radio_Button' });
+  }
+  // TV-Screen: register the CRT mesh as a clickable. Lets users on slow hardware
+  // skip the long scroll-into-TV cinematic by clicking the screen directly.
+  if (crtTargetMesh) {
+    clickables.push({ object: crtTargetMesh, name: 'TV-Screen' });
   }
 
   // Default outline — always visible on both buttons so user knows they're clickable
@@ -3110,11 +3119,22 @@ function onTVButtonClick() {
 }
 function onRadioButtonClick() { toggleMusic(); if (typeof markRadioSeen === 'function') markRadioSeen(); if (typeof refreshRadioHintText === 'function') refreshRadioHintText(); }
 
+// Skip the long scroll-into-TV cinematic. Used when the user clicks the TV screen
+// directly (helps visitors on slow hardware or those who don't want to scroll).
+// We jump-scroll past the end of the cinematic; the existing scroll-driven
+// transition logic then runs at that target = 1 position and seats them inside the TV.
+function onTVScreenClick() {
+  const camRange = window.innerHeight * 4;
+  // Scroll past the end of the cinematic range so target=1 and the lock kicks in.
+  window.scrollTo(0, camRange + 50);
+}
+
 window.addEventListener('click', () => {
   const c = pickButton();
   if (!c) return;
   if (c.name === 'TV-Button') onTVButtonClick();
   else if (c.name === 'Radio_Button') onRadioButtonClick();
+  else if (c.name === 'TV-Screen') onTVScreenClick();
 });
 
 /* ====================================================================== */
@@ -3298,6 +3318,7 @@ window.addEventListener('wheel', (e) => {
 // ===== Floating pills: language toggle ABOVE the TV + dynamic play/stop hint ABOVE the radio =====
 const hintLang = document.getElementById('hint-lang');
 const hintRadio = document.getElementById('hint-radio');
+const hintTvScreen = document.getElementById('hint-tv-screen');
 // hints reset every reload — only hidden within the current session after interaction
 let _radioSeen = false;
 let _tvSeen = false;
@@ -3312,6 +3333,19 @@ function refreshRadioHintText() {
   } else {
     hintRadio.textContent = playing ? 'Click to stop music' : 'Click to play music';
     hintRadio.setAttribute('dir', 'ltr');
+  }
+}
+function refreshTvScreenHintText() {
+  if (!hintTvScreen) return;
+  // Written in the current site language — the user already chose it.
+  if (currentLang === 'ar') {
+    hintTvScreen.textContent = 'اضغط لرؤية الأعمال';
+    hintTvScreen.setAttribute('dir', 'rtl');
+    hintTvScreen.setAttribute('lang', 'ar');
+  } else {
+    hintTvScreen.textContent = 'Click here to see the portfolio';
+    hintTvScreen.setAttribute('dir', 'ltr');
+    hintTvScreen.setAttribute('lang', 'en');
   }
 }
 function refreshLangPillText() {
@@ -3333,6 +3367,7 @@ function refreshLangPillText() {
 }
 refreshLangPillText();
 refreshRadioHintText();
+refreshTvScreenHintText();
 // (language pill is text-only — not clickable, just a visual hint)
 const _hintVec = new THREE.Vector3();
 function _projectToScreen(obj) {
@@ -3346,8 +3381,13 @@ function updateHints() {
   if (window._pfLocked) {
     if (hintLang) hintLang.style.opacity = '0';
     if (hintRadio) hintRadio.style.opacity = '0';
+    if (hintTvScreen) hintTvScreen.style.opacity = '0';
     return;
   }
+  // Fade the TV-screen hint out once the user has started scrolling into the TV
+  // (no point showing "click the screen" when they're 50% into the cinematic already).
+  const _scrollHide = (typeof scrollProgress !== 'undefined') && scrollProgress > 0.2;
+
   const _set = (el, obj, dy, hide, dx) => {
     if (!el || !obj) return;
     if (hide) { el.style.opacity = '0'; return; }
@@ -3359,6 +3399,7 @@ function updateHints() {
   };
   _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
   _set(hintRadio, radioButton, -180, _radioSeen, 90);                // radio hint shifted right 90px to sit over the actual visible knob
+  _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
 }
 
 // ===== Full-body emissive pulse on the TV and radio so users SEE they are clickable from the start =====
@@ -3473,6 +3514,24 @@ function animate() {
   composer.render();
 }
 animate();
+
+// RAM measurement — logs JS heap + Three.js GPU object counts ~5 seconds after load
+// so we can verify the site's real memory footprint on different machines.
+setTimeout(() => {
+  try {
+    const ri = renderer.info;
+    const tex = ri && ri.memory ? ri.memory.textures : '?';
+    const geo = ri && ri.memory ? ri.memory.geometries : '?';
+    const calls = ri && ri.render ? ri.render.calls : '?';
+    const tris  = ri && ri.render ? ri.render.triangles : '?';
+    let heapMB = '?', limitMB = '?';
+    if (performance.memory) {
+      heapMB  = (performance.memory.usedJSHeapSize / 1048576).toFixed(0);
+      limitMB = (performance.memory.jsHeapSizeLimit / 1048576).toFixed(0);
+    }
+    console.log('[mem] JS heap ' + heapMB + ' MB / ' + limitMB + ' MB limit | textures: ' + tex + ' | geometries: ' + geo + ' | draw calls/frame: ' + calls + ' | triangles: ' + tris);
+  } catch (e) { console.warn('[mem] readout failed', e); }
+}, 5000);
 
 /* ====================================================================== */
 /* FORM + UNLOCK                                                          */

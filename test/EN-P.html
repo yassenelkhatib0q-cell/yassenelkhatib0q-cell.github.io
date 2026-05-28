@@ -2,6 +2,10 @@
 <html lang="en" dir="ltr" data-baked="1"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Cache busting — deploys appear instantly. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Yassen Elkhatib — Performance-driven Video Editor (Portfolio)</title>
 <meta name="description" content="Yassen Elkhatib — performance-driven video editor for short-form & long-form content. Reels, TikTok, social media ads. Produced more than twenty videos for over five brands.">
 <meta name="author" content="Yassen Elkhatib">
@@ -24,6 +28,52 @@
 <link href="/vendor/fonts/fonts-v5.css" rel="stylesheet">
 <script src="/vendor/gsap.min.js" defer></script>
 <style>
+  /* ─── Cinema bars + music controls (added for the selector-page entry path) ─── */
+  .yx-cinema-bar {
+    position: fixed; left: 0; right: 0;
+    height: clamp(48px, 9vh, 110px);
+    background: #0a0710;
+    z-index: 50;
+    pointer-events: none;
+  }
+  .yx-cinema-bar.top    { top: 0;    box-shadow: 0 8px 22px rgba(0,0,0,.4); }
+  .yx-cinema-bar.bottom { bottom: 0; box-shadow: 0 -8px 22px rgba(0,0,0,.4); }
+  .yx-music-controls {
+    position: fixed;
+    top: clamp(48px, 9vh, 110px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: clamp(8px, 1vw, 14px);
+    z-index: 51;
+  }
+  .yx-music-controls button {
+    width:  clamp(42px, 4.2vw, 60px);
+    height: clamp(42px, 4.2vw, 60px);
+    border-radius: 50%;
+    border: 1.5px solid rgba(232,220,196,.4);
+    background: rgba(10,7,16,.92);
+    color: #e8dcc4;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .2s, border-color .2s, color .2s;
+    box-shadow: 0 6px 18px rgba(0,0,0,.55);
+    padding: 0;
+  }
+  .yx-music-controls button:hover {
+    background: #e8dcc4; color: #0a0710;
+    transform: translateY(-3px);
+    border-color: rgba(232,220,196,.7);
+  }
+  .yx-music-controls button:active { transform: translateY(-1px) scale(.96); }
+  .yx-music-controls svg { width: 52%; height: 52%; }
+  .yx-music-controls button.playing .ic-play  { display: none; }
+  .yx-music-controls button:not(.playing) .ic-pause { display: none; }
+  /* Preview mode: hide everything that would imply interaction, freeze the page,
+     auto-scroll only. Triggered by ?preview=1 in URL (used by the selector iframes). */
+  html.yx-preview .yx-cinema-bar,
+  html.yx-preview .yx-music-controls { display: none !important; }
+  html.yx-preview, html.yx-preview body { pointer-events: none !important; }
   @font-face{ font-family: 'Panorama'; src: url('../assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display: swap; }
   @font-face{ font-family: 'Vintage Town'; src: url('../assets/fonts/VintageTown.otf') format('opentype'); font-display: swap; }
   @font-face{ font-family: 'Wanlaners'; src: url('../assets/fonts/Wanlaners.otf') format('opentype'); font-display: swap; }
@@ -368,6 +418,33 @@
   }
 </style></head>
 <body>
+
+<!-- Cinema bars + music controls (added for the selector entry path).
+     Hidden automatically in preview mode (?preview=1 used by selector iframes). -->
+<div class="yx-cinema-bar top"></div>
+<div class="yx-cinema-bar bottom"></div>
+<div class="yx-music-controls" id="yxMusicControls" aria-label="Background music controls">
+  <button id="yxMusicToggle" type="button" title="Play / pause music" aria-label="Play or pause music">
+    <!-- Old-piano-keys icon (retro) -->
+    <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 5h18v14H3V5zm2 2v10h2V7H5zm4 0v6h2V7H9zm4 0v10h2V7h-2zm4 0v6h2V7h-2z"/>
+    </svg>
+    <svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6 5h4v14H6V5zm8 0h4v14h-4V5z"/>
+    </svg>
+  </button>
+  <button id="yxMusicSwitch" type="button" title="Switch track" aria-label="Switch to next track">
+    <!-- Loop/refresh icon -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M17 1l4 4-4 4"></path>
+      <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+      <path d="M7 23l-4-4 4-4"></path>
+      <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+    </svg>
+  </button>
+</div>
+<audio id="yxAudio" preload="none"></audio>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <button id="tv-home" type="button" aria-label="Back to start" title="Back to start">
@@ -695,4 +772,78 @@ window.addEventListener('message', function(e){
 })();
 </script>
 <!-- BAKED-ASPECT-FIX-END -->
+
+<!-- Music control + preview-mode logic (added for the selector entry path) -->
+<script>
+(function() {
+  // ── PREVIEW MODE (selector iframe) ──────────────────────────────────────
+  // When loaded as /test/EN-P.html?preview=1 inside the landing selector's iframe:
+  //   - Disable all interactions
+  //   - Hide cinema bars + music controls
+  //   - Auto-scroll the page in a slow ping-pong loop so the iframe looks "alive"
+  if (location.search.indexOf('preview=1') !== -1) {
+    document.documentElement.classList.add('yx-preview');
+    let pos = 0;
+    let dir = 1;
+    function _previewStep() {
+      pos += dir * 1.2;
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      if (pos >= max) { dir = -1; pos = max; }
+      if (pos <= 0)   { dir = 1;  pos = 0; }
+      window.scrollTo(0, pos);
+    }
+    setInterval(_previewStep, 30);
+    return; // Skip music init in preview
+  }
+
+  // ── MUSIC CONTROLS (real visitor on EN portfolio) ───────────────────────
+  // Track list rotates through these on each press of the switch button.
+  const TRACKS = [
+    '/assets/music/radio-inkspots-en.mp3',
+    '/assets/music/radio-shadow-en.mp3',
+    '/assets/music/radio-sunset-en.mp3',
+    '/assets/music/music-en-1.mp3',
+    '/assets/music/music-en-2.mp3'
+  ];
+  const audio  = document.getElementById('yxAudio');
+  const toggle = document.getElementById('yxMusicToggle');
+  const sw     = document.getElementById('yxMusicSwitch');
+  if (!audio || !toggle || !sw) return;
+  let idx = 0;
+  let userPaused = true; // start paused — autoplay would be blocked by browsers anyway
+  audio.src = TRACKS[idx];
+  audio.loop = true;
+  audio.volume = 0.55;
+
+  function _setPlayingClass(playing) {
+    toggle.classList.toggle('playing', playing);
+    toggle.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+  }
+
+  toggle.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().then(() => { userPaused = false; _setPlayingClass(true); })
+                  .catch(()=>{ /* probably blocked autoplay — user clicked, browser should allow but ignore failures */ });
+    } else {
+      audio.pause();
+      userPaused = true;
+      _setPlayingClass(false);
+    }
+  });
+
+  sw.addEventListener('click', () => {
+    idx = (idx + 1) % TRACKS.length;
+    const wasPlaying = !audio.paused;
+    audio.src = TRACKS[idx];
+    audio.loop = true;
+    if (wasPlaying || !userPaused) {
+      audio.play().then(() => _setPlayingClass(true)).catch(()=>{});
+    }
+  });
+
+  // Sync state if audio events fire externally (e.g., autoplay policy unblock)
+  audio.addEventListener('play',  () => _setPlayingClass(true));
+  audio.addEventListener('pause', () => _setPlayingClass(false));
+})();
+</script>
 </body></html>
