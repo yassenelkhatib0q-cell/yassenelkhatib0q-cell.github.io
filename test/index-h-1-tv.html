@@ -679,6 +679,9 @@
   /* MOBILE-3D top-center tab nav — same logic as EN-P-tv variant. */
   if (location.search.indexOf('mobile3d=1') !== -1) {
     document.body.classList.add('mobile3d');
+    // Replace the desktop scroll hint text with the mobile-3d equivalent.
+    const _hint = document.getElementById('hint');
+    if (_hint) _hint.textContent = 'اضغط للدخول';
     const tabs = document.querySelectorAll('#tvTabs .tv-tab');
     function jumpToPanel(idx) {
       const targetY = idx * DESIGN_W * (currentScale || 1);

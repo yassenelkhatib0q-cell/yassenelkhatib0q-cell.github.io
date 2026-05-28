@@ -757,6 +757,10 @@
      design X = N * DESIGN_W). */
   if (location.search.indexOf('mobile3d=1') !== -1) {
     document.body.classList.add('mobile3d');
+    // Replace the desktop "Scroll to advance" hint text with the mobile-3d
+    // equivalent — there's no scroll on phone, tabs are the nav.
+    const _hint = document.getElementById('hint');
+    if (_hint) _hint.textContent = 'Click to Enter';
     const tabs = document.querySelectorAll('#tvTabs .tv-tab');
     function jumpToPanel(idx) {
       const targetY = idx * DESIGN_W * (currentScale || 1);

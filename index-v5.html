@@ -682,7 +682,7 @@
 <div class="hint" id="hint-radio">اضغط لتشغيل الموسيقى</div>
 <!-- TV-screen hint: tells users they can click the screen to enter the portfolio
      without scrolling (helps slow-hardware visitors). -->
-<div class="hint" id="hint-tv-screen">Click on the screen<br>to see the portfolio</div>
+<!-- hint-tv-screen removed per Yassen — iframe #hint shows 'Click to Enter' instead. -->
 
 <canvas id="gl"></canvas>
 
@@ -2925,7 +2925,7 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260529e';
+const _PF_CACHE_BUST = 'v=20260529f';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
   // Pass &mobile3d=1 when the parent is in landscape-mobile mode so the iframe
@@ -3434,17 +3434,8 @@ function refreshRadioHintText() {
   }
 }
 function refreshTvScreenHintText() {
-  if (!hintTvScreen) return;
-  // Two-line hint — innerHTML so the <br> renders as a real line break.
-  if (currentLang === 'ar') {
-    hintTvScreen.innerHTML = 'اضغط على الشاشة<br>لرؤية الأعمال';
-    hintTvScreen.setAttribute('dir', 'rtl');
-    hintTvScreen.setAttribute('lang', 'ar');
-  } else {
-    hintTvScreen.innerHTML = 'Click on the screen<br>to see the portfolio';
-    hintTvScreen.setAttribute('dir', 'ltr');
-    hintTvScreen.setAttribute('lang', 'en');
-  }
+  // hint-tv-screen element removed per Yassen — no-op kept so the existing
+  // callers (refresh on language flip, etc.) don't throw.
 }
 function refreshLangPillText() {
   if (!hintLang) return;
