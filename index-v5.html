@@ -346,16 +346,27 @@
   /* TV-button hint (hint-lang) on mobile-3d: sit to the RIGHT of the TV button
      instead of floating above it. Default transform centers horizontally on the
      projected screen point; we override to extend rightward + vertically center,
-     and hide the downward arrow (it would point at nothing). */
-  .landscape-mobile #hint-lang {
+     and hide the downward arrow (it would point at nothing). Made TINY — the
+     cramped phone canvas can't afford a chunky pill next to the TV. */
+  .landscape-mobile #hint-lang,
+  .landscape-mobile #hint-lang[dir="ltr"] {
     transform: translate(0, -50%) scale(1);
     animation: hint-pulse-side 2.4s ease-in-out infinite;
+    font-size: 5px;
+    padding: 2px 5px;
+    letter-spacing: 0.02em;
+    border-width: 0.5px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3);
   }
   .landscape-mobile #hint-lang::after { display: none; }
   @keyframes hint-pulse-side {
-    0%, 100% { transform: translate(0, -50%) scale(1);    box-shadow: 0 2px 8px rgba(0,0,0,.4); }
-    50%      { transform: translate(0, -50%) scale(1.06); box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+    0%, 100% { transform: translate(0, -50%) scale(1);    box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+    50%      { transform: translate(0, -50%) scale(1.06); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
   }
+  /* Cinema bars (12vh top/bottom) eat almost all the screen on a landscape phone
+     and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
+  .landscape-mobile .cinema-bar { display: none !important; }
+  .landscape-mobile #vignette { opacity: 0.4; }
 
   #cursor { position:fixed; top:0; left:0; width:32px; height:32px; pointer-events:none; z-index:999; will-change:transform; }
   #cursor svg { width:100%; height:100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
@@ -1001,7 +1012,10 @@ function setLanguage(lang) {
 /* THREE.JS                                                               */
 /* ====================================================================== */
 const canvas = document.getElementById('gl');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+// preserveDrawingBuffer: true — without this, phone screenshots of the 3D scene
+// come out BLACK because the OS captures after the canvas has cleared. Costs a
+// small amount of GPU memory but matters more than a few % perf on a portfolio.
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));  // Restored — full quality on hi-DPI/Retina screens.
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
