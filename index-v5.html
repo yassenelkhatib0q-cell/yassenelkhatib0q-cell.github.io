@@ -316,8 +316,10 @@
     animation: none;
   }
   #hint-tv-screen::after { display: none; }
-  /* English variant: keep the same minimal styling, just inherit the italic */
-  #hint-tv-screen[dir="ltr"] { font-size: 14px; letter-spacing: 0.08em; }
+  /* Font now matches the "Let's build something together" headline beside the TV
+     (#phase1-overlay h1): Berkshire Pro Loops for EN, Panorama Naskh for AR. */
+  #hint-tv-screen          { font-family: 'Panorama Naskh', 'Cairo', sans-serif; font-weight: 400; font-size: 14px; letter-spacing: 0.04em; }
+  #hint-tv-screen[dir="ltr"]{ font-family: 'Berkshire Pro Loops', 'Fraunces', serif; font-style: normal; font-weight: 400; font-size: 14px; letter-spacing: 0.04em; }
   /* Two-line hint — override the .hint nowrap so <br> renders as a real break. */
   #hint-tv-screen { white-space: normal; line-height: 1.25; text-align: center; }
 
@@ -342,11 +344,18 @@
     border-right-width: 5px;
     border-top-width: 7px;
   }
-  .landscape-mobile #hint-tv-screen,
-  .landscape-mobile #hint-tv-screen[dir="ltr"] {
+  .landscape-mobile #hint-tv-screen {
+    font-family: 'Panorama Naskh', 'Cairo', sans-serif !important;
     font-size: 16px;
     padding: 3px 6px;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
+  }
+  .landscape-mobile #hint-tv-screen[dir="ltr"] {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif !important;
+    font-style: normal !important;
+    font-size: 16px;
+    padding: 3px 6px;
+    letter-spacing: 0.04em;
   }
   /* Cinema bars (12vh top/bottom) eat almost all the screen on a landscape phone
      and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
