@@ -97,14 +97,24 @@
       grid-template-rows: 1fr;
     }
   }
-  /* MOBILE / TABLET — 2 panels stacked, no TV experience */
+  /* MOBILE / TABLET — 2 portrait panels stacked, no TV experience.
+     On phones in portrait, each panel is tall/vertical (portfolios look natural).
+     Page is allowed to scroll if both panels don't fit at once. */
   @media (max-width: 899px) {
+    html, body { overflow-y: auto; overflow-x: hidden; }
     .selector {
+      height: auto;
+      min-height: calc(100dvh - clamp(70px, 14vh, 140px));
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: clamp(10px, 1.8vh, 18px);
+      grid-auto-rows: minmax(0, auto);
+      gap: clamp(14px, 2.4vh, 24px);
     }
-    .panel.middle { display: none; }
+    .panel { aspect-ratio: 3 / 4; }     /* portrait shape — taller than wide */
+    .panel.middle { display: none; }     /* full 3D experience is desktop-only */
+  }
+  /* Very tall narrow phones (<420px): even taller panels look fine */
+  @media (max-width: 420px) {
+    .panel { aspect-ratio: 4 / 5.5; }
   }
 
   .panel {
