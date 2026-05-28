@@ -349,6 +349,10 @@
   html[dir="rtl"] #phase1-overlay h1 { font-family:'Panorama Naskh', 'Cairo', sans-serif; font-style:normal; font-weight:400; font-feature-settings:"swsh" 1, "calt" 1, "liga" 1, "dlig" 1; }
   html[dir="rtl"] #phase1-overlay { direction:ltr; }
   html[dir="rtl"] #phase1-overlay > * { direction:rtl; text-align:right; }
+  /* Yassen request: shrink the whole "Let's build something together" group to 67%.
+     Anchored to the left edge (right edge for RTL) so the text stays in its left lane. */
+  #phase1-overlay > div { transform: scale(0.67); transform-origin: left center; }
+  html[dir="rtl"] #phase1-overlay > div { transform-origin: right center; }
 
   /* Portfolio reveals after the CRT transition. Pinned to the viewport
      bottom of the cinematic, fading in via the JS handoff. */
