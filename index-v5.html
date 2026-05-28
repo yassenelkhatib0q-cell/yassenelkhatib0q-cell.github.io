@@ -320,52 +320,10 @@
   #hint-tv-screen[dir="ltr"] { font-size: 14px; letter-spacing: 0.08em; }
 
   /* ============================================================================
-     MOBILE-3D ONLY — phone screens are tiny, the pill hints dwarf the TV/radio.
-     Activated by /mobile-3d/ via ?landscape=1 (see gate script below). Desktop
-     and tablet visitors keep the full-size hints.
+     MOBILE-3D scoped tweaks. Hint pill resize + reposition REMOVED per Yassen
+     ('put them back') — hints now render at original desktop size + position on
+     mobile too. Cinema bars hide + hero overlay shrink kept.
      ============================================================================ */
-  .landscape-mobile .hint {
-    padding: 4px 10px;
-    font-size: 9px;
-    border-width: 1px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.4);
-    letter-spacing: 0.02em;
-  }
-  .landscape-mobile .hint[dir="ltr"] {
-    font-size: 9px;
-    letter-spacing: 0.08em;
-  }
-  .landscape-mobile .hint::after {
-    border-left-width: 5px;
-    border-right-width: 5px;
-    border-top-width: 7px;
-  }
-  .landscape-mobile #hint-tv-screen,
-  .landscape-mobile #hint-tv-screen[dir="ltr"] {
-    font-size: 9px;
-    padding: 2px 4px;
-    letter-spacing: 0.04em;
-  }
-  /* TV-button hint (hint-lang) on mobile-3d: sit to the RIGHT of the TV button
-     instead of floating above it. Default transform centers horizontally on the
-     projected screen point; we override to extend rightward + vertically center,
-     and hide the downward arrow (it would point at nothing). Made TINY — the
-     cramped phone canvas can't afford a chunky pill next to the TV. */
-  .landscape-mobile #hint-lang,
-  .landscape-mobile #hint-lang[dir="ltr"] {
-    transform: translate(0, -50%) scale(1);
-    animation: hint-pulse-side 2.4s ease-in-out infinite;
-    font-size: 5px;
-    padding: 2px 5px;
-    letter-spacing: 0.02em;
-    border-width: 0.5px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.3);
-  }
-  .landscape-mobile #hint-lang::after { display: none; }
-  @keyframes hint-pulse-side {
-    0%, 100% { transform: translate(0, -50%) scale(1);    box-shadow: 0 1px 4px rgba(0,0,0,.3); }
-    50%      { transform: translate(0, -50%) scale(1.06); box-shadow: 0 2px 6px rgba(0,0,0,.4); }
-  }
   /* Cinema bars (12vh top/bottom) eat almost all the screen on a landscape phone
      and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
   .landscape-mobile .cinema-bar { display: none !important; }
@@ -3431,14 +3389,7 @@ function updateHints() {
     el.style.top = (p.y + dy) + 'px';
     el.style.opacity = '1';
   };
-  // Mobile-3d: shift hint-lang to the RIGHT of the TV button (cramped landscape
-  // phone canvas — above-the-button placement overlaps the TV itself).
-  const _isLandscapeMobile = document.documentElement.classList.contains('landscape-mobile');
-  if (_isLandscapeMobile) {
-    _set(hintLang, tvButton, 0, false, 70);                          // right of TV button (dx=+70, no vertical offset)
-  } else {
-    _set(hintLang, tvButton, -110, false, 0);                        // language hint above the TV (close to button so the arrow connects visually)
-  }
+  _set(hintLang, tvButton, -110, false, 0);                          // language hint above the TV (close to button so the arrow connects visually)
   _set(hintRadio, radioButton, -180, _radioSeen, 90);                // radio hint shifted right 90px to sit over the actual visible knob
   _set(hintTvScreen, window._crtMesh, -160, _scrollHide, 0);         // TV-screen hint floats above the CRT, hides once user starts scrolling
 }
