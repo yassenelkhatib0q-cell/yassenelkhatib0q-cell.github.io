@@ -1022,12 +1022,13 @@ const outlinePass = new OutlinePass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
   scene, camera
 );
-// Outline dialed way down per Yassen — was reading as a big yellow rectangle
-// around the TV. Thin breathing line now, still visible but not dominant.
-outlinePass.edgeStrength = 1.5;
-outlinePass.edgeGlow = 0.15;
-outlinePass.edgeThickness = 0.6;
-outlinePass.pulsePeriod = 2.4;
+// Outline restored to original prominent look — Yassen wants it visible so
+// people see it's clickable. The "make it smaller" request is now handled by
+// a smaller dedicated click-target plane (see TV-Screen click-zone setup).
+outlinePass.edgeStrength = 4.0;
+outlinePass.edgeGlow = 0.6;
+outlinePass.edgeThickness = 1.5;
+outlinePass.pulsePeriod = 1.6; // gentle breathing
 outlinePass.visibleEdgeColor.set('#ffd070');
 outlinePass.hiddenEdgeColor.set('#664020');
 composer.addPass(outlinePass);
@@ -1417,10 +1418,34 @@ gltfLoader.load('assets/room.glb', (gltf) => {
   if (radioButton) {
     clickables.push({ object: radioButton, name: 'Radio_Button' });
   }
-  // TV-Screen: register the CRT mesh as a clickable. Lets users on slow hardware
-  // skip the long scroll-into-TV cinematic by clicking the screen directly.
+  // TV-Screen: build a SMALLER invisible plane sitting just in front of the CRT
+  // mesh, and register THAT as the clickable / outlined target. The full CRT
+  // mesh was making the yellow hover-outline cover almost the whole TV — this
+  // smaller plane (~55% of the CRT size, centered) gives a focused rectangle
+  // that still reads as "press here" but doesn't dominate the screen.
   if (crtTargetMesh) {
-    clickables.push({ object: crtTargetMesh, name: 'TV-Screen' });
+    crtTargetMesh.geometry.computeBoundingBox();
+    const bb = crtTargetMesh.geometry.boundingBox;
+    const w = (bb.max.x - bb.min.x) * 0.55;
+    const h = (bb.max.y - bb.min.y) * 0.55;
+    const tvClick = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, h),
+      // Transparent (invisible to the eye) but NOT material.visible:false — the
+      // OutlinePass skips invisible meshes. Opacity 0 + depthWrite false gives
+      // a fully see-through mesh that still gets outlined when hovered.
+      new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide })
+    );
+    tvClick.name = 'TV-Screen-ClickZone';
+    // Mirror the CRT mesh's transform + nudge slightly toward camera so the
+    // raycast hits this first instead of the underlying CRT plane.
+    crtTargetMesh.updateWorldMatrix(true, false);
+    tvClick.matrixAutoUpdate = true;
+    crtTargetMesh.getWorldPosition(tvClick.position);
+    crtTargetMesh.getWorldQuaternion(tvClick.quaternion);
+    tvClick.translateZ(0.02);
+    scene.add(tvClick);
+    window._crtClickZone = tvClick;
+    clickables.push({ object: tvClick, name: 'TV-Screen' });
   }
 
   // Default outline — always visible on both buttons so user knows they're clickable
@@ -3254,10 +3279,10 @@ function updateHoverGlow() {
       document.body.style.cursor = 'pointer';
       const fn = _tooltipText[hoveredName];
       if (fn) _tooltipEl.textContent = fn();
-      // Intensify outline strength on hover — kept subtle to match the dialed-down baseline.
+      // Intensify outline strength on hover — buttons stay outlined regardless
       if (window._outlinePass) {
-        window._outlinePass.edgeStrength = 3.0;  // was 8.0
-        window._outlinePass.edgeGlow = 0.4;      // was 1.0
+        window._outlinePass.edgeStrength = 8.0;  // boosted
+        window._outlinePass.edgeGlow = 1.0;
       }
     }
     // Position tooltip near the cursor (refresh each frame in case of move)
