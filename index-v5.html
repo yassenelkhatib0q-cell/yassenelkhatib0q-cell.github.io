@@ -225,32 +225,29 @@
     background: #000;
     opacity: 0;
   }
+  /* PERF STACK (Option 1 + 3 + 4 from the analysis):
+     - Option 1: ::before halo removed → eliminates the gradient compositing pass per frame
+     - Option 3: animate via transform: scale(--bw, --bh) instead of width/height
+                 → rasterized once at base size, GPU compositor stretches each frame.
+                 Side effect: filter:blur(10px) gets stretched too — looks slightly softer/pixelated at max scale.
+     - Option 4: max scale clamped to 12× so the rasterized blur doesn't go fully ugly.
+     Base size is 160x160 (big enough that scale 12x = 1920px, covers most viewports). */
   #tv-beam {
     position: absolute;
     top: 50%; left: 50%;
-    width: 2px; height: 2px;
+    width: 160px; height: 160px;
+    margin-left: -80px; margin-top: -80px;
     opacity: 0;
     border-radius: 40px;
     background: linear-gradient(180deg, rgba(255,250,242,0.98), rgba(255,235,198,0.86));
-    transform: translate(-50%, -50%);
+    transform: scale(var(--bw, 0.0125), var(--bh, 0.0125)); /* 0.0125 * 160 = 2px starting size */
+    transform-origin: center center;
     filter: blur(10px);
-    /* PERF: scope the beam's per-frame width/height changes so they don't trigger
-       a page-wide reflow on trackpad scroll. Saves 1-3ms per frame during transition. */
     contain: layout style paint;
+    will-change: transform, opacity;
   }
-  #tv-beam::before {
-    content: '';
-    position: absolute;
-    inset: -180px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at center,
-      rgba(255,240,200,0.46) 0%,
-      rgba(255,235,180,0.30) 28%,
-      rgba(255,220,150,0.18) 55%,
-      rgba(255,220,150,0) 80%);
-    pointer-events: none;
-    z-index: -1;
-  }
+  /* Option 1: ::before halo intentionally removed for max perf.
+     The warm cathedral halo is gone. If you want it back, ask me to revert to Option 2. */
   /* Default cursor — ink pen disabled. Pin body to `default` AND force every descendant to inherit,
      because Chrome on Windows displays the text I-beam over <h1>/<p> children of an overlay even
      when the overlay has pointer-events:none. Without `* { cursor: inherit }`, those text elements
@@ -2917,8 +2914,14 @@ function updateCRTTransition(progress) {
     [cfg.beam.end, 0],
   ], progress);
   const beamActive = progress >= cfg.beam.start && progress <= cfg.beam.end;
-  tvBeamEl.style.width  = beamWidth  + 'px';
-  tvBeamEl.style.height = beamHeight + 'px';
+  // PERF STACK (Option 3 + 4):
+  //   Option 3: drive size via transform: scale(--bw, --bh) on a 160px base → GPU compositor work only
+  //   Option 4: cap max scale at 12 so the blur:10px doesn't stretch beyond reasonable softness
+  const BASE = 160, MAX_SCALE = 12;
+  const sx = Math.min(beamWidth  / BASE, MAX_SCALE);
+  const sy = Math.min(beamHeight / BASE, MAX_SCALE);
+  tvBeamEl.style.setProperty('--bw', sx);
+  tvBeamEl.style.setProperty('--bh', sy);
   tvBeamEl.style.opacity = beamActive ? String(beamOpacity) : '0';
 
   // Blackout fades in over the camera scene, then fades out revealing portfolio
