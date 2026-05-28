@@ -208,6 +208,18 @@
   }
 
   /* Experience: logo grid → expand rectangle (mobile pattern requested by Yassen) */
+  /* Tap hint above the logo grid — first-time visitors don't always realize the
+     logos are tappable. Small italic, centered, faded; doesn't compete with logos. */
+  .tap-hint {
+    margin-top: 14px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-align: center;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+  }
   .logo-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -464,6 +476,7 @@
 
 <section class="section">
   <h2>Experience</h2>
+  <div class="tap-hint">Press any logo for more details</div>
 
   <div class="logo-grid" id="expGrid">
     <button class="logo-tile" data-key="alx" type="button">

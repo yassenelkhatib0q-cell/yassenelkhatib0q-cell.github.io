@@ -193,6 +193,18 @@
   }
 
   /* Experience: logo grid → expand rectangle */
+  /* Tap hint above the logo grid — first-time visitors don't always realize the
+     logos are tappable. Small, centered, faded; uses Cairo (Arabic body font). */
+  .tap-hint {
+    margin-top: 14px;
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-align: center;
+    letter-spacing: 0;
+    opacity: 0.85;
+    direction: rtl;
+  }
   .logo-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -415,6 +427,7 @@
 
 <section class="section">
   <h2>الْخِبْرَة</h2>
+  <div class="tap-hint">اضغط علي اي لوجو لمعرفه التفاصيل</div>
 
   <div class="logo-grid" id="expGrid">
     <button class="logo-tile" data-key="alx" type="button">
