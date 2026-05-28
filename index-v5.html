@@ -574,6 +574,10 @@
 </style>
 <script>
 (function () {
+  // BYPASS: ?landscape=1 in the URL (used by /mobile-3d/ when the visitor rotates
+  // their phone) tells the gate to skip — let landscape mobile visitors through.
+  if (location.search.indexOf('landscape=1') !== -1) return;
+
   var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   var touchUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(navigator.userAgent);
   // iPadOS 13+ identifies as Mac — catch it via touch capability + non-pointer hover.

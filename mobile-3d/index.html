@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Yassen Elkhatib — Rotate to enter</title>
+<meta name="description" content="The full 3D experience runs in landscape. Rotate your phone to enter.">
+<meta name="theme-color" content="#0a0710">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<style>
+  @font-face {
+    font-family: 'Berkshire Pro Loops';
+    src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Panorama Naskh';
+    src: url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    font-display: swap;
+  }
+</style>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    min-height: 100dvh;
+    background: #0a0710;
+    color: #e8dcc4;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Cinema bars top + bottom — matches the rest of the site */
+  .cinema-bar {
+    position: fixed; left: 0; right: 0;
+    height: clamp(48px, 9vh, 110px);
+    background: #0a0710;
+    z-index: 60;
+    pointer-events: none;
+    box-shadow: 0 0 30px rgba(0,0,0,.4);
+  }
+  .cinema-bar.top    { top: 0; }
+  .cinema-bar.bottom { bottom: 0; }
+
+  /* Warm radial glow backdrop */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,180,80,.10) 0%, transparent 55%),
+      radial-gradient(circle at 30% 30%, rgba(70,30,20,.30) 0%, transparent 65%);
+  }
+
+  /* The rotate prompt — centered, retro-cinematic */
+  .rotate-prompt {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 28px;
+    padding: 32px;
+    text-align: center;
+  }
+  .rotate-icon {
+    width: clamp(72px, 22vw, 120px);
+    height: clamp(72px, 22vw, 120px);
+    color: #e8dcc4;
+    opacity: 0.95;
+    animation: rotateHint 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,.5));
+  }
+  @keyframes rotateHint {
+    0%, 30%  { transform: rotate(0deg); }
+    50%, 70% { transform: rotate(-90deg); }
+    100%     { transform: rotate(0deg); }
+  }
+  .rotate-title {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif;
+    font-size: clamp(28px, 8vw, 44px);
+    color: #F5E8C8;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    text-shadow:
+      -1px -1px 0 #2a0f08,
+       1px -1px 0 #2a0f08,
+      -1px  1px 0 #2a0f08,
+       1px  1px 0 #2a0f08,
+       0    2px 0 #2a0f08,
+       0    6px 14px rgba(0,0,0,.55);
+    max-width: 90%;
+  }
+  .rotate-sub {
+    font-size: clamp(12px, 3.6vw, 15px);
+    color: rgba(232,220,196,.7);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.5;
+    max-width: 85%;
+  }
+  .rotate-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(232,220,196,.25);
+    margin: 4px 0;
+  }
+  .rotate-arabic {
+    font-family: 'Panorama Naskh', 'Cairo', sans-serif;
+    direction: rtl;
+    font-size: clamp(14px, 4vw, 18px);
+    color: rgba(232,220,196,.55);
+    line-height: 1.6;
+    max-width: 85%;
+  }
+  /* Loading state shown while we navigate to /index-v5.html */
+  .going {
+    position: fixed; inset: 0;
+    z-index: 200;
+    background: #0a0710;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: rgba(232,220,196,.55);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  body.going .going { display: flex; }
+  body.going .rotate-prompt,
+  body.going .cinema-bar { display: none; }
+</style>
+</head>
+<body>
+
+<div class="cinema-bar top"></div>
+<div class="cinema-bar bottom"></div>
+
+<div class="rotate-prompt">
+  <!-- Rotating phone SVG -->
+  <svg class="rotate-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="20" y="6" width="24" height="44" rx="3" />
+    <line x1="28" y1="44" x2="36" y2="44" />
+    <path d="M50 18a14 14 0 0 1 8 12" />
+    <polyline points="54 14 58 18 54 22" />
+  </svg>
+  <div class="rotate-title">Rotate your phone</div>
+  <div class="rotate-sub">to enter the full 3D experience</div>
+  <div class="rotate-divider"></div>
+  <div class="rotate-arabic">قم بإدارة هاتفك للدخول إلى التجربة الكاملة</div>
+</div>
+
+<div class="going">loading experience…</div>
+
+<script>
+(function() {
+  // The 3D site's URL with a query flag that bypasses its mobile gate.
+  const TARGET = '/index-v5.html?landscape=1';
+
+  // Desktop visitor hitting this page — just go to the 3D site, no rotation prompt.
+  const ua = navigator.userAgent || '';
+  const isMobile = /Mobi|Android|iPhone|iPod/i.test(ua) ||
+                   (/iPad/i.test(ua) && navigator.maxTouchPoints > 1);
+  if (!isMobile) {
+    location.replace(TARGET);
+    return;
+  }
+
+  // Mobile visitor: watch orientation. As soon as the phone is in landscape, enter.
+  function isLandscape() {
+    // Use both matchMedia and innerWidth/innerHeight to handle browser quirks
+    if (window.matchMedia && window.matchMedia('(orientation: landscape)').matches) return true;
+    return window.innerWidth > window.innerHeight;
+  }
+  function tryEnter() {
+    if (isLandscape()) {
+      document.body.classList.add('going');
+      // small delay so the going-overlay shows before navigation kicks in
+      setTimeout(() => location.replace(TARGET), 220);
+    }
+  }
+  // Check on load (phone might already be in landscape)
+  tryEnter();
+  // Watch for rotation
+  window.addEventListener('orientationchange', () => setTimeout(tryEnter, 250));
+  window.addEventListener('resize', tryEnter);
+  // Some iOS Safari versions only fire orientation reliably via mql
+  if (window.matchMedia) {
+    const mql = window.matchMedia('(orientation: landscape)');
+    if (mql.addEventListener) mql.addEventListener('change', tryEnter);
+    else if (mql.addListener) mql.addListener(tryEnter);
+  }
+})();
+</script>
+
+</body>
+</html>
