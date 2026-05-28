@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Yassen Elkhatib — Choose Your Experience</title>
+<meta name="description" content="Yassen Elkhatib — video editor portfolio (mobile)">
+<meta name="theme-color" content="#0a0710">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+<style>
+  @font-face {
+    font-family: 'Berkshire Pro Loops';
+    src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Panorama Naskh';
+    src: url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    font-display: swap;
+  }
+</style>
+
+<style>
+  /* MOBILE-FIRST design — designed specifically for phone screens (320-500px wide).
+     No grid juggling, no responsive breakpoints — single column, big tap targets,
+     short scroll, lightweight (no iframes, no autoplay video). */
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    width: 100%; min-height: 100dvh;
+    background: #0a0710;
+    color: #e8dcc4;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Subtle warm backdrop */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 25%, rgba(70,30,20,.32) 0%, transparent 65%),
+      radial-gradient(circle at 25% 80%, rgba(40,15,40,.22) 0%, transparent 60%);
+  }
+
+  .wrap {
+    position: relative; z-index: 1;
+    padding: 28px 18px 24px;
+    max-width: 520px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .brand {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif;
+    font-size: 28px;
+    color: #e8dcc4;
+    line-height: 1.05;
+  }
+  .sub {
+    font-size: 10.5px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-top: 8px;
+  }
+
+  .panels {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+  }
+
+  .panel {
+    position: relative;
+    display: block;
+    border-radius: 14px;
+    background: rgba(232,220,196,.06);
+    border: 1px solid rgba(232,220,196,.16);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: 4 / 3;
+    transition: background .2s, border-color .2s, transform .15s;
+  }
+  .panel:active {
+    transform: scale(.985);
+    background: rgba(232,220,196,.11);
+    border-color: rgba(232,220,196,.4);
+  }
+
+  .panel-thumb {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #1a0f18;
+  }
+  .panel-thumb::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,7,16,.15) 0%, rgba(10,7,16,.78) 100%);
+  }
+
+  .panel-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 14px 18px 16px;
+    z-index: 1;
+  }
+  .panel-title {
+    font-family: 'Berkshire Pro Loops', 'Fraunces', serif;
+    font-size: 22px;
+    color: #f3eee8;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .panel-cta {
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+  .panel-cta::after {
+    content: ' →';
+    opacity: 0.6;
+    margin-left: 4px;
+  }
+
+  /* Arabic panel — RTL flip for proper text alignment */
+  .panel.ar { direction: rtl; }
+  .panel.ar .panel-title { font-family: 'Panorama Naskh', 'Cairo', sans-serif; }
+  .panel.ar .panel-cta::after { content: ' ←'; margin-right: 4px; margin-left: 0; }
+
+  /* "Desktop recommended" badge on the 3D experience panel */
+  .badge-desktop {
+    position: absolute;
+    top: 12px; right: 12px;
+    z-index: 2;
+    background: rgba(10,7,16,.85);
+    border: 1px solid rgba(255,180,80,.4);
+    color: #ffd070;
+    font-size: 9.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 5px 9px;
+    border-radius: 999px;
+  }
+
+  /* Specific panel backgrounds — using video posters / static thumbnails */
+  .panel.en .panel-thumb   { background-image: url('/assets/bakes/BAKE_Cube.001_0__WoodFine.jpg'); background-color: #2a1a14; }
+  .panel.ar .panel-thumb   { background-image: url('/assets/bakes/BAKE_Cube.003_0__WoodFine.jpg'); background-color: #2a1a14; }
+  .panel.full .panel-thumb { background-image: url('/assets/room-env.jpg'); background-color: #1a0f18; }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0 8px;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    opacity: 0.35;
+  }
+
+  /* If for some reason this page is opened on a desktop, give a hint at the bottom */
+  .desktop-hint {
+    display: none;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 11px;
+    opacity: 0.45;
+  }
+  .desktop-hint a { color: #e8dcc4; }
+  @media (min-width: 720px) {
+    .desktop-hint { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="header">
+    <div class="brand">Yassen Elkhatib</div>
+    <div class="sub">Choose Your Experience</div>
+  </header>
+
+  <div class="panels">
+
+    <a class="panel en" href="/test/EN-P.html" aria-label="Open English portfolio">
+      <div class="panel-thumb"></div>
+      <div class="panel-info">
+        <div class="panel-title">English Portfolio</div>
+        <div class="panel-cta">Open</div>
+      </div>
+    </a>
+
+    <a class="panel ar" href="/test/index-h-1.html" aria-label="افتح أعمالي بالعربية">
+      <div class="panel-thumb"></div>
+      <div class="panel-info">
+        <div class="panel-title">أعمالي بالعربية</div>
+        <div class="panel-cta">افتح</div>
+      </div>
+    </a>
+
+    <a class="panel full" href="/index-v5.html" aria-label="Open the full 3D experience">
+      <span class="badge-desktop">Desktop recommended</span>
+      <div class="panel-thumb"></div>
+      <div class="panel-info">
+        <div class="panel-title">The Full Experience</div>
+        <div class="panel-cta">Open Anyway</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="desktop-hint">
+    You opened the mobile version on a wide screen.<br>
+    <a href="/?nm=1">→ open the full desktop selector</a>
+  </div>
+
+  <footer class="footer">Performance-driven video editor</footer>
+
+</div>
+
+</body>
+</html>

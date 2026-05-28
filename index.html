@@ -7,6 +7,23 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<!-- AUTO-REDIRECT phone users to the dedicated mobile page.
+     Triggers only on touch UAs (Mobi/Android/iPhone/iPad-mobile) AND narrow viewports.
+     Add ?nm=1 to the URL to opt out of the redirect (useful for testing desktop layout on a small window). -->
+<script>
+(function() {
+  try {
+    if (location.search.indexOf('nm=1') !== -1) return;
+    const ua = navigator.userAgent || '';
+    const isMobileUA = /Mobi|Android|iPhone|iPod/i.test(ua) ||
+                       (/iPad/i.test(ua) && navigator.maxTouchPoints > 1);
+    const isNarrow = window.matchMedia && window.matchMedia('(max-width: 720px)').matches;
+    if (isMobileUA || isNarrow) {
+      location.replace('/mobile/');
+    }
+  } catch (e) { /* never block page render */ }
+})();
+</script>
 <title>Yassen Elkhatib — Choose Your Experience</title>
 <meta name="description" content="Yassen Elkhatib's video editor portfolio — pick the full 3D experience, the English portfolio, or the Arabic portfolio.">
 <meta name="theme-color" content="#0a0710">
