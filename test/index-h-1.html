@@ -824,34 +824,43 @@ window.addEventListener('message', function(e){
   //   - Disable all interactions
   //   - Hide cinema bars + music controls
   //   - Auto-scroll the page in a slow ping-pong loop so the iframe looks "alive"
-  if (location.search.indexOf('preview=1') !== -1) {
+  if (location.search.indexOf('preview=') !== -1) {
     document.documentElement.classList.add('yx-preview');
-    // PREVIEW MOTION (Yassen's requested style): one smooth journey first → last,
-    // pause briefly at the end, then loop back to the top and journey again.
-    // Eased with sine in/out so the start and end of each journey feel natural.
-    const JOURNEY_MS = 14000;   // ~14s top → bottom
-    const HOLD_END_MS = 1500;   // pause at the very bottom before looping
+    // PREVIEW MODES (used by the selector page iframes):
+    //   ?preview=top    → fix the page at the TOP (first section visible). Used for the EN tile.
+    //   ?preview=bottom → fix the page at the BOTTOM (last section visible). Used for the AR tile.
+    //   ?preview=1      → legacy smooth-journey loop, kept for back-compat.
+    const m = (location.search.match(/preview=([^&]+)/) || [])[1] || '1';
+
+    if (m === 'top' || m === 'bottom') {
+      function _snap() {
+        const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        window.scrollTo(0, m === 'bottom' ? max : 0);
+      }
+      _snap();
+      setTimeout(_snap, 200);
+      setTimeout(_snap, 800);
+      setTimeout(_snap, 2000);
+      setTimeout(_snap, 4000);
+      return;
+    }
+
+    // Legacy ?preview=1
+    const JOURNEY_MS = 14000;
+    const HOLD_END_MS = 1500;
     let startT = performance.now();
-    let phase  = 'journey';     // 'journey' | 'hold'
+    let phase  = 'journey';
     function _previewStep(now) {
       const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
       const elapsed = now - startT;
       if (phase === 'journey') {
         if (elapsed < JOURNEY_MS) {
           const t = elapsed / JOURNEY_MS;
-          const eased = 0.5 - 0.5 * Math.cos(t * Math.PI); // easeInOutSine
+          const eased = 0.5 - 0.5 * Math.cos(t * Math.PI);
           window.scrollTo(0, eased * max);
-        } else {
-          window.scrollTo(0, max);
-          phase = 'hold';
-          startT = now;
-        }
+        } else { window.scrollTo(0, max); phase = 'hold'; startT = now; }
       } else if (phase === 'hold') {
-        if (elapsed > HOLD_END_MS) {
-          window.scrollTo(0, 0);
-          phase = 'journey';
-          startT = now;
-        }
+        if (elapsed > HOLD_END_MS) { window.scrollTo(0, 0); phase = 'journey'; startT = now; }
       }
       requestAnimationFrame(_previewStep);
     }
