@@ -107,11 +107,36 @@
     background-size: cover;
     background-position: center;
     background-color: #1a0f18;
+    overflow: hidden;
   }
   .panel-thumb::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(10,7,16,.15) 0%, rgba(10,7,16,.78) 100%);
+    background: linear-gradient(180deg, rgba(10,7,16,.10) 0%, rgba(10,7,16,.78) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  /* iframe-based portfolio previews — load the actual portfolio inside ?preview=1
+     mode which auto-scrolls and disables interactions. */
+  .panel-thumb iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1280px;
+    height: 720px;
+    border: 0;
+    transform-origin: top left;
+    pointer-events: none;
+    z-index: 1;
+  }
+  /* video for the Full Experience panel — actual selector-tv.mp4 looping */
+  .panel-thumb video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
   }
 
   .panel-info {
@@ -159,10 +184,10 @@
     border-radius: 999px;
   }
 
-  /* Specific panel backgrounds — using video posters / static thumbnails */
-  .panel.en .panel-thumb   { background-image: url('/assets/bakes/BAKE_Cube.001_0__WoodFine.jpg'); background-color: #2a1a14; }
-  .panel.ar .panel-thumb   { background-image: url('/assets/bakes/BAKE_Cube.003_0__WoodFine.jpg'); background-color: #2a1a14; }
-  .panel.full .panel-thumb { background-image: url('/assets/room-env.jpg'); background-color: #1a0f18; }
+  /* Panel backgrounds — solid color fallback while iframe/video loads */
+  .panel.en .panel-thumb,
+  .panel.ar .panel-thumb   { background-color: #e7dcc2; }
+  .panel.full .panel-thumb { background-color: #1a0f18; }
 
   .footer {
     text-align: center;
@@ -199,7 +224,9 @@
   <div class="panels">
 
     <a class="panel en" href="/mobile/en/" aria-label="Open English portfolio (mobile)">
-      <div class="panel-thumb"></div>
+      <div class="panel-thumb">
+        <iframe data-src="/test/EN-P.html?preview=1" loading="lazy" title="English portfolio preview"></iframe>
+      </div>
       <div class="panel-info">
         <div class="panel-title">English Portfolio</div>
         <div class="panel-cta">Open</div>
@@ -207,7 +234,9 @@
     </a>
 
     <a class="panel ar" href="/mobile/ar/" aria-label="افتح أعمالي بالعربية (موبايل)">
-      <div class="panel-thumb"></div>
+      <div class="panel-thumb">
+        <iframe data-src="/test/index-h-1.html?preview=1" loading="lazy" title="معاينة الأعمال بالعربية"></iframe>
+      </div>
       <div class="panel-info">
         <div class="panel-title">أعمالي بالعربية</div>
         <div class="panel-cta">افتح</div>
@@ -216,7 +245,11 @@
 
     <a class="panel full" href="/index-v5.html" aria-label="Open the full 3D experience">
       <span class="badge-desktop">Desktop recommended</span>
-      <div class="panel-thumb"></div>
+      <div class="panel-thumb">
+        <video id="mobTvVideo" autoplay muted loop playsinline preload="auto" disablepictureinpicture>
+          <source src="/assets/video/selector-tv.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="panel-info">
         <div class="panel-title">The Full Experience</div>
         <div class="panel-cta">Open Anyway</div>
@@ -233,6 +266,58 @@
   <footer class="footer">Performance-driven video editor</footer>
 
 </div>
+
+<script>
+(function() {
+  // Lazy-load iframe previews when each panel enters the viewport — saves data on mobile.
+  // Once loaded, scale the iframe down so the 1280×720 internal content fits the panel.
+  const iframes = document.querySelectorAll('.panel-thumb iframe[data-src]');
+  function fitIframe(ifr) {
+    const wrap = ifr.parentElement;
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+    if (r.width === 0) return;
+    const scale = r.width / 1280;
+    ifr.style.transform = 'scale(' + scale.toFixed(4) + ')';
+    ifr.style.height = (r.height / scale) + 'px';
+  }
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const ifr = e.target;
+        ifr.src = ifr.dataset.src;
+        ifr.removeAttribute('data-src');
+        ifr.addEventListener('load', () => fitIframe(ifr));
+        obs.unobserve(ifr);
+      });
+    }, { threshold: 0.05, rootMargin: '100px' });
+    iframes.forEach(i => obs.observe(i));
+  } else {
+    // Fallback: load all immediately
+    iframes.forEach(i => { i.src = i.dataset.src; i.removeAttribute('data-src'); i.addEventListener('load', () => fitIframe(i)); });
+  }
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.panel-thumb iframe').forEach(fitIframe);
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.panel-thumb iframe').forEach(fitIframe);
+  }, 1500);
+
+  // Keep the TV video looping reliably on mobile (autoplay policies + tab throttling can pause it).
+  const tvVid = document.getElementById('mobTvVideo');
+  if (tvVid) {
+    const _kick = () => { tvVid.play().catch(() => {}); };
+    tvVid.addEventListener('pause', () => setTimeout(_kick, 30));
+    tvVid.addEventListener('ended', _kick);
+    tvVid.addEventListener('canplay', _kick);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) _kick(); });
+    _kick();
+    setTimeout(_kick, 500);
+    setTimeout(_kick, 2000);
+  }
+})();
+</script>
 
 </body>
 </html>
