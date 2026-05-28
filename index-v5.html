@@ -1444,6 +1444,19 @@ gltfLoader.load('assets/room.glb', (gltf) => {
   }
   if (radioButton) {
     clickables.push({ object: radioButton, name: 'Radio_Button' });
+    // ONE-SHOT DEBUG: dump the radio mesh bounding-box size to console + a
+    // tiny on-screen badge so Yassen can read the dimensions directly.
+    try {
+      const _bb = new THREE.Box3().setFromObject(radioButton);
+      const _sz = new THREE.Vector3(); _bb.getSize(_sz);
+      const _txt = 'Radio hit: ' + _sz.x.toFixed(2) + ' x ' + _sz.y.toFixed(2) + ' x ' + _sz.z.toFixed(2) + ' (W x H x D, world units)';
+      console.log('[RADIO BBOX]', _txt);
+      const _badge = document.createElement('div');
+      _badge.textContent = _txt;
+      _badge.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;background:rgba(10,7,16,.85);color:#e8dcc4;font:11px/1.2 monospace;padding:4px 7px;border-radius:4px;pointer-events:none;';
+      document.body.appendChild(_badge);
+      setTimeout(() => _badge.remove(), 30000);   // auto-hide after 30s so it doesn't stay forever
+    } catch (e) {}
   }
   // TV-Screen: build a SMALLER invisible plane sitting just in front of the CRT
   // mesh, and register THAT as the clickable / outlined target. The full CRT
