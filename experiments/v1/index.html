@@ -29,18 +29,18 @@
 <style>
   @font-face {
     font-family: 'Berkshire Pro Loops';
-    src: url('assets/fonts/berkshire-pro-loops.otf') format('opentype'),
-         url('assets/fonts/berkshire-pro-loops.ttf') format('truetype');
+    src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype'),
+         url('/assets/fonts/berkshire-pro-loops.ttf') format('truetype');
     font-display: swap;
   }
   @font-face {
     font-family: 'Cazon Uno';
-    src: url('assets/fonts/Cazon-Uno.ttf') format('truetype');
+    src: url('/assets/fonts/Cazon-Uno.ttf') format('truetype');
     font-display: swap;
   }
   @font-face {
     font-family: 'Panorama Naskh';
-    src: url('assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    src: url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
     font-display: swap;
   }
 </style>
@@ -984,7 +984,7 @@ composer.addPass(new OutputPass());
 const pmremGen = new THREE.PMREMGenerator(renderer);
 pmremGen.compileEquirectangularShader();
 
-new THREE.TextureLoader().load('assets/room-env.jpg', (tex) => {
+new THREE.TextureLoader().load('/assets/room-env.jpg', (tex) => {
   tex.mapping = THREE.EquirectangularReflectionMapping;
   tex.colorSpace = THREE.SRGBColorSpace;
   const envMap = pmremGen.fromEquirectangular(tex).texture;
@@ -1024,30 +1024,30 @@ function makeVideoTexture(src, opts = {}) {
 // Tradeoff: first language switch pauses ~1-2s while the second video loads + decodes its first frame.
 // The other-language slot is created lazily by ensureOtherCrtSlot() below in setLanguage().
 const _crtSlots = { ar: null, en: null };
-_crtSlots[currentLang] = makeVideoTexture('assets/video/crt-' + currentLang + '.mp4');
+_crtSlots[currentLang] = makeVideoTexture('/assets/video/crt-' + currentLang + '.mp4');
 let videoCRTSlot = _crtSlots[currentLang];
 let videoCRT = videoCRTSlot.video;
 let videoCRTTex = videoCRTSlot.texture;
 function ensureCrtSlot(lang) {
   if (_crtSlots[lang]) return _crtSlots[lang];
-  _crtSlots[lang] = makeVideoTexture('assets/video/crt-' + lang + '.mp4');
+  _crtSlots[lang] = makeVideoTexture('/assets/video/crt-' + lang + '.mp4');
   return _crtSlots[lang];
 }
-const videoWindowSlot = makeVideoTexture('assets/video/window-bg.mp4');
+const videoWindowSlot = makeVideoTexture('/assets/video/window-bg.mp4');
 const videoWindowTex = videoWindowSlot.texture;
 
 /* ====================================================================== */
 /* MUSIC                                                                  */
 /* ====================================================================== */
 const RADIO_AR = [
-  'assets/music/radio-farid.mp3',
-  'assets/music/radio-abdelhalim.mp3',
-  'assets/music/radio-omkalthoum.mp3',
+  '/assets/music/radio-farid.mp3',
+  '/assets/music/radio-abdelhalim.mp3',
+  '/assets/music/radio-omkalthoum.mp3',
 ];
 const RADIO_EN = [
-  'assets/music/radio-sunset-en.mp3',
-  'assets/music/radio-inkspots-en.mp3',
-  'assets/music/radio-shadow-en.mp3',
+  '/assets/music/radio-sunset-en.mp3',
+  '/assets/music/radio-inkspots-en.mp3',
+  '/assets/music/radio-shadow-en.mp3',
 ];
 const PLAYLISTS = { en: RADIO_EN, ar: RADIO_AR };   // radio swaps with the UI language
 
@@ -1071,7 +1071,7 @@ let _ambientLoaded = false;
 function ensureAmbient() {
   if (_ambientLoaded) return;
   _ambientLoaded = true;
-  audioAmbient.src = 'assets/music/ambient-night.mp3';
+  audioAmbient.src = '/assets/music/ambient-night.mp3';
 }
 
 const musicState = { playing: false, trackIndex: 0, muffled: false, started: false };
@@ -1216,7 +1216,7 @@ function isShinyMatName(name) {
   return /(MetalTable|MetalWindow|^_*Metal$|__Metal$|Glass)/i.test(name);
 }
 
-gltfLoader.load('assets/room.glb', (gltf) => {
+gltfLoader.load('/assets/room.glb', (gltf) => {
   const root = gltf.scene;
   scene.add(root);
 
