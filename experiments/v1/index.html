@@ -590,6 +590,51 @@
      a DOM overlay, not a 3D object). REMOVE when done. -->
 <div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:36px; height:36px; border-radius:50%; background:#ff8c00; box-shadow:0 0 22px rgba(255,140,0,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none;" title="experiment v1: kill OS momentum tail">v1</div>
 
+<!-- DEBUG: real-time perf overlay. Updates 4x/sec. Shows FPS, worst frame ms,
+     and which perf gates are currently active. Helps determine if "lag" is
+     a frame-rate issue (low FPS) or an input-latency issue (FPS is 60 but feels slow). -->
+<div id="fps-overlay" style="position:fixed; top:8px; right:8px; z-index:100000; background:rgba(10,7,16,.88); border:1px solid rgba(232,220,196,.25); border-radius:6px; padding:10px 14px; font:12px/1.55 ui-monospace,Consolas,Menlo,monospace; color:#a8ff9a; pointer-events:none; min-width:170px;"></div>
+<script>
+(function() {
+  const el = document.getElementById('fps-overlay');
+  if (!el) return;
+  let _f = [];         // timestamps of recent frames (for FPS)
+  let _worstMs = 0;    // worst frame-to-frame delta in last 1 sec
+  let _worstReset = 0;
+  let _prev = performance.now();
+  function tick() {
+    const now = performance.now();
+    const dt = now - _prev; _prev = now;
+    _f.push(now);
+    while (_f.length && now - _f[0] > 1000) _f.shift();
+    if (dt > _worstMs) _worstMs = dt;
+    if (now - _worstReset > 1000) { _worstReset = now; }
+    requestAnimationFrame(tick);
+  }
+  setInterval(() => {
+    const fps = _f.length;
+    const scrollActive = document.body.classList.contains('scroll-perf-mode');
+    const bloomOn = window.bloomPass ? window.bloomPass.enabled : '?';
+    const outlineOn = window.outlinePass ? window.outlinePass.enabled : '?';
+    const fpsColor = fps >= 55 ? '#a8ff9a' : fps >= 30 ? '#ffd070' : '#ff7070';
+    el.innerHTML =
+      '<div style="color:'+fpsColor+';font-size:18px;font-weight:600;letter-spacing:.5px">FPS '+fps+'</div>' +
+      '<div>worst frame &nbsp;<span style="color:#fff">'+_worstMs.toFixed(1)+' ms</span></div>' +
+      '<div>scroll active <span style="color:#fff">'+(scrollActive?'YES':'no')+'</span></div>' +
+      '<div>bloom &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#fff">'+(bloomOn===true?'ON':bloomOn===false?'off':'?')+'</span></div>' +
+      '<div>outline &nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#fff">'+(outlineOn===true?'ON':outlineOn===false?'off':'?')+'</span></div>' +
+      '<div style="opacity:.5;font-size:10px;margin-top:6px">v1 debug overlay</div>';
+    _worstMs = 0; // reset for next sample
+  }, 250);
+  requestAnimationFrame(tick);
+  // Expose the passes so the overlay can read their .enabled state.
+  // Done in a setTimeout so module-scope `const bloomPass` is defined by the time we run.
+  setTimeout(() => {
+    try { window.bloomPass = bloomPass; window.outlinePass = outlinePass; } catch(e){}
+  }, 100);
+})();
+</script>
+
 <div id="loader">
   <div class="brand">YASSEN</div>
   <div class="label" data-i18n="loading">LOADING…</div>
