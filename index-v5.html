@@ -1009,6 +1009,36 @@ composer.addPass(new OutputPass());
     setTimeout(_showHWAccelNotice, 600); // delay so DOM is ready
   } catch (e) { /* detection is best-effort, never throw */ }
 })();
+/* FPS-BASED FALLBACK DETECTION
+   The primary detector (above) uses WEBGL_debug_renderer_info, but some Chrome
+   installs block that extension for privacy. So we ALSO measure actual frame
+   rate over the first 3 seconds. If average FPS < 25, treat it as low-perf
+   (could be software rendering OR a weak GPU OR background tabs hogging the
+   GPU) and apply the same degradation. */
+(function _fpsBasedFallback() {
+  // Skip if primary detection already degraded
+  if (bloomPass && bloomPass.enabled === false) return;
+  let frames = 0;
+  const startT = performance.now();
+  function _tick() {
+    frames++;
+    const elapsed = performance.now() - startT;
+    if (elapsed < 3000) {
+      requestAnimationFrame(_tick);
+      return;
+    }
+    const avgFps = frames * 1000 / elapsed;
+    if (avgFps < 25) {
+      console.warn('[perf] Average FPS in first 3s was ' + avgFps.toFixed(1) + ' — degrading visuals to keep the site usable.');
+      try { bloomPass.enabled   = false; } catch(e){}
+      try { outlinePass.enabled = false; } catch(e){}
+      try { renderer.setPixelRatio(0.75); } catch(e){}
+      _showHWAccelNotice();
+    }
+  }
+  requestAnimationFrame(_tick);
+})();
+
 function _showHWAccelNotice() {
   if (localStorage.getItem('hwAccelNoticeDismissed') === '1') return;
   const el = document.createElement('div');
