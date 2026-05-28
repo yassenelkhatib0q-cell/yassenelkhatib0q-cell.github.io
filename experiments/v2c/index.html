@@ -50,6 +50,22 @@
 </style>
 
 <style>
+  /* V2C: CSS scroll-driven animation. The scroll math runs on the compositor thread,
+     not the main thread. JS just reads --scroll-p once per rAF (cheap getComputedStyle).
+     Requires Chrome 115+ / Edge 115+ / Safari 18+. Firefox: still flag-gated as of 2026. */
+  @property --scroll-p {
+    syntax: '<number>';
+    initial-value: 0;
+    inherits: true;
+  }
+  @keyframes _v2c_scroll_progress {
+    from { --scroll-p: 0; }
+    to   { --scroll-p: 1; }
+  }
+  html {
+    animation: _v2c_scroll_progress linear forwards;
+    animation-timeline: scroll(root block);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width:100%; min-height:100%; overflow-x:hidden; background:#0a0710; color:#f3eee8; font-family:'Inter',system-ui,sans-serif; }
   html { height:100%; }
@@ -588,7 +604,7 @@
 <!-- DEPLOY-CONFIRM MARKER: red dot positioned approximately over the TV screen in the 3D
      room (works only at scroll 0 — once the camera moves the dot won't follow because it's
      a DOM overlay, not a 3D object). REMOVE when done. -->
-<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:36px; height:36px; border-radius:50%; background:#ff8c00; box-shadow:0 0 22px rgba(255,140,0,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none;" title="experiment v1: kill OS momentum tail">v1</div>
+<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:40px; height:40px; border-radius:50%; background:#ec4899; box-shadow:0 0 22px rgba(236,72,153,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none; color:#fff; font:bold 12px/40px sans-serif; text-align:center;" title="v2c: CSS animation-timeline scroll-driven progress (needs Chrome 115+)">v2c</div>
 
 <div id="loader">
   <div class="brand">YASSEN</div>
@@ -2851,7 +2867,20 @@ function updateCameraFromScroll() {
   _scrollSmoothLastT = now;
   // 4 viewport heights of scroll covers the full cinematic (camera + CRT transition)
   const camRange = window.innerHeight * 4.0;
-  const target = clampN(window.scrollY / camRange, 0, 1);
+  // V2C: read scroll progress from the CSS animation-timeline custom property.
+  // The browser computes --scroll-p on the COMPOSITOR THREAD as the user scrolls — no main
+  // thread cost for the scroll math. We just read the resolved value.
+  // Fallback: if --scroll-p is empty (browser doesn't support animation-timeline yet), use window.scrollY.
+  let _cssScrollP = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-p'));
+  let target;
+  if (Number.isFinite(_cssScrollP) && _cssScrollP > 0) {
+    // CSS gives us 0..1 over the WHOLE document height. We want 0..1 over camRange only.
+    const _docScrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const _absoluteScroll = _cssScrollP * _docScrollable;
+    target = clampN(_absoluteScroll / camRange, 0, 1);
+  } else {
+    target = clampN(window.scrollY / camRange, 0, 1);
+  }
   // Adaptive smoothing: base rate cranked from 9→30/s so the camera catches up in ~50ms (3 frames)
   // instead of ~270ms (16 frames). The old slower rate left the camera visibly trailing the user's
   // scroll input — felt like "lag" even though the main thread was responsive. Keeps the trackpad

@@ -588,7 +588,7 @@
 <!-- DEPLOY-CONFIRM MARKER: red dot positioned approximately over the TV screen in the 3D
      room (works only at scroll 0 — once the camera moves the dot won't follow because it's
      a DOM overlay, not a 3D object). REMOVE when done. -->
-<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:36px; height:36px; border-radius:50%; background:#ff8c00; box-shadow:0 0 22px rgba(255,140,0,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none;" title="experiment v1: kill OS momentum tail">v1</div>
+<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:40px; height:40px; border-radius:50%; background:#22d3ee; box-shadow:0 0 22px rgba(34,211,238,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none; color:#0a0710; font:bold 12px/40px sans-serif; text-align:center;" title="v2b: 30fps during scroll (skip every other render frame)">v2b</div>
 
 <div id="loader">
   <div class="brand">YASSEN</div>
@@ -3458,17 +3458,23 @@ function animate() {
     if (Math.abs(diff) < 0.01) { tvButton.rotation.z = tvButtonTargetZ; tvButtonAnimating = false; }
     else tvButton.rotation.z = cur + diff*0.18;
   }
-  // V1 PERF GATES — skip non-critical per-frame work during the scroll-active window:
-  //  - Raycasting: pointer isn't moving during scroll, no hover to detect
-  //  - Ink trail:  user isn't looking at cursor trail, plus cursor isn't moving
-  //  - updateHints already runs lower in the file; the gate there is more involved
-  // These save ~1-3ms per frame combined.
+  // V2b PERF (everything from v1 plus): during scroll-active, render only every OTHER frame
+  // (30fps instead of 60fps). The user is moving fast through the cinematic — they can't
+  // perceive 60fps motion any better than 30fps when the camera is sweeping. Saves ~50%
+  // of render cost during the worst time. Game devs do this routinely during cutscenes.
   if (!_isScrollActive()) {
     updateHoverGlow();
     renderInkTrail();
   }
-  _updatePassFade(dt); // bloom + outline fade lerp before render
-  composer.render();
+  _updatePassFade(dt);
+  if (_isScrollActive()) {
+    window._v2bFrame = (window._v2bFrame || 0) + 1;
+    if (window._v2bFrame % 2 === 0) {
+      composer.render(); // render only on even frames while scroll-active → 30fps
+    }
+  } else {
+    composer.render(); // idle / static views render normally at 60fps
+  }
 }
 animate();
 

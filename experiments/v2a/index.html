@@ -588,7 +588,7 @@
 <!-- DEPLOY-CONFIRM MARKER: red dot positioned approximately over the TV screen in the 3D
      room (works only at scroll 0 — once the camera moves the dot won't follow because it's
      a DOM overlay, not a 3D object). REMOVE when done. -->
-<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:36px; height:36px; border-radius:50%; background:#ff8c00; box-shadow:0 0 22px rgba(255,140,0,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none;" title="experiment v1: kill OS momentum tail">v1</div>
+<div id="deploy-marker" style="position:fixed; top:48%; left:42%; width:40px; height:40px; border-radius:50%; background:#a259ff; box-shadow:0 0 22px rgba(162,89,255,1), inset 0 0 8px rgba(255,255,255,.6); z-index:99999; pointer-events:none; color:#fff; font:bold 12px/40px sans-serif; text-align:center;" title="v2a: render-on-demand (skip composer.render when idle 500ms+)">v2a</div>
 
 <div id="loader">
   <div class="brand">YASSEN</div>
@@ -3458,18 +3458,27 @@ function animate() {
     if (Math.abs(diff) < 0.01) { tvButton.rotation.z = tvButtonTargetZ; tvButtonAnimating = false; }
     else tvButton.rotation.z = cur + diff*0.18;
   }
-  // V1 PERF GATES — skip non-critical per-frame work during the scroll-active window:
-  //  - Raycasting: pointer isn't moving during scroll, no hover to detect
-  //  - Ink trail:  user isn't looking at cursor trail, plus cursor isn't moving
-  //  - updateHints already runs lower in the file; the gate there is more involved
-  // These save ~1-3ms per frame combined.
+  // V2a PERF (everything from v1 plus): render-on-demand.
+  // composer.render() is the heaviest call. We only fire it when:
+  //   - User input arrived within last 500ms (scrolling, moving, clicking), OR
+  //   - Bloom/outline fade is still lerping (visual transition in progress), OR
+  //   - TV button click animation is mid-flight
+  // When all are false, the page is idle → skip the render entirely. GPU rests.
   if (!_isScrollActive()) {
     updateHoverGlow();
     renderInkTrail();
   }
-  _updatePassFade(dt); // bloom + outline fade lerp before render
-  composer.render();
+  _updatePassFade(dt);
+  const _idleMs = performance.now() - (window._lastInputAt || 0);
+  const _fadeStillMoving = Math.abs(_bloomTargetFactor - _bloomCurrentFactor) > 0.002;
+  const _renderNeeded = _idleMs < 500 || _fadeStillMoving || tvButtonAnimating;
+  if (_renderNeeded) composer.render();
 }
+// v2a: track user input across all relevant events so the render-on-demand gate knows when to wake
+window._lastInputAt = performance.now();
+['scroll','wheel','pointermove','mousemove','click','keydown','touchstart','touchmove'].forEach(t => {
+  window.addEventListener(t, () => { window._lastInputAt = performance.now(); }, { passive: true });
+});
 animate();
 
 /* ====================================================================== */
