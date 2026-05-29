@@ -2877,14 +2877,25 @@ function exitTv() {
         try { if (videoWindowSlot && videoWindowSlot.video) videoWindowSlot.video.play().catch(()=>{}); } catch (e) {}
       }, 120);
       setTimeout(() => {
-        if (_activeFrame) {
-          // Restore opacity but FORCE pointer-events:none — the room state must never let the
-          // iframe catch clicks (only entering the TV sets it back to 'auto'). _pfPrevPE could be
-          // 'auto' from older syncIframeToLang behavior; restoring that would re-introduce the
-          // click-stealing bug after exit.
-          _activeFrame.style.pointerEvents = 'none';
-          _activeFrame.style.opacity = _pfPrevOp;
-          try { _activeFrame.contentWindow && _activeFrame.contentWindow.postMessage({ type: 'yassen:tv-exit-end' }, '*'); } catch (e) {}
+        // CRITICAL: don't restore the iframe that was active when exitTv started.
+        // If the user pressed the TV button to switch language during the 1300ms
+        // exit tween, syncIframeToLang() has already pointed activePortfolioFrame
+        // at the OTHER iframe. Blindly restoring _activeFrame here would resurrect
+        // the previous-language iframe on top of the newly-selected one — the
+        // user would re-enter the TV and still see the old language.
+        const _af = window.activePortfolioFrame || _activeFrame;
+        if (_af) {
+          _af.style.pointerEvents = 'none';
+          _af.style.opacity = '1';
+          try { _af.contentWindow && _af.contentWindow.postMessage({ type: 'yassen:tv-exit-end' }, '*'); } catch (e) {}
+        }
+        // Make sure the OTHER iframe is hidden so it doesn't sit on top of the
+        // current one (DOM-order rendering means pf-frame-alt is above pf-frame
+        // when both are opacity 1).
+        const _other = (_af === pfFrame) ? pfFrameAlt : pfFrame;
+        if (_other) {
+          _other.style.opacity = '0';
+          _other.style.pointerEvents = 'none';
         }
       }, 240);
       // Clear the exit guard so future TV entries can re-lock normally.
@@ -2925,7 +2936,7 @@ function attachScrollUpExit(frameElOpt) {
 // Cache-bust the portfolio iframe so phones that previously visited (and cached
 // the old @media-mobile version that flipped the layout vertical) pick up the
 // new -tv files. Bump this string whenever EN-P-tv / index-h-1-tv change.
-const _PF_CACHE_BUST = 'v=20260529g';
+const _PF_CACHE_BUST = 'v=20260529h';
 function portfolioSrcForLang(lang) {
   const base = (lang === 'en') ? '/test/EN-P-tv.html' : '/test/index-h-1-tv.html';
   // Pass &mobile3d=1 when the parent is in landscape-mobile mode so the iframe
