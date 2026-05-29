@@ -280,6 +280,7 @@
     font-family:'Panorama Naskh','Tajawal','Cairo',serif; font-size:20px; font-weight:500;
     letter-spacing:0.04em;
     white-space:nowrap; opacity:0; pointer-events:none;
+    /* Sentinel — per-hint sizes below override these for #hint-radio. */
     /* z-index BELOW cinema-bar (50) so the pill slides behind the bottom bar instead of
        poking through it — keeps the cinematic frame on top, pill becomes a cinema-framed element. */
     transition:opacity .45s ease; z-index:40;
@@ -303,6 +304,10 @@
     50%      { transform:translate(-50%,0) scale(1.06); box-shadow:0 10px 30px rgba(0,0,0,.6); }
   }
   .hint.clickable { pointer-events:auto; cursor:pointer; }
+  /* Radio hint smaller than the language pill (desktop). Mobile-3d
+     override below shrinks it further to 9px. */
+  #hint-radio { font-size: 13px; padding: 6px 14px; }
+  #hint-radio::after { border-left-width: 6px; border-right-width: 6px; border-top-width: 9px; }
   /* TV-screen hint — smaller, NO pill background / border / arrow.
      Floats as plain text above the TV instead of a chunky pill button. */
   #hint-tv-screen {
