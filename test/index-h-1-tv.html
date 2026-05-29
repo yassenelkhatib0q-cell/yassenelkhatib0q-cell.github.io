@@ -364,17 +364,63 @@
   #modal .m-video::after{ content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #4a2f17; mix-blend-mode: multiply; opacity: .5; }   /* brown wash (all) */
   /* ===== ALX: video fills the LEFT half, text on the right (back-button stays bottom-centre, default) ===== */
   /* ===== JADE: video fills the TOP half, logo + text centred below, back-button UNDER the text ===== */
-  #modal.lay-jade .box{ grid-template-columns: 1fr; grid-template-rows: 0.95fr 1.05fr; direction: rtl; }   /* video box a bit taller (extends down); content keeps the rest */
-  #modal.lay-jade .m-right{ grid-row: 1; grid-column: 1; border-left: none; border-bottom: 3px solid var(--ink); background: #1a1510; }   /* dark bars around the fitted video */
-  #modal.lay-jade .m-video video{ object-fit: cover; }   /* FILL the top half (cropped to fit) */
-  #modal.lay-jade .m-left{ grid-row: 2; grid-column: 1; text-align: center; align-items: center; justify-content: center; gap: 0.417cqw; padding: 0.625cqw 2.604cqw 4.583cqw; overflow: hidden; }   /* fit, NO scroll, clear the button */
-  #modal.lay-jade #m-logoslot{ width: 8.333cqw; height: 11.111cqh; transform: none; }       /* bigger logo; Jade keeps logo at its place (no nudge) */
-  #modal.lay-jade .m-desc{ text-align: center; }
-  #modal.lay-jade .m-desc h3{ font-size: clamp(16px,1.9cqw,24px); margin-bottom: 0.556cqh; }   /* smaller title */
-  #modal.lay-jade .m-desc ul{ display: inline-block; text-align: right; }
-  #modal.lay-jade .m-desc li{ font-size: clamp(14px,1.5cqw,18px); line-height: 1.4; margin-bottom: 0.556cqh; padding-right: 1.146cqw; }   /* smaller bullets */
-  #modal.lay-jade .m-desc li::before{ top: 0.833cqh; }
-  #modal.lay-jade .close{ top: 50%; bottom: auto; left: 50%; transform: translate(-50%,-50%); }   /* Jade: button centred on the page */
+  /* JADE — 2-col layout: video TOP, logo+title LEFT, story RIGHT (per Yassen).
+     Same pattern as EN-P-tv: display:contents on m-left and m-desc so the leaf
+     elements become direct grid items of .box. */
+  #modal.lay-jade .box{
+    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas:
+      "video video"
+      "logo  story"
+      "title story"
+      ".     story";
+    direction: ltr;
+    padding: 3.125cqw 3.125cqw 6.250cqw;
+    gap: 1.042cqw 2.083cqw;
+  }
+  #modal.lay-jade .m-left{ display: contents; }
+  #modal.lay-jade .m-desc{ display: contents; }
+  #modal.lay-jade .m-right{
+    grid-area: video;
+    display: block;
+    justify-self: stretch; align-self: stretch;
+    border: 3px solid var(--ink);
+    background: #1a1510; position: relative; overflow: hidden;
+  }
+  #modal.lay-jade .m-right::after{ display: none; }
+  #modal.lay-jade .m-video{ position: absolute; inset: 0; }
+  #modal.lay-jade .m-video video{ width: 100%; height: 100%; object-fit: cover; }
+  #modal.lay-jade #m-logoslot{
+    grid-area: logo;
+    justify-self: start; align-self: start;
+    width: 10.417cqw; height: 13.889cqh; transform: none; margin: 0;
+  }
+  #modal.lay-jade .m-desc h3{
+    grid-area: title;
+    justify-self: start; align-self: start;
+    text-align: right; margin: 0;
+    font-size: clamp(20px, 1.8cqw, 32px);
+    direction: rtl;
+  }
+  #modal.lay-jade #m-list{
+    grid-area: story;
+    align-self: start;
+    max-width: none; margin: 0;
+    overflow: auto;
+    text-align: right;
+    direction: rtl;
+  }
+  #modal.lay-jade .m-story{
+    font-size: clamp(14px, 1.2cqw, 20px);
+    line-height: 1.65;
+    max-width: none; margin: 0;
+    text-align: right; direction: rtl;
+  }
+  #modal.lay-jade .m-desc ul{ display: block; text-align: right; direction: rtl; }
+  #modal.lay-jade .m-desc li{ font-size: clamp(14px,1.5cqw,18px); line-height: 1.4; margin-bottom: 0.556cqh; padding-right: 1.146cqw; padding-left: 0; }
+  #modal.lay-jade .m-desc li::before{ top: 0.833cqh; right: 0; left: auto; }
+  #modal.lay-jade .close{ top: 50%; bottom: auto; left: 50%; transform: translate(-50%,-50%); }
 
   /* ===== old-TV "back to the start" button (fixed; grain sits ON TOP of it) ===== */
   #tv-home{ position: fixed; bottom: 2.407cqh; left: 1.354cqw; z-index: 40; width: 3.229cqw; height: 5.741cqh; display: grid; place-items: center;

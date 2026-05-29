@@ -388,11 +388,14 @@
      elements (#m-list, #m-logoslot, h3, .m-right) become direct grid items of .box and can be placed
      via grid-template-areas. ===== */
   #modal.lay-jade .box{
+    /* Per Yassen — logo+title LEFT, story text RIGHT, video spans top. */
     grid-template-columns: 0.9fr 1.1fr;
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas: "logo  video"
-      "title video"
-      "story video";
+    grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas:
+      "video video"
+      "logo  story"
+      "title story"
+      ".     story";
     direction: ltr;
     padding: 3.125cqw 3.125cqw 6.250cqw;
     gap: 1.042cqw 2.083cqw;
