@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ياسين الخطيب — محرّر فيديو ومصمّم موشن</title>
@@ -10,7 +13,7 @@
 <style>
   @font-face{
     font-family:'Panorama';
-    src:url('../assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    src:url('../assets/fonts/NTPanoramaNaskh-Regular.otf?v=dde7da2c') format('opentype');
     font-display:swap;
   }
   :root{
@@ -35,7 +38,7 @@
   /* ---- paper grain + foxing ---- */
   body::before{
     content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.10'/></svg>");
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n')' opacity='0.10'/></svg>");
     mix-blend-mode:multiply; opacity:.5;
   }
   /* halftone dot field overlay (very subtle, whole page) */
@@ -47,7 +50,7 @@
   .wrap{position:relative; z-index:1;}
 
   /* ============ SVG ink-roughen filter target ============ */
-  .rough{ filter:url(#inkrough); }
+  .rough{ filter:url('#inkrough'); }
 
   /* ============ POSTER ============ */
   .poster{

@@ -12,8 +12,8 @@
 <meta name="author" content="Yassen Elkhatib">
 <meta name="theme-color" content="#0a0710">
 <meta name="robots" content="index, follow">
-<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32">
-<link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=7aad4e54" sizes="16x16 32x32">
+<link rel="icon" type="image/png" href="/favicon-64.png?v=8c2c9ffc" sizes="64x64">
 <link rel="canonical" href="/index-v5.html">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -28,23 +28,23 @@
 <!-- Structured data (Schema.org Person) -->
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Yassen Elkhatib","jobTitle":"Video Editor","description":"Performance-driven video editor for short-form & long-form content.","knowsLanguage":["en","ar"]}</script>
 
-<link href="/vendor/fonts/fonts-v5.css" rel="stylesheet">
+<link href="/vendor/fonts/fonts-v5.css?v=e2245936" rel="stylesheet">
 
 <style>
   @font-face {
     font-family: 'Berkshire Pro Loops';
-    src: url('/assets/fonts/berkshire-pro-loops.otf') format('opentype'),
-         url('/assets/fonts/berkshire-pro-loops.ttf') format('truetype');
+    src: url('/assets/fonts/berkshire-pro-loops.otf?v=c26eac8d') format('opentype'),
+         url('/assets/fonts/berkshire-pro-loops.ttf?v=7d17e991') format('truetype');
     font-display: swap;
   }
   @font-face {
     font-family: 'Cazon Uno';
-    src: url('/assets/fonts/Cazon-Uno.ttf') format('truetype');
+    src: url('/assets/fonts/Cazon-Uno.ttf?v=348aaae1') format('truetype');
     font-display: swap;
   }
   @font-face {
     font-family: 'Panorama Naskh';
-    src: url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype');
+    src: url('/assets/fonts/NTPanoramaNaskh-Regular.otf?v=dde7da2c') format('opentype');
     font-display: swap;
   }
 </style>
@@ -178,8 +178,8 @@
     position: fixed; inset: 0;
     pointer-events: none;
     z-index: 49;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust'><feTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1' seed='5'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust)' fill='white'/></svg>"),
-                       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust2'><feTurbulence type='fractalNoise' baseFrequency='5' numOctaves='1' seed='12'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust2)' fill='black'/></svg>");
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust'><feTurbulence type='fractalNoise' baseFrequency='4' numOctaves='1' seed='5'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust')' fill='white'/></svg>"),
+                       url('data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='dust2'><feTurbulence type='fractalNoise' baseFrequency='5' numOctaves='1' seed='12'/><feComponentTransfer><feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23dust2')' fill='black'/></svg>");
     background-size: 400px 400px, 400px 400px;
     mix-blend-mode: overlay;
     opacity: 0.55;
@@ -203,7 +203,7 @@
     z-index: 49;
     opacity: 0.10;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n')'/></svg>");
     background-size: 200px 200px;
     animation: grainShift 0.7s steps(8) infinite;
   }
@@ -273,7 +273,7 @@
   #loader .pct { margin-top:20px; font-family:'Fraunces',serif; font-size:34px; color:#e8dcc4; letter-spacing:1px; font-variant-numeric:tabular-nums; }
 
   /* ===== Floating hints on the TV / radio — plain text in the portfolio's Panorama font, gentle glow pulse ===== */
-  @font-face { font-family:'Panorama Naskh'; src:url('/assets/fonts/NTPanoramaNaskh-Regular.otf') format('opentype'); font-display:swap; }
+  @font-face { font-family:'Panorama Naskh'; src:url('/assets/fonts/NTPanoramaNaskh-Regular.otf?v=dde7da2c') format('opentype'); font-display:swap; }
   .hint { position:fixed; left:0; top:0;
     padding:12px 26px; border-radius:999px;
     background:rgba(232,220,196,.96); color:#1a1510;
@@ -626,7 +626,7 @@
     <defs><linearGradient id="penGold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#f4d27a"/><stop offset="50%" stop-color="#c89a3a"/><stop offset="100%" stop-color="#8a6520"/>
     </linearGradient></defs>
-    <path d="M3,29 L7,25 L24,8 L28,12 L11,29 Z" fill="url(#penGold)" stroke="#5a3f10" stroke-width="0.5" stroke-linejoin="round"/>
+    <path d="M3,29 L7,25 L24,8 L28,12 L11,29 Z" fill="url('#penGold')" stroke="#5a3f10" stroke-width="0.5" stroke-linejoin="round"/>
     <line x1="6" y1="26" x2="20" y2="12" stroke="#1a1208" stroke-width="0.7"/>
     <circle cx="3.5" cy="28.5" r="1.4" fill="#1a1208"/>
   </svg>
@@ -1075,7 +1075,7 @@ let _ambientLoaded = false;
 function ensureAmbient() {
   if (_ambientLoaded) return;
   _ambientLoaded = true;
-  audioAmbient.src = '/assets/music/ambient-night.mp3';
+  audioAmbient.src='/assets/music/ambient-night.mp3?v=fa2753e4';
 }
 
 const musicState = { playing: false, trackIndex: 0, muffled: false, started: false };
