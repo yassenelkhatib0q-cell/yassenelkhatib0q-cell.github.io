@@ -390,9 +390,12 @@
   #modal.lay-jade .box{
     /* Per Yassen — logo+title LEFT, story text RIGHT, video spans top. */
     grid-template-columns: 0.9fr 1.1fr;
-    grid-template-rows: 1fr auto auto 1fr;
+    /* video row bumped 1fr -> 3fr so the video box is bigger; added a 3cqh
+       spacer row between video and text so the title/story sit lower. */
+    grid-template-rows: 3fr 3cqh auto auto 1fr;
     grid-template-areas:
       "video video"
+      ".     ."
       "logo  story"
       "title story"
       ".     story";
