@@ -357,6 +357,12 @@
     padding: 3px 6px;
     letter-spacing: 0.04em;
   }
+  /* Radio hint specifically smaller than the other hints. */
+  .landscape-mobile #hint-radio,
+  .landscape-mobile #hint-radio[dir="ltr"] {
+    font-size: 9px;
+    padding: 3px 9px;
+  }
   /* Cinema bars (12vh top/bottom) eat almost all the screen on a landscape phone
      and read as "black bars" the user wants gone. Hide them only in mobile-3d. */
   .landscape-mobile .cinema-bar { display: none !important; }
@@ -3505,7 +3511,7 @@ function updateHints() {
   // remain as a label). On desktop, _radioSeen still fades it once clicked.
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
   _set(hintLang,     tvButton,        _isLM ? -50  : -110, false,        0);
-  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _isLM ? false : _radioSeen, _isLM ? 0  : 90);
+  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _isLM ? false : _radioSeen, _isLM ? -25 : 90);
   _set(hintTvScreen, window._crtMesh, _isLM ? -100 : -160, _scrollHide,  0);
 }
 
