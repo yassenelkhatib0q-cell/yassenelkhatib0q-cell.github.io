@@ -3518,7 +3518,9 @@ function updateHints() {
   // remain as a label). On desktop, _radioSeen still fades it once clicked.
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
   _set(hintLang,     tvButton,        _isLM ? -50  : -110, false,        0);
-  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _isLM ? false : _radioSeen, _isLM ? -25 : 70);
+  // Radio hint: never fade on click (both desktop AND mobile-3d). Only the
+  // TV-lock (window._pfLocked) hides it — already handled at the lock site.
+  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, false, _isLM ? -25 : 70);
   _set(hintTvScreen, window._crtMesh, _isLM ? -100 : -160, _scrollHide,  0);
 }
 
