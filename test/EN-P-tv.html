@@ -371,7 +371,7 @@
   #modal .m-desc ul{ list-style: none; }
   #modal .m-desc li{ font-family: 'Wanlaners','Fraunces',serif; font-size: clamp(22px,2cqw,30px); line-height: 1.55; color: var(--ink); position: relative; padding-right: 1.458cqw; margin-bottom: 1.481cqh; }
   #modal .m-desc li::before{ content: "◾"; position: absolute; right: 0; top: 1.296cqh; font-size: clamp(8px, 0.625cqw, 16px); color: var(--accent); }
-  #modal .m-story{ font-family: 'Fraunces',serif; font-size: clamp(20px,1.9cqw,26px); line-height: 1.55; color: var(--ink); }   /* clean Fraunces body for English */
+  #modal .m-story{ font-family: 'Fraunces',serif; font-size: clamp(13px,1.3cqw,18px); line-height: 1.55; color: var(--ink); }   /* max 18px per Yassen */
   #modal.lay-jade .m-story{ font-size: clamp(17px,1.85cqw,24px); line-height: 1.6; max-width: min(48.958cqw,92%); margin-inline: auto; word-spacing: 0.28em; }   /* bigger story text + wide box + looser word spacing */
   #modal .m-right{ border-left: 3px solid var(--ink); background: var(--paper); position: relative; }   /* media box — same paper as the text side */
   #modal .m-right::after{ content: ""; position: absolute; inset: 2.500cqw; border: 0.104cqw dashed rgba(26,21,16,.18); }   /* intentional placeholder frame */ /* empty box for media (you'll fill it) */
@@ -398,8 +398,9 @@
       ".     story";
     direction: ltr;
     /* top padding bumped 3.125 -> 14cqw so the whole video + content block sits
-       much lower in the modal (per Yassen). */
-    padding: 14cqw 3.125cqw 6.250cqw;
+       much lower in the modal (per Yassen). Side padding bumped 3.125 -> 6.125
+       so the video box is narrower (more breathing room left/right). */
+    padding: 14cqw 6.125cqw 6.250cqw;
     gap: 1.042cqw 2.083cqw;
   }
   #modal.lay-jade .m-left{ display: contents; }
