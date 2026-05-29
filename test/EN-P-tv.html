@@ -760,7 +760,12 @@
     // Replace the desktop "Scroll to advance" hint text with the mobile-3d
     // equivalent — there's no scroll on phone, tabs are the nav.
     const _hint = document.getElementById('hint');
-    if (_hint) _hint.textContent = 'Click to Enter';
+    if (_hint) {
+      _hint.textContent = 'Click to Enter';
+      // DIAGNOSTIC: bright color so it's obvious my code ran. Remove later.
+      _hint.style.color = '#ff6b35';
+      _hint.style.fontWeight = '900';
+    }
     const tabs = document.querySelectorAll('#tvTabs .tv-tab');
     function jumpToPanel(idx) {
       const targetY = idx * DESIGN_W * (currentScale || 1);
