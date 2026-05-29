@@ -3170,6 +3170,13 @@ function updateCRTTransition(progress) {
       // the TV, animate() would bail, and the renderer would freeze for the whole exit.
       if (!window._pfLocked && !window._exitingTv) {
         window._pfLocked = true; document.documentElement.style.overflow = 'hidden';   // lock page scroll -> only the iframe scrolls
+        // BUG FIX: animate() early-returns when _pfLocked is true, so updateHints()
+        // never gets a chance to hide pills. Hide them right here at the lock moment.
+        try {
+          if (hintLang)     hintLang.style.opacity     = '0';
+          if (hintRadio)    hintRadio.style.opacity    = '0';
+          if (hintTvScreen) hintTvScreen.style.opacity = '0';
+        } catch (e) {}
         // Pause the room's background videos (CRT + window) — they're hidden now and
         // their decoding competes with the portfolio's project videos, causing lag.
         try { if (videoCRT) videoCRT.pause(); } catch (e) {}
