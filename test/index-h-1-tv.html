@@ -376,7 +376,9 @@
       "title story"
       ".     story";
     direction: ltr;
-    padding: 3.125cqw 3.125cqw 6.250cqw;
+    /* top padding bumped 3.125 -> 14cqw so the whole video + content block sits
+       much lower in the modal (per Yassen). */
+    padding: 14cqw 3.125cqw 6.250cqw;
     gap: 1.042cqw 2.083cqw;
   }
   #modal.lay-jade .m-left{ display: contents; }
