@@ -3501,9 +3501,11 @@ function updateHints() {
   //   hint-lang (TV button):     dy = -50   (was -110 desktop)
   //   hint-tv-screen (CRT):      dy = -100  (raised another 30px from -70)
   //   hint-radio:                dy = -90,  dx = 0 (back over the radio — +70 was off-screen)
+  // Radio hint stays visible on mobile-3d even after a tap (user wants it to
+  // remain as a label). On desktop, _radioSeen still fades it once clicked.
   const _isLM = document.documentElement.classList.contains('landscape-mobile');
   _set(hintLang,     tvButton,        _isLM ? -50  : -110, false,        0);
-  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _radioSeen,   _isLM ? 0  : 90);
+  _set(hintRadio,    radioButton,     _isLM ? -90  : -180, _isLM ? false : _radioSeen, _isLM ? 0  : 90);
   _set(hintTvScreen, window._crtMesh, _isLM ? -100 : -160, _scrollHide,  0);
 }
 
