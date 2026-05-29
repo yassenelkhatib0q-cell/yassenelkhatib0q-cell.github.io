@@ -305,8 +305,9 @@
   }
   .hint.clickable { pointer-events:auto; cursor:pointer; }
   /* Radio hint smaller than the language pill (desktop). Mobile-3d
-     override below shrinks it further to 9px. */
-  #hint-radio { font-size: 13px; padding: 6px 14px; }
+     override below shrinks it further to 9px. Two-line stacked text, so
+     allow wrapping (.hint base sets nowrap) and tighten line-height. */
+  #hint-radio { font-size: 13px; padding: 6px 14px; white-space: normal; line-height: 1.15; text-align: center; }
   #hint-radio::after { border-left-width: 6px; border-right-width: 6px; border-top-width: 9px; }
   /* TV-screen hint — smaller, NO pill background / border / arrow.
      Floats as plain text above the TV instead of a chunky pill button. */
@@ -3454,11 +3455,12 @@ function markRadioSeen() { _radioSeen = true; refreshRadioHintText(); }
 function refreshRadioHintText() {
   if (!hintRadio) return;
   const playing = (typeof musicState !== 'undefined' && musicState.playing);
+  // Two-line stacked text per Yassen — innerHTML so <br> renders.
   if (currentLang === 'ar') {
-    hintRadio.textContent = playing ? 'اضغط لإطفاء الموسيقى' : 'اضغط لتشغيل الموسيقى';
+    hintRadio.innerHTML = playing ? 'اضغط لإطفاء<br>الموسيقى' : 'اضغط لتشغيل<br>الموسيقى';
     hintRadio.setAttribute('dir', 'rtl');
   } else {
-    hintRadio.textContent = playing ? 'Click to stop music' : 'Click to play music';
+    hintRadio.innerHTML = playing ? 'Click to<br>stop music' : 'Click to<br>play music';
     hintRadio.setAttribute('dir', 'ltr');
   }
 }
